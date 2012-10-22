@@ -1,10 +1,9 @@
 package de.sciss.voicetrap
 
 //import collection.immutable.{IndexedSeq => IIdxSeq}
-import de.sciss.lucre.stm
 
 object Document {
-   implicit def serializer: stm.Serializer[ Tx, Acc, Document ] = ???
+   implicit def serializer: Serializer[ Document ] = ???
 }
 trait Document {
    /**

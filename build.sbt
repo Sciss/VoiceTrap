@@ -15,7 +15,7 @@ scalaVersion := "2.9.2" // "2.10.0-M7"
 // crossScalaVersions in ThisBuild := Seq( "2.10.0-M6", "2.9.2" )
 
 libraryDependencies ++= Seq(
-   "de.sciss" %% "soundprocesses" % "1.0.0"
+   "de.sciss" %% "soundprocesses" % "1.1.0-SNAPSHOT"
 )
 
 // libraryDependencies in ThisBuild <+= scalaVersion { sv =>
