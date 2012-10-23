@@ -25,13 +25,17 @@ object DocumentImpl {
          val chanCursorVars   = IIdxSeq.fill( num ) {
             tx.readVar[ Cursor ]( id, in )
          }
-         val chanVars         = IIdxSeq.tabulate( num ) { i =>
-//            val row     = i / numColumns
-//            val column  = i % numColumns
-            tx.readVar[ Channel ]( id, in )
-         }
+//         val chanVars         = IIdxSeq.tabulate( num ) { i =>
+////            val row     = i / numColumns
+////            val column  = i % numColumns
+//            tx.readVar[ Channel ]( id, in )
+//         }
+
+         val channels      = IIdxSeq.fill( num )( Channel.serializer.read( in, access ))
+         val chanHandles   = channels.map( tx.newHandle( _ ))
+
          val artifactStoreVar = tx.readVar[ ArtifactStore ]( id, in ) // .read[ S ]( in, access )
-         new Impl( id, cursor, chanCursorVars, chanVars, artifactStoreVar )
+         new Impl( id, cursor, chanCursorVars, channels, chanHandles, artifactStoreVar )
       }
    }
 
@@ -42,18 +46,21 @@ object DocumentImpl {
       val group            = proc.ProcGroup_.Modifiable[ S ]
       val chanCursors      = IIdxSeq.fill( matrixSize )( tx.newCursor() )
       val chanCursorVars   = chanCursors.map( tx.newVar( id, _ ))
-      val chanVars         = IIdxSeq.tabulate( matrixSize ) { i =>
+      val channels         = IIdxSeq.tabulate( matrixSize ) { i =>
          val row     = i / numColumns
          val column  = i % numColumns
-         tx.newVar( id, Channel( row, column, group ))
+         Channel( row, column, group )
+//         tx.newVar( id, )
       }
+      val chanHandles      = channels.map( tx.newHandle( _ ))
       val artifactStoreVar = tx.newVar( id, proc.ArtifactStore[ S ]( new File( VoiceTrap.baseDirectory, "artifacts" )))
-      new Impl( id, cursor, chanCursorVars, chanVars, artifactStoreVar )
+      new Impl( id, cursor, chanCursorVars, channels, chanHandles, artifactStoreVar )
    }
 
    private final class Impl( val id: ID, val cursor: Cursor,
                              chanCursorVars: IIdxSeq[ Var[ Cursor ]],
-                             chanVars: IIdxSeq[ Var[ Channel ]],
+                             channelsStale: IIdxSeq[ Channel ],
+                             chanHandles: IIdxSeq[ Source[ Channel ]],
                              val artifactStoreVar : Var[ ArtifactStore ])
    extends Document {
       doc =>
@@ -77,7 +84,7 @@ object DocumentImpl {
          for( i <- 0 until matrixSize ) {
             val csr = chanCursorVars( i ).get
             spawn( csr ) { implicit tx =>
-               val ch = chanVars( i ).get
+               val ch = chanHandles( i ).get
                ch.start( doc, auralSystem )( tx, csr )
             }
          }
@@ -88,7 +95,7 @@ object DocumentImpl {
          for( i <- 0 until matrixSize ) {
             val csr = chanCursorVars( i ).get
             spawn( csr ) { implicit tx =>
-               val ch = chanVars( i ).get
+               val ch = chanHandles( i ).get
                ch.stop()
             }
          }
@@ -102,7 +109,7 @@ object DocumentImpl {
 //         mapSerializer[ (Int, Int), Channel ].write( channels, out )
          out.writeInt( matrixSize )
          chanCursorVars.foreach( _.write( out ))
-         chanVars.foreach( _.write( out ))
+         channelsStale.foreach( _.write( out ))
          artifactStoreVar.write( out )
       }
    }
