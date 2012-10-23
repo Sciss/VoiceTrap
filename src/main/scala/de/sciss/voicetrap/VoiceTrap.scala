@@ -4,8 +4,9 @@ import java.io.File
 
 object VoiceTrap {
    def baseDirectory : File   = new File( new File( sys.props( "user.home" ), "Desktop" ), "VoiceTrap" )
+   def artifactDirectory: File = new File( baseDirectory, "artifacts" )
 
-   val minimal                = true
+   val minimal                = false
 
    def numRows                = if( minimal ) 1 else 4
    def numColumns             = if( minimal ) 1 else 3

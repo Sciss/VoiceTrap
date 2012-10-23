@@ -53,7 +53,7 @@ object DocumentImpl {
 //         tx.newVar( id, )
       }
       val chanHandles      = channels.map( tx.newHandle( _ ))
-      val artifactStoreVar = tx.newVar( id, proc.ArtifactStore[ S ]( new File( VoiceTrap.baseDirectory, "artifacts" )))
+      val artifactStoreVar = tx.newVar( id, proc.ArtifactStore[ S ]( VoiceTrap.artifactDirectory ))
       new Impl( id, cursor, chanCursorVars, channels, chanHandles, artifactStoreVar )
    }
 
