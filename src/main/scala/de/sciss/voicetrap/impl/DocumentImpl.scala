@@ -74,12 +74,24 @@ object DocumentImpl {
       val pDur = 60.0
 
       def start( auralSystem: AuralSystem[ S ])( implicit tx: Tx ) {
-         ???
+         for( i <- 0 until matrixSize ) {
+            val csr = chanCursorVars( i ).get
+            spawn( csr ) { implicit tx =>
+               val ch = chanVars( i ).get
+               ch.start( doc, auralSystem )( tx, csr )
+            }
+         }
 //         channels.valuesIterator.foreach( _.start( doc, auralSystem ))
       }
 
       def stop()( implicit tx: Tx ) {
-         ???
+         for( i <- 0 until matrixSize ) {
+            val csr = chanCursorVars( i ).get
+            spawn( csr ) { implicit tx =>
+               val ch = chanVars( i ).get
+               ch.stop()
+            }
+         }
 //         channels.valuesIterator.foreach( _.stop() )
       }
 

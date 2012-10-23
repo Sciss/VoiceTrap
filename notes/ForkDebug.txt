@@ -1,0 +1,44 @@
+[23 Oct 2012, 19:22'45.087] voice - Read document
+[23 Oct 2012, 19:22'45.216] voice - read chan (0,0) -> cursor = Cursor<24> with path Path(0, 3)
+[23 Oct 2012, 19:22'45.315] voice - infra started with path Path(0, 1)
+fCoreAudioDriverUID com_motu_driver_FWA_Engine:0000014326
+Number of Devices: 11
+   0 : "Built-in Microphone"
+   1 : "Built-in Input"
+   2 : "Built-in Output"
+   3 : "CD Spin Doctor Capture Support"
+   4 : "Soundflower (2ch)"
+   5 : "Soundflower (16ch)"
+   6 : "Adobe Encore DVD 4.0.1"
+   7 : "Adobe Media Encoder 4.0"
+   8 : "After Effects 9.0.2"
+   9 : "Premiere Pro 4.0"
+   10 : "Soundbooth 2.0"
+
+"Built-in Microphone" Input Device
+   Streams: 1
+      0  channels 2
+
+"Built-in Output" Output Device
+   Streams: 1
+      0  channels 2
+
+SC_AudioDriver: sample rate = 44100.000000, driver's block size = 512
+SuperCollider 3 server ready (debug build).
+[23 Oct 2012, 19:22'47.006] voice - Read document
+[23 Oct 2012, 19:22'47.006] voice - read chan (0,0) -> cursor = Cursor<24> with path Path(0, 3)
+[23 Oct 2012, 19:22'47.012] voice - spawning Chan(r=0, c=0) with path Path(0, 3)
+[23 Oct 2012, 19:22'47.061] voice - spawned Chan(r=0, c=0)
+FOUND in Chan(r=0, c=0) and path Path(0, 3) : List()
+[23 Oct 2012, 19:22'47.287] Confluent - Var(<14 @ 0,1>) get
+[23 Oct 2012, 19:22'47.287] Confluent - txn get' <14 @ 0,1>
+[23 Oct 2012, 19:22'47.288] Confluent - Var(<15 @ 0,1>) get
+[23 Oct 2012, 19:22'47.288] Confluent - txn get' <15 @ 0,1>
+[23 Oct 2012, 19:22'47.288] Confluent - Var(<16 @ 0,1>) get
+[23 Oct 2012, 19:22'47.288] Confluent - txn get' <16 @ 0,1>
+[23 Oct 2012, 19:22'47.289] Confluent - Var(<17 @ 0,1>) get
+[23 Oct 2012, 19:22'47.289] Confluent - txn get' <17 @ 0,1>
+GROUP BiGroup<4 @ 0,1> has first event at None				## should be <4 @ 0.3> !!
+[23 Oct 2012, 19:22'47.304] Confluent - ::::::: txn flush - term = 5 :::::::
+[23 Oct 2012, 19:22'47.306] Confluent - txn flush write Vector((1,ObserverKey(0)), (2,ObserverKey(0))) for <2 @ 0,5>
+[23 Oct 2012, 19:22'47.371] Confluent - Cursor<24> flush path = Path(0, 5)
