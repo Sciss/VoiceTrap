@@ -5,6 +5,7 @@ import de.sciss.lucre.{DataInput, DataOutput, stm}
 import de.sciss.synth
 import synth.proc
 import concurrent.stm.Ref
+import de.sciss.lucre.bitemp.Span
 
 object ChannelImpl {
    private final val SER_VERSION = 1
@@ -44,7 +45,7 @@ object ChannelImpl {
 
       private val transportVar = Ref( Option.empty[ Transport ])
 
-      override def toString = "Channel(row=" + row + ", column=" + column + ")"
+      override def toString = "Chan(r=" + row + ", c=" + column + ")"
 
       def hiddenLayer : AudioArtifact = ???
 
@@ -59,9 +60,10 @@ object ChannelImpl {
          cursorVar.set( newCursor )
          oldCursor.dispose()
 
-         println( "SPAWING WITH " + newCursor.position )
+         println( "SPAWNING WITH " + newCursor.position )
 
          spawn( newCursor ) { implicit tx =>
+            println( "SPAWNING IN " + Thread.currentThread() )
             start2( document, auralSystem )( tx, newCursor )
          }
       }
@@ -102,7 +104,7 @@ object ChannelImpl {
          val time       = transport.time
 
          import implicits._
-         import VoiceTrap.{numColumns, numRows, matrixSize}
+         import VoiceTrap.{numColumns, numRows, matrixSize, sampleRate}
 
          val p          = proc.Proc[ S ]
          p.name_=( chan.toString )
@@ -110,11 +112,13 @@ object ChannelImpl {
             import synth._
             import ugen._
 
-            val freq = (row * numColumns + column).linexp( 0, matrixSize - 1, 300, 3000 )
-            val beat = LFPulse.ar( column.linexp( 0, numColumns - 1, 1, 8.0/5 ))
+            val freq = (row * numColumns + column).linexp( 0, math.max( 1, matrixSize - 1 ), 300, 3000 )
+            val beat = LFPulse.ar( column.linexp( 0, math.max( 1, numColumns - 1 ), 1, 8.0/5 ))
             val sig  = SinOsc.ar( freq ) * beat / matrixSize
             Out.ar( 0, sig )
          })
+
+         group.add( Span( time, time + (sampleRate * 4).toLong ), p )
       }
    }
 }

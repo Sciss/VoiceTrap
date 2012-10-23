@@ -13,8 +13,9 @@ object InfraImpl {
       val dir     = new File( VoiceTrap.baseDirectory, "db" )
       val store   = BerkeleyDB.factory( dir )
       val system  = ConfluentReactive( store )
+//de.sciss.lucre.confluent.showLog = true
       val (access, cursor) = system.cursorRoot[ Document, Cursor ] { implicit tx => Document() } { _ => _.cursor }
-
+//de.sciss.lucre.confluent.showLog = false
       new Impl( system, access )( cursor )
    }
 

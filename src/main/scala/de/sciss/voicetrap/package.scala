@@ -55,21 +55,28 @@ package object voicetrap {
    implicit def artifactStoreSerializer   = proc.ArtifactStore.serializer[ S ]
    implicit def procGroupSerializer       = proc.ProcGroup_.Modifiable.serializer[ S ]
 
-   private lazy val pool : ExecutorService = {        // system wide scheduler
-      val res = Executors.newSingleThreadExecutor()
-      sys.addShutdownHook( shutdownThreadPool() )
-      res
-   }
-
-   private def shutdownThreadPool() {
-     pool.shutdown()
-   }
+//   private lazy val pool : ExecutorService = {        // system wide scheduler
+//      val res = Executors.newSingleThreadExecutor()
+//      sys.addShutdownHook( shutdownThreadPool() )
+//      res
+//   }
+//
+//   private def shutdownThreadPool() {
+//     pool.shutdown()
+//   }
 
    def spawn( cursor: Cursor )( fun: Tx => Unit )( implicit tx: Tx ) {
-      Txn.afterCommit( _ => pool.submit( new Runnable {
-         def run() {
-            cursor.step { implicit tx => fun( tx )}
-         }
-      }))( tx.peer )
+//      Txn.afterCommit( _ => pool.submit( new Runnable {
+//         def run() {
+//            cursor.step { implicit tx => fun( tx )}
+//         }
+//      }))( tx.peer )
+      Txn.afterCommit( _ => {
+//         proc.impl.TransportImpl.pool.submit( new Runnable {
+//            def run() {
+               cursor.step { implicit tx => fun( tx )}
+//            }
+//         })
+      })( tx.peer )
    }
 }
