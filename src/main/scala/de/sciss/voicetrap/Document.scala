@@ -1,11 +1,15 @@
 package de.sciss.voicetrap
 
 //import collection.immutable.{IndexedSeq => IIdxSeq}
+import impl.{DocumentImpl => Impl}
+import de.sciss.lucre.Writable
 
 object Document {
-   implicit def serializer: Serializer[ Document ] = ???
+   implicit def serializer: Serializer[ Document ] = Impl.serializer
+
+   def apply()( implicit tx: Tx ) : Document = Impl()
 }
-trait Document {
+trait Document extends Writable {
    /**
     * Map from (row, column) to channel
     */
@@ -26,4 +30,7 @@ trait Document {
     * Wrapping duration in seconds for the performance time
     */
    def pDur : Double // Var[ Double ]
+
+   def start() : Unit
+   def stop() : Unit
 }

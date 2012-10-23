@@ -1,7 +1,11 @@
 package de.sciss.voicetrap
 
-object Infra {
+import impl.{InfraImpl => Impl}
 
+object Infra {
+   private lazy val instance = Impl()
+
+   def apply() : Infra = instance
 }
 trait Infra {
    def system: S
