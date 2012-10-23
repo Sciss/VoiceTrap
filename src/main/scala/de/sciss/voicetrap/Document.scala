@@ -3,7 +3,7 @@ package de.sciss.voicetrap
 //import collection.immutable.{IndexedSeq => IIdxSeq}
 import impl.{DocumentImpl => Impl}
 import de.sciss.lucre.Writable
-import de.sciss.synth.proc.{ArtifactStore, AuralSystem}
+import de.sciss.synth.proc.AuralSystem
 
 object Document {
    implicit def serializer: Serializer[ Document ] = Impl.serializer
@@ -13,7 +13,7 @@ object Document {
 trait Document extends Writable {
    def cursor: Cursor
 
-   implicit def artifactStore : ArtifactStore[ S ]
+   def artifactStore( implicit tx: Tx ) : ArtifactStore
 
    /**
     * Map from (row, column) to channel
@@ -29,7 +29,7 @@ trait Document extends Writable {
     * One group is shared across channels, which merely
     * differ in their cursor access...
     */
-   def group : ProcGroup // Source[ ProcGroup ]
+   def group( implicit tx: Tx ) : ProcGroup // Source[ ProcGroup ]
 
    /**
     * Wrapping duration in seconds for the performance time

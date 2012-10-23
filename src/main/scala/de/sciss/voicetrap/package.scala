@@ -2,11 +2,16 @@ package de.sciss
 
 import lucre.confluent.reactive.ConfluentReactive
 import lucre.{DataOutput, DataInput, stm}
+import synth.expr.ExprImplicits
 import synth.proc
 import proc.Grapheme
+import java.util.concurrent.{ExecutorService, Executors, ScheduledExecutorService}
 
 package object voicetrap {
    type S               = ConfluentReactive
+
+   object implicits extends ExprImplicits[ S ]
+
    type D               = stm.Durable
    type I               = stm.InMemory
    type Tx              = S#Tx
@@ -20,6 +25,8 @@ package object voicetrap {
    type Serializer[ A ] = stm.Serializer[ Tx, Acc, A ]
 
    type AudioArtifact   = Grapheme.Value.Audio
+   type Transport       = proc.ProcTransport[ S ]
+   type ArtifactStore   = proc.ArtifactStore[ S ]
 
    def ??? : Nothing = sys.error( "TODO" )
 
@@ -34,5 +41,24 @@ package object voicetrap {
 
    def mapSerializer[ A, B ]( implicit entrySerializer: Serializer[ (A, B) ]) = stm.Serializer.map[ Tx, Acc, A, B ]
 
-//   implicit def durableTx( implicit tx: Tx ) : D#Tx = ???
+   implicit def artifactStoreSerializer   = proc.ArtifactStore.serializer[ S ]
+   implicit def procGroupSerializer       = proc.ProcGroup_.Modifiable.serializer[ S ]
+
+   private lazy val pool : ExecutorService = {        // system wide scheduler
+      val res = Executors.newSingleThreadExecutor()
+      sys.addShutdownHook( shutdownThreadPool() )
+      res
+   }
+
+   private def shutdownThreadPool() {
+     pool.shutdown()
+   }
+
+   def spawn( cursor: Cursor )( fun: Tx => Unit ) {
+      pool.submit( new Runnable {
+         def run() {
+            cursor.step( fun )
+         }
+      })
+   }
 }

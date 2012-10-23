@@ -7,6 +7,7 @@ object VoiceTrap {
 
    def numRows                = 4
    def numColumns             = 3
+   def matrixSize             = numRows * numColumns
 
    def sampleRate             = 44100.0
    def audioInterface         = "MOTU 828mk2"
