@@ -17,8 +17,8 @@ trait Channel extends Writable {
 
    // ---- algorithm ----
 
-   def start() : Unit
-   def stop() : Unit
+   def start()( implicit tx: Tx ) : Unit
+   def stop()( implicit tx: Tx ) : Unit
 
    def fork()( implicit tx: Tx ) : Unit
 }

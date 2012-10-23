@@ -29,8 +29,8 @@ object ChannelImpl {
 
       def cursor( implicit tx: Tx ) : Cursor = ???
 
-      def start() { ??? }
-      def stop() { ??? }
+      def start()( implicit tx: Tx ) { ??? }
+      def stop()( implicit tx: Tx ) { ??? }
 
       def fork()( implicit tx: Tx ) { ??? }
 

@@ -10,6 +10,8 @@ object Document {
    def apply()( implicit tx: Tx ) : Document = Impl()
 }
 trait Document extends Writable {
+   def cursor: Cursor
+
    /**
     * Map from (row, column) to channel
     */
@@ -31,6 +33,6 @@ trait Document extends Writable {
     */
    def pDur : Double // Var[ Double ]
 
-   def start() : Unit
-   def stop() : Unit
+   def start()( implicit tx: Tx ) : Unit
+   def stop()( implicit tx: Tx ) : Unit
 }

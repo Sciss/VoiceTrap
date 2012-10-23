@@ -29,4 +29,6 @@ package object voicetrap {
    def writeSerVersion( out: DataOutput, cookie: Int ) {
       out.writeUnsignedByte( cookie )
    }
+
+   def mapSerializer[ A, B ]( implicit entrySerializer: Serializer[ (A, B) ]) = stm.Serializer.map[ Tx, Acc, A, B ]
 }
