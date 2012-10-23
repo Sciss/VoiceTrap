@@ -3,6 +3,7 @@ package de.sciss.voicetrap
 //import collection.immutable.{IndexedSeq => IIdxSeq}
 import impl.{DocumentImpl => Impl}
 import de.sciss.lucre.Writable
+import de.sciss.synth.proc.AuralSystem
 
 object Document {
    implicit def serializer: Serializer[ Document ] = Impl.serializer
@@ -33,6 +34,6 @@ trait Document extends Writable {
     */
    def pDur : Double // Var[ Double ]
 
-   def start()( implicit tx: Tx ) : Unit
+   def start( auralSystem: AuralSystem[ S ])( implicit tx: Tx ) : Unit
    def stop()( implicit tx: Tx ) : Unit
 }

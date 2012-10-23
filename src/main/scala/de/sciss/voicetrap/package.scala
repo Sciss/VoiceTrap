@@ -7,6 +7,7 @@ import proc.Grapheme
 
 package object voicetrap {
    type S               = ConfluentReactive
+   type I               = stm.InMemory
    type Tx              = S#Tx
    type Acc             = S#Acc
    type ID              = S#ID

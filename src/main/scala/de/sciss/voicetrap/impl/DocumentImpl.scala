@@ -2,7 +2,7 @@ package de.sciss.voicetrap
 package impl
 
 import de.sciss.lucre.{stm, DataOutput, DataInput}
-import de.sciss.synth.proc.ProcGroup_
+import de.sciss.synth.proc.{AuralSystem, ProcGroup_}
 
 object DocumentImpl {
    private final val SER_VERSION = 1
@@ -40,8 +40,8 @@ object DocumentImpl {
       val pDur = 60.0
 
 
-      def start()( implicit tx: Tx ) {
-         channels.valuesIterator.foreach( _.start() )
+      def start( auralSystem: AuralSystem[ S ])( implicit tx: Tx ) {
+         channels.valuesIterator.foreach( _.start( auralSystem ))
       }
 
       def stop()( implicit tx: Tx ) {

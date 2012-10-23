@@ -2,7 +2,7 @@ package de.sciss.voicetrap
 package impl
 
 import de.sciss.lucre.{DataInput, DataOutput, stm}
-import de.sciss.synth.proc.Transport
+import de.sciss.synth.proc.{AuralSystem, Transport}
 
 object ChannelImpl {
    private final val SER_VERSION = 1
@@ -29,7 +29,10 @@ object ChannelImpl {
 
       def cursor( implicit tx: Tx ) : Cursor = ???
 
-      def start()( implicit tx: Tx ) { ??? }
+      def start( auralSystem: AuralSystem[ S ])( implicit tx: Tx ) {
+         ???
+      }
+
       def stop()( implicit tx: Tx ) { ??? }
 
       def fork()( implicit tx: Tx ) { ??? }

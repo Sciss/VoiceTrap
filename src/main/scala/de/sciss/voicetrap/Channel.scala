@@ -2,6 +2,7 @@ package de.sciss.voicetrap
 
 import impl.{ChannelImpl => Impl}
 import de.sciss.lucre.Writable
+import de.sciss.synth.proc.AuralSystem
 
 object Channel {
    implicit def serializer: Serializer[ Channel ] = Impl.serializer
@@ -17,7 +18,7 @@ trait Channel extends Writable {
 
    // ---- algorithm ----
 
-   def start()( implicit tx: Tx ) : Unit
+   def start( auralSystem: AuralSystem[ S ])( implicit tx: Tx ) : Unit
    def stop()( implicit tx: Tx ) : Unit
 
    def fork()( implicit tx: Tx ) : Unit
