@@ -58,6 +58,7 @@ package object voicetrap {
 
    implicit def artifactStoreSerializer   = proc.ArtifactStore.serializer[ S ]
    implicit def procGroupSerializer       = proc.ProcGroup_.Modifiable.serializer[ S ]
+   implicit def cursorSerializer          = CursorSerializer
 
 //   private lazy val pool : ExecutorService = {        // system wide scheduler
 //      val res = Executors.newSingleThreadExecutor()

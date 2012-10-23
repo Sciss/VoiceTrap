@@ -2,12 +2,12 @@ package de.sciss.voicetrap
 
 import impl.{ChannelImpl => Impl}
 import de.sciss.lucre.Writable
-import de.sciss.synth.proc.AuralSystem
+import de.sciss.synth.proc
 
 object Channel {
    implicit def serializer: Serializer[ Channel ] = Impl.serializer
 
-   def apply( row: Int, column: Int )( implicit tx: Tx ) : Channel = Impl( row, column )
+   def apply( row: Int, column: Int, group: ProcGroup )( implicit tx: Tx ) : Channel = Impl( row, column, group )
 }
 trait Channel extends Writable {
    def row: Int
@@ -16,9 +16,12 @@ trait Channel extends Writable {
    def hiddenLayer : AudioArtifact
 //   def cursor( implicit tx: Tx ): Cursor
 
+//   def refresh( implicit tx: Tx ) : Channel
+
    // ---- algorithm ----
 
-   def start( document: Document, auralSystem: AuralSystem[ S ])( implicit tx: Tx ) : Unit
+//   def start( document: Document, auralSystem: AuralSystem[ S ])( implicit tx: Tx ) : Unit
+   def start( document: Document, auralSystem: proc.AuralSystem[ S ])( implicit tx: Tx, cursor: Cursor ) : Unit
    def stop()( implicit tx: Tx ) : Unit
 
 //   def fork()( implicit tx: Tx ) : Unit

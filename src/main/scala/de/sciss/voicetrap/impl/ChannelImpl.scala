@@ -12,13 +12,6 @@ object ChannelImpl {
 
    var VERBOSE = false
 
-   implicit object cursorSerializer extends stm.Serializer[ Tx, Acc, Cursor ] {
-      def write( v: Cursor, out: DataOutput ) { v.write( out )}
-      def read( in: DataInput, access: Acc )( implicit tx: Tx ) : Cursor = {
-         tx.readCursor( in, access )
-      }
-   }
-
    implicit object serializer extends stm.Serializer[ Tx, Acc, Channel ] {
       def write( v: Channel, out: DataOutput ) { v.write( out )}
 
@@ -28,20 +21,25 @@ object ChannelImpl {
          val id         = tx.readID( in, access )
          val row        = in.readInt()
          val column     = in.readInt()
-         val cursorVar  = tx.readVar[ Cursor ]( id, in )
-         new Impl( id, row, column, cursorVar )
+//         val cursorVar  = tx.readVar[ Cursor    ]( id, in )
+         val groupVar   = tx.readVar[ ProcGroup ]( id, in )
+
+//         log( "read chan " + (row, column) + " -> cursor = " + cursorVar.get + " with path " + cursorVar.get.position )
+
+         new Impl( id, row, column, /* cursorVar, */ groupVar )
       }
    }
 
-   def apply( row: Int, column: Int )( implicit tx: Tx ) : Channel = {
+   def apply( row: Int, column: Int, group: ProcGroup )( implicit tx: Tx ) : Channel = {
 //      val dtx: D#Tx  = tx
       val id         = tx.newID()
-      val initCursor = tx.newCursor()
-      val cursorVar  = tx.newVar[ Cursor ]( id, initCursor )
-      new Impl( id, row, column, cursorVar )
+//      val initCursor = tx.newCursor()
+//      val cursorVar  = tx.newVar[ Cursor ]( id, initCursor )
+      val groupVar   = tx.newVar[ ProcGroup ]( id, group )
+      new Impl( id, row, column, /* cursorVar, */ groupVar )
    }
 
-   private final class Impl( val id: ID, val row: Int, val column: Int, cursorVar: Var[ Cursor ])
+   private final class Impl( val id: ID, val row: Int, val column: Int, /* cursorVar: Var[ Cursor ], */ groupVar: Var[ ProcGroup ])
    extends Channel {
       chan =>
 
@@ -53,32 +51,16 @@ object ChannelImpl {
 
 //      def cursor( implicit tx: Tx ) : Cursor = cursorVar.get
 
-      def start( document: Document, auralSystem: proc.AuralSystem[ S ])( implicit tx: Tx ) {
-//         implicit val dtx: D#Tx  = tx
-
-//         implicit val cursor = cursorVar.get
-         val newCursor = tx.newCursor()
-         val oldCursor = cursorVar.get
-         cursorVar.set( newCursor )
-         oldCursor.dispose()
-
-         log( "spawning " + chan + " with path " + newCursor.position )
-
-         spawn( newCursor ) { implicit tx =>
-            log( "spawned " + chan )
-            start2( document, auralSystem )( tx, newCursor )
-         }
-      }
-
-      private def start2( document: Document, auralSystem: proc.AuralSystem[ S ])( implicit tx: Tx, cursor: Cursor ) {
+      def start( document: Document, auralSystem: proc.AuralSystem[ S ])( implicit tx: Tx, cursor: Cursor ) {
+         log( "spawning " + chan + " with path " + cursor.position )
          implicit val aStore  = document.artifactStore
-         val transport        = proc.Transport[ S, I ]( document.group, VoiceTrap.sampleRate )
+         val transport        = proc.Transport[ S, I ]( group, VoiceTrap.sampleRate )
          /* val view = */ proc.AuralPresentation.run[ S, I ]( transport, auralSystem )
          transport.play()
          transportVar.set( Some( transport ))( tx.peer )
 
-//         testSpawn( document.group )
-         testReplay( document.group )
+//         testSpawn()
+         testReplay()
       }
 
       def stop()( implicit tx: Tx ) {
@@ -97,23 +79,32 @@ object ChannelImpl {
          id.write( out )
          out.writeInt( row )
          out.writeInt( column )
-         cursorVar.write( out )
+//         cursorVar.write( out )
+         groupVar.write( out )
       }
+
+      def group( implicit tx: Tx ) : ProcGroup = groupVar.get
+
+//      def refresh( implicit tx: Tx ) : Channel = {
+//         tx.newHandle( this ).get
+//      }
 
       // ---- testing ----
 
-      private def testReplay( group: ProcGroup )( implicit tx: Tx ) {
+      private def testReplay()( implicit tx: Tx ) {
+         val g = group
          val transport  = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
          transport.seek( 0L )
          println( "FOUND in " + chan + " and path " + tx.inputAccess + " : " + transport.iterator.toList )
 de.sciss.lucre.confluent.showLog = true
-         println( "group has first event at " + group.nearestEventAfter( Long.MinValue ))
+         println( "GROUP " + g + " has first event at " + g.nearestEventAfter( Long.MinValue ))
          transport.play()
       }
 
-      private def testSpawn( group: ProcGroup )( implicit tx: Tx ) {
+      private def testSpawn()( implicit tx: Tx ) {
          val transport  = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
          val time       = transport.time
+         val g          = group
 
          import implicits._
          import VoiceTrap.{numColumns, numRows, matrixSize, sampleRate}
@@ -133,7 +124,8 @@ de.sciss.lucre.confluent.showLog = true
          println( "ADDING in " + chan + " and path " + tx.inputAccess + " at " + time )
 
 de.sciss.lucre.confluent.showLog = true
-         group.add( Span( time, time + (sampleRate * 4).toLong ), p )
+log( "ADDING TO GROUP " + g )
+         g.add( Span( time, time + (sampleRate * 4).toLong ), p )
 //         de.sciss.lucre.confluent.showLog = true
       }
    }
