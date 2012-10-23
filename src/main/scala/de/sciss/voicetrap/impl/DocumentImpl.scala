@@ -13,9 +13,13 @@ object DocumentImpl {
    implicit object serializer extends stm.Serializer[ Tx, Acc, Document ] {
       def write( v: Document, out: DataOutput ) { v.write( out )}
       def read( in: DataInput, access: Acc )( implicit tx: Tx ) : Document = {
-         readSerVersion( in, SER_VERSION )
+         readSerVersion( in, "doc", SER_VERSION )
          val id               = tx.readID( in, access )
+//         val _s1 = in.readString()
+//         require( _s1 == "ALPHA", "found " + _s1 + " but not ALPHA" )
          val cursor           = tx.readCursor( in, access )
+//         val _s2 = in.readString()
+//         require( _s2 == "BETA", "found " + _s2 + " but not BETA" )
          val groupVar         = tx.readVar[ ProcGroup ]( id, in ) // proc.ProcGroup_.Modifiable.read[ S ]( in, access )
          val channels         = mapSerializer[ (Int, Int), Channel ].read( in, access )
          val artifactStoreVar = tx.readVar[ ArtifactStore ]( id, in ) // .read[ S ]( in, access )
@@ -36,14 +40,14 @@ object DocumentImpl {
 
    private final class Impl( val id: ID, val cursor: Cursor, groupVar: Var[ ProcGroup ],
                              val channels: Map[ (Int, Int), Channel ],
-                             val artifactStoreH : Var[ ArtifactStore ])
+                             val artifactStoreVar : Var[ ArtifactStore ])
    extends Document {
       doc =>
 
       override def toString = "Document"
 
       def group( implicit tx: Tx ) : ProcGroup = groupVar.get
-      def artifactStore( implicit tx: Tx ) : ArtifactStore = artifactStoreH.get
+      def artifactStore( implicit tx: Tx ) : ArtifactStore = artifactStoreVar.get
 
       /**
        * Fork random range bounds in seconds
@@ -64,12 +68,14 @@ object DocumentImpl {
       }
 
       def write( out: DataOutput ) {
-         writeSerVersion( out, SER_VERSION )
+         writeSerVersion( out, "doc", SER_VERSION )
          id.write( out )
+//         out.writeString( "ALPHA" )
          cursor.write( out )
+//         out.writeString( "BETA" )
          groupVar.write( out )
          mapSerializer[ (Int, Int), Channel ].write( channels, out )
-         artifactStoreH.write( out )
+         artifactStoreVar.write( out )
       }
    }
 }

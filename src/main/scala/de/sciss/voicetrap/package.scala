@@ -6,6 +6,7 @@ import synth.expr.ExprImplicits
 import synth.proc
 import proc.Grapheme
 import java.util.concurrent.{ExecutorService, Executors, ScheduledExecutorService}
+import concurrent.stm.Txn
 
 package object voicetrap {
    type S               = ConfluentReactive
@@ -30,13 +31,23 @@ package object voicetrap {
 
    def ??? : Nothing = sys.error( "TODO" )
 
-   def readSerVersion( in: DataInput, expected: Int ) {
-      val cookie = in.readUnsignedByte()
-      require( cookie == expected, "Expected serialized version " + expected + ", but found " + cookie )
+   def readSerVersion( in: DataInput, cookie: String, version: Int ) {
+      val sb      = new StringBuilder( 3 )
+      sb.append( in.readChar() )
+      sb.append( in.readChar() )
+      sb.append( in.readChar() )
+      val cFound  = sb.toString()
+      require( cFound == cookie, "Unexpected cookie, expected " + cookie + " but found " + cFound )
+      val vFound = in.readUnsignedByte()
+      require( vFound == version, "Expected serialized version " + version + ", but found " + vFound )
    }
 
-   def writeSerVersion( out: DataOutput, cookie: Int ) {
-      out.writeUnsignedByte( cookie )
+   def writeSerVersion( out: DataOutput, cookie: String, version: Int ) {
+      require( cookie.length == 3 )
+      out.writeChar( cookie.charAt( 0 ))
+      out.writeChar( cookie.charAt( 1 ))
+      out.writeChar( cookie.charAt( 2 ))
+      out.writeUnsignedByte( version )
    }
 
    def mapSerializer[ A, B ]( implicit entrySerializer: Serializer[ (A, B) ]) = stm.Serializer.map[ Tx, Acc, A, B ]
@@ -54,11 +65,11 @@ package object voicetrap {
      pool.shutdown()
    }
 
-   def spawn( cursor: Cursor )( fun: Tx => Unit ) {
-      pool.submit( new Runnable {
+   def spawn( cursor: Cursor )( fun: Tx => Unit )( implicit tx: Tx ) {
+      Txn.afterCommit( _ => pool.submit( new Runnable {
          def run() {
-            cursor.step( fun )
+            cursor.step { implicit tx => fun( tx )}
          }
-      })
+      }))( tx.peer )
    }
 }

@@ -3,7 +3,6 @@ package impl
 
 import de.sciss.lucre.{DataInput, DataOutput, stm}
 import de.sciss.synth
-import synth.expr.ExprImplicits
 import synth.proc
 import concurrent.stm.Ref
 
@@ -22,7 +21,7 @@ object ChannelImpl {
 
       def read( in: DataInput, access: Acc )( implicit tx: Tx ) : Channel = {
 //         implicit val dtx: D#Tx = tx
-         readSerVersion( in, SER_VERSION )
+         readSerVersion( in, "cha", SER_VERSION )
          val id         = tx.readID( in, access )
          val row        = in.readInt()
          val column     = in.readInt()
@@ -49,13 +48,21 @@ object ChannelImpl {
 
       def hiddenLayer : AudioArtifact = ???
 
-      def cursor( implicit tx: Tx ) : Cursor = cursorVar.get
+//      def cursor( implicit tx: Tx ) : Cursor = cursorVar.get
 
       def start( document: Document, auralSystem: proc.AuralSystem[ S ])( implicit tx: Tx ) {
 //         implicit val dtx: D#Tx  = tx
-         implicit val cursor = cursorVar.get
-         spawn( cursor ) { implicit tx =>
-            start2( document, auralSystem )
+
+//         implicit val cursor = cursorVar.get
+         val newCursor = tx.newCursor()
+         val oldCursor = cursorVar.get
+         cursorVar.set( newCursor )
+         oldCursor.dispose()
+
+         println( "SPAWING WITH " + newCursor.position )
+
+         spawn( newCursor ) { implicit tx =>
+            start2( document, auralSystem )( tx, newCursor )
          }
       }
 
@@ -76,12 +83,12 @@ object ChannelImpl {
          }
       }
 
-      def fork()( implicit tx: Tx ) {
-         ???
-      }
+//      def fork()( implicit tx: Tx ) {
+//         ...
+//      }
 
       def write( out: DataOutput ) {
-         writeSerVersion( out, SER_VERSION )
+         writeSerVersion( out, "cha", SER_VERSION )
          id.write( out )
          out.writeInt( row )
          out.writeInt( column )

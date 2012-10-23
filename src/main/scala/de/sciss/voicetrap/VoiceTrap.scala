@@ -13,4 +13,8 @@ object VoiceTrap {
    def audioInterface         = "MOTU 828mk2"
    def highestInputChannel    = 2
    def highestOutputChannel   = 22
+
+   def main( args: Array[ String ]) {
+      Infra().start()
+   }
 }

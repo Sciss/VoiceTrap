@@ -14,12 +14,12 @@ trait Channel extends Writable {
    def column: Int
 
    def hiddenLayer : AudioArtifact
-   def cursor( implicit tx: Tx ): Cursor
+//   def cursor( implicit tx: Tx ): Cursor
 
    // ---- algorithm ----
 
    def start( document: Document, auralSystem: AuralSystem[ S ])( implicit tx: Tx ) : Unit
    def stop()( implicit tx: Tx ) : Unit
 
-   def fork()( implicit tx: Tx ) : Unit
+//   def fork()( implicit tx: Tx ) : Unit
 }
