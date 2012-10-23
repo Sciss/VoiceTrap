@@ -18,7 +18,7 @@ trait Channel extends Writable {
 
    // ---- algorithm ----
 
-   def start( auralSystem: AuralSystem[ S ])( implicit tx: Tx ) : Unit
+   def start( document: Document, auralSystem: AuralSystem[ S ])( implicit tx: Tx ) : Unit
    def stop()( implicit tx: Tx ) : Unit
 
    def fork()( implicit tx: Tx ) : Unit

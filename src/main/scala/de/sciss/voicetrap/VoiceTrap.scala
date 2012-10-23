@@ -8,6 +8,7 @@ object VoiceTrap {
    def numRows                = 4
    def numColumns             = 3
 
+   def sampleRate             = 44100.0
    def audioInterface         = "MOTU 828mk2"
    def highestInputChannel    = 2
    def highestOutputChannel   = 22

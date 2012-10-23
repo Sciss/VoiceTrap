@@ -7,6 +7,7 @@ import proc.Grapheme
 
 package object voicetrap {
    type S               = ConfluentReactive
+   type D               = stm.Durable
    type I               = stm.InMemory
    type Tx              = S#Tx
    type Acc             = S#Acc
@@ -32,4 +33,6 @@ package object voicetrap {
    }
 
    def mapSerializer[ A, B ]( implicit entrySerializer: Serializer[ (A, B) ]) = stm.Serializer.map[ Tx, Acc, A, B ]
+
+//   implicit def durableTx( implicit tx: Tx ) : D#Tx = ???
 }

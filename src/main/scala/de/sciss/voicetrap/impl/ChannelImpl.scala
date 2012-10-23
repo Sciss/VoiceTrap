@@ -2,45 +2,70 @@ package de.sciss.voicetrap
 package impl
 
 import de.sciss.lucre.{DataInput, DataOutput, stm}
-import de.sciss.synth.proc.{AuralSystem, Transport}
+import de.sciss.synth.proc.{AuralPresentation, AuralSystem, Transport}
 
 object ChannelImpl {
    private final val SER_VERSION = 1
+
+   implicit object cursorSerializer extends stm.Serializer[ Tx, Acc, Cursor ] {
+      def write( v: Cursor, out: DataOutput ) { v.write( out )}
+      def read( in: DataInput, access: Acc )( implicit tx: Tx ) : Cursor = {
+         tx.readCursor( in, access )
+      }
+   }
 
    implicit object serializer extends stm.Serializer[ Tx, Acc, Channel ] {
       def write( v: Channel, out: DataOutput ) { v.write( out )}
 
       def read( in: DataInput, access: Acc )( implicit tx: Tx ) : Channel = {
+//         implicit val dtx: D#Tx = tx
          readSerVersion( in, SER_VERSION )
-         val row     = in.readInt()
-         val column  = in.readInt()
-         new Impl( row, column )
+         val id         = tx.readID( in, access )
+         val row        = in.readInt()
+         val column     = in.readInt()
+         val cursorVar  = tx.readVar[ Cursor ]( id, in )
+         new Impl( id, row, column, cursorVar )
       }
    }
 
    def apply( row: Int, column: Int )( implicit tx: Tx ) : Channel = {
-      new Impl( row, column )
+//      val dtx: D#Tx  = tx
+      val id         = tx.newID()
+      val initCursor = tx.newCursor()
+      val cursorVar  = tx.newVar[ Cursor ]( id, initCursor )
+      new Impl( id, row, column, cursorVar )
    }
 
-   private final class Impl( val row: Int, val column: Int ) extends Channel {
+   private final class Impl( val id: ID, val row: Int, val column: Int, cursorVar: Var[ Cursor ])
+   extends Channel {
       override def toString = "Channel(row=" + row + ", column=" + column + ")"
 
       def hiddenLayer : AudioArtifact = ???
 
-      def cursor( implicit tx: Tx ) : Cursor = ???
+      def cursor( implicit tx: Tx ) : Cursor = cursorVar.get
 
-      def start( auralSystem: AuralSystem[ S ])( implicit tx: Tx ) {
+      def start( document: Document, auralSystem: AuralSystem[ S ])( implicit tx: Tx ) {
+//         implicit val dtx: D#Tx  = tx
+         implicit val cursor     = cursorVar.get
+         import document.artifactStore
+         val transport           = Transport[ S, I ]( document.group, VoiceTrap.sampleRate )
+         /* val view = */ AuralPresentation.run[ S, I ]( transport, auralSystem )
+      }
+
+      def stop()( implicit tx: Tx ) {
          ???
       }
 
-      def stop()( implicit tx: Tx ) { ??? }
-
-      def fork()( implicit tx: Tx ) { ??? }
+      def fork()( implicit tx: Tx ) {
+         ???
+      }
 
       def write( out: DataOutput ) {
          writeSerVersion( out, SER_VERSION )
+         id.write( out )
          out.writeInt( row )
          out.writeInt( column )
+         cursorVar.write( out )
       }
    }
 }

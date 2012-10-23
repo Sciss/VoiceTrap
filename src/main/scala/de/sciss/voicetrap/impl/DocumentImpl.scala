@@ -2,7 +2,8 @@ package de.sciss.voicetrap
 package impl
 
 import de.sciss.lucre.{stm, DataOutput, DataInput}
-import de.sciss.synth.proc.{AuralSystem, ProcGroup_}
+import de.sciss.synth.proc.{ArtifactStore, AuralSystem, ProcGroup_}
+import java.io.File
 
 object DocumentImpl {
    private final val SER_VERSION = 1
@@ -11,9 +12,10 @@ object DocumentImpl {
       def write( v: Document, out: DataOutput ) { v.write( out )}
       def read( in: DataInput, access: Acc )( implicit tx: Tx ) : Document = {
          readSerVersion( in, SER_VERSION )
-         val cursor     = tx.readCursor( in, access )
-         val group      = ProcGroup_.Modifiable.read[ S ]( in, access )
-         val channels   = mapSerializer[ (Int, Int), Channel ].read( in, access )
+         val cursor        = tx.readCursor( in, access )
+         val group         = ProcGroup_.Modifiable.read[ S ]( in, access )
+         val channels      = mapSerializer[ (Int, Int), Channel ].read( in, access )
+         implicit val artifactStore = ArtifactStore.read[ S ]( in, access )
          new Impl( cursor, group, channels )
       }
    }
@@ -24,11 +26,17 @@ object DocumentImpl {
       val channels   = for( row <- 0 until VoiceTrap.numRows; column <- 0 until VoiceTrap.numColumns ) yield {
          (row, column) -> Channel( row, column )
       }
+      implicit val artifactStore = ArtifactStore[ S ]( new File( VoiceTrap.baseDirectory, "artifacts" ))
       new Impl( cursor, group, channels.toMap )
    }
 
    private final class Impl( val cursor: Cursor, val group: ProcGroup, val channels: Map[ (Int, Int), Channel ])
+                           ( implicit val artifactStore : ArtifactStore[ S ])
    extends Document {
+      doc =>
+
+      override def toString = "Document"
+
       /**
        * Fork random range bounds in seconds
        */
@@ -39,9 +47,8 @@ object DocumentImpl {
        */
       val pDur = 60.0
 
-
       def start( auralSystem: AuralSystem[ S ])( implicit tx: Tx ) {
-         channels.valuesIterator.foreach( _.start( auralSystem ))
+         channels.valuesIterator.foreach( _.start( doc, auralSystem ))
       }
 
       def stop()( implicit tx: Tx ) {
@@ -53,6 +60,7 @@ object DocumentImpl {
          cursor.write( out )
          group.write( out )
          mapSerializer[ (Int, Int), Channel ].write( channels, out )
+         artifactStore.write( out )
       }
    }
 }

@@ -3,7 +3,7 @@ package de.sciss.voicetrap
 //import collection.immutable.{IndexedSeq => IIdxSeq}
 import impl.{DocumentImpl => Impl}
 import de.sciss.lucre.Writable
-import de.sciss.synth.proc.AuralSystem
+import de.sciss.synth.proc.{ArtifactStore, AuralSystem}
 
 object Document {
    implicit def serializer: Serializer[ Document ] = Impl.serializer
@@ -12,6 +12,8 @@ object Document {
 }
 trait Document extends Writable {
    def cursor: Cursor
+
+   implicit def artifactStore : ArtifactStore[ S ]
 
    /**
     * Map from (row, column) to channel
