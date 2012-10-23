@@ -13,6 +13,7 @@ object DocumentImpl {
    implicit object serializer extends stm.Serializer[ Tx, Acc, Document ] {
       def write( v: Document, out: DataOutput ) { v.write( out )}
       def read( in: DataInput, access: Acc )( implicit tx: Tx ) : Document = {
+         log( "Read document" )
          readSerVersion( in, "doc", SER_VERSION )
          val id               = tx.readID( in, access )
 //         val _s1 = in.readString()

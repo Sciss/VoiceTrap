@@ -8,7 +8,10 @@ import de.sciss.synth.proc.AuralSystem
 object Document {
    implicit def serializer: Serializer[ Document ] = Impl.serializer
 
-   def apply()( implicit tx: Tx ) : Document = Impl()
+   def apply()( implicit tx: Tx ) : Document = {
+      log( "New document" )
+      Impl()
+   }
 }
 trait Document extends Writable {
    def cursor: Cursor

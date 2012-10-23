@@ -7,6 +7,10 @@ import synth.proc
 import proc.Grapheme
 import java.util.concurrent.{ExecutorService, Executors, ScheduledExecutorService}
 import concurrent.stm.Txn
+import java.text.SimpleDateFormat
+import java.util.{Date, Locale}
+import annotation.elidable
+import annotation.elidable._
 
 package object voicetrap {
    type S               = ConfluentReactive
@@ -65,6 +69,8 @@ package object voicetrap {
 //     pool.shutdown()
 //   }
 
+   private val fullDecouple = false
+
    def spawn( cursor: Cursor )( fun: Tx => Unit )( implicit tx: Tx ) {
 //      Txn.afterCommit( _ => pool.submit( new Runnable {
 //         def run() {
@@ -72,11 +78,25 @@ package object voicetrap {
 //         }
 //      }))( tx.peer )
       Txn.afterCommit( _ => {
-//         proc.impl.TransportImpl.pool.submit( new Runnable {
-//            def run() {
+         val r = new Runnable {
+            def run() {
                cursor.step { implicit tx => fun( tx )}
-//            }
-//         })
+            }
+         }
+
+         if( fullDecouple ) {
+            proc.impl.TransportImpl.pool.submit( r )
+         } else {
+            r.run()
+         }
+
       })( tx.peer )
+   }
+
+   private lazy val logHeader = new SimpleDateFormat( "[d MMM yyyy, HH:mm''ss.SSS] 'voice' - ", Locale.US )
+   var showLog = true
+
+   @elidable(CONFIG) private[voicetrap] def log( what: => String ) {
+      if( showLog ) Console.out.println( logHeader.format( new Date() ) + what )
    }
 }

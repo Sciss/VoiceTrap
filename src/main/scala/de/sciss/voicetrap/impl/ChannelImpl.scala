@@ -10,6 +10,8 @@ import de.sciss.lucre.bitemp.Span
 object ChannelImpl {
    private final val SER_VERSION = 1
 
+   var VERBOSE = false
+
    implicit object cursorSerializer extends stm.Serializer[ Tx, Acc, Cursor ] {
       def write( v: Cursor, out: DataOutput ) { v.write( out )}
       def read( in: DataInput, access: Acc )( implicit tx: Tx ) : Cursor = {
@@ -60,10 +62,10 @@ object ChannelImpl {
          cursorVar.set( newCursor )
          oldCursor.dispose()
 
-         println( "SPAWNING WITH " + newCursor.position )
+         log( "spawning " + chan + " with path " + newCursor.position )
 
          spawn( newCursor ) { implicit tx =>
-            println( "SPAWNING IN " + Thread.currentThread() )
+            log( "spawned " + chan )
             start2( document, auralSystem )( tx, newCursor )
          }
       }
@@ -75,7 +77,8 @@ object ChannelImpl {
          transport.play()
          transportVar.set( Some( transport ))( tx.peer )
 
-         testSpawn( document.group )
+//         testSpawn( document.group )
+         testReplay( document.group )
       }
 
       def stop()( implicit tx: Tx ) {
@@ -99,6 +102,15 @@ object ChannelImpl {
 
       // ---- testing ----
 
+      private def testReplay( group: ProcGroup )( implicit tx: Tx ) {
+         val transport  = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
+         transport.seek( 0L )
+         println( "FOUND in " + chan + " and path " + tx.inputAccess + " : " + transport.iterator.toList )
+de.sciss.lucre.confluent.showLog = true
+         println( "group has first event at " + group.nearestEventAfter( Long.MinValue ))
+         transport.play()
+      }
+
       private def testSpawn( group: ProcGroup )( implicit tx: Tx ) {
          val transport  = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
          val time       = transport.time
@@ -106,7 +118,7 @@ object ChannelImpl {
          import implicits._
          import VoiceTrap.{numColumns, numRows, matrixSize, sampleRate}
 
-         val p          = proc.Proc[ S ]
+         val p = proc.Proc[ S ]
          p.name_=( chan.toString )
          p.graph_=( synth.SynthGraph {
             import synth._
@@ -118,7 +130,11 @@ object ChannelImpl {
             Out.ar( 0, sig )
          })
 
+         println( "ADDING in " + chan + " and path " + tx.inputAccess + " at " + time )
+
+de.sciss.lucre.confluent.showLog = true
          group.add( Span( time, time + (sampleRate * 4).toLong ), p )
+//         de.sciss.lucre.confluent.showLog = true
       }
    }
 }

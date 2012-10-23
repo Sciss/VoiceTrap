@@ -5,8 +5,10 @@ import java.io.File
 object VoiceTrap {
    def baseDirectory : File   = new File( new File( sys.props( "user.home" ), "Desktop" ), "VoiceTrap" )
 
-   def numRows                = 1 // 2 // 4
-   def numColumns             = 1 // 2 // 3
+   val minimal                = true
+
+   def numRows                = if( minimal ) 1 else 4
+   def numColumns             = if( minimal ) 2 else 3
    def matrixSize             = numRows * numColumns
 
    def sampleRate             = 44100.0

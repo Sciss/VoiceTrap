@@ -31,7 +31,7 @@ object InfraImpl {
          sCfg.pickPort()
 
          cursor.step { implicit tx =>
-            println( "input access " + tx.inputAccess )
+            log( "infra started with path " + tx.inputAccess )
             val as = AuralSystem[ S, I ].start( sCfg )
             as.whenStarted { implicit tx =>
                server => document.get.start( as )
