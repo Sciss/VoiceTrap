@@ -8,7 +8,7 @@ object VoiceTrap {
 
    val minimal                = false
 
-   def numRows                = if( minimal ) 1 else 4
+   def numRows                = if( minimal ) 2 else 4
    def numColumns             = if( minimal ) 1 else 3
    def matrixSize             = numRows * numColumns
 

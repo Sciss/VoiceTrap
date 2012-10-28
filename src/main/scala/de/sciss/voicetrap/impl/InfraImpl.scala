@@ -32,9 +32,11 @@ object InfraImpl {
 
          cursor.step { implicit tx =>
             log( "infra started with path " + tx.inputAccess )
-            val as = AuralSystem[ S, I ].start( sCfg )
+            val as = AuralSystem[ S ].start( sCfg )
             as.whenStarted { implicit tx =>
-               server => document.get.start( as )
+               server =>
+                  server.peer.dumpOSC()
+                  document.get.start( as )
             }
          }
       }

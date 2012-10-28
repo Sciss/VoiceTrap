@@ -5,7 +5,6 @@ import lucre.{DataOutput, DataInput, stm}
 import synth.expr.ExprImplicits
 import synth.proc
 import proc.Grapheme
-import java.util.concurrent.{ExecutorService, Executors, ScheduledExecutorService}
 import concurrent.stm.Txn
 import java.text.SimpleDateFormat
 import java.util.{Date, Locale}
@@ -86,7 +85,7 @@ package object voicetrap {
          }
 
          if( fullDecouple ) {
-            proc.impl.TransportImpl.pool.submit( r )
+            proc.SoundProcesses.pool.submit( r )
          } else {
             r.run()
          }
