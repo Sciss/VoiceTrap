@@ -105,8 +105,11 @@ object ChannelImpl {
          val g = group
          val transport = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
          transport.iterator.toList.headOption.foreach { case (span, timed) =>
+            logThis( "removing process " + timed )
+//de.sciss.lucre.event.showLog = true
             val ok = g.remove( timed.span, timed.value )
-            logThis( "removing process " + timed + " ; success? " + ok )
+//de.sciss.lucre.event.showLog = false
+            logThis( "removing process - success? " + ok )
          }
       }
 
@@ -148,7 +151,11 @@ object ChannelImpl {
                   val env  = EnvGen.ar( Env.linen( 0.2, (duri - 0.4).max( 0 ), 0.2 ))
                   Out.ar( 0, sig * env )
                })
-               g.add( Span( time, time + len ), p )
+               val span    = Span( time, time + len )
+               logThis( "adding process " + (span, p) )
+//de.sciss.lucre.event.showLog = true
+               g.add( span, p )
+//de.sciss.lucre.event.showLog = false
 
             } catch {
                case e: IOException => e.printStackTrace()

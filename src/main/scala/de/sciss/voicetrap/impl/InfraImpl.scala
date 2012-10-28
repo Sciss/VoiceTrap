@@ -4,8 +4,8 @@ package impl
 import de.sciss.lucre.confluent.reactive.ConfluentReactive
 import de.sciss.lucre.stm.impl.BerkeleyDB
 import java.io.File
-import de.sciss.synth.proc.AuralSystem
-import de.sciss.synth.Server
+import de.sciss.synth.{proc, Server}
+import proc.AuralSystem
 import de.sciss.osc
 
 object InfraImpl {
@@ -36,6 +36,8 @@ object InfraImpl {
             as.whenStarted { implicit tx =>
                server =>
                   server.peer.dumpOSC()
+                  proc.showLog      = true
+                  proc.showAuralLog = true
                   document.get.start( as )
             }
          }

@@ -6,7 +6,7 @@ object VoiceTrap {
    def baseDirectory : File   = new File( new File( sys.props( "user.home" ), "Desktop" ), "VoiceTrap" )
    def artifactDirectory: File = new File( baseDirectory, "artifacts" )
 
-   val minimal                = false
+   val minimal                = true
 
    def numRows                = if( minimal ) 2 else 4
    def numColumns             = if( minimal ) 1 else 3
