@@ -77,7 +77,13 @@ object ChannelImpl {
 
       override def toString = "Chan" + id + "(r=" + row + ", c=" + column + ")"
 
-      def hiddenLayer : AudioArtifact = ???
+      def hiddenLayer : AudioArtifact = {
+         val name    = "hidden_" + (row+1) + "_" + (column+1) + ".aif"
+         val artif   = Artifact( name )
+         val path    = new File( VoiceTrap.artifactDirectory, name ).getPath
+         val spec    = audioFileSpec( path )
+         Grapheme.Value.Audio( artif, spec, 0L, 1.0 )
+      }
 
 //      def cursor( implicit tx: Tx ) : Cursor = cursorVar.get
 
@@ -102,10 +108,6 @@ object ChannelImpl {
 //         search( insTime, (phraseLength.step() * sampleRate).toLong, group )
          SearchStepAlgorithm( Span( insTime, insTime + (phraseLength.step() * sampleRate).toLong ), group, hiddenLayer )
       }
-
-//      private def search( time: Long, length: Long, group: ProcGroup ) {
-//         ???
-//      }
 
       def stop()( implicit tx: Tx ) {
          transportVar.get( tx.peer ).foreach { t =>
