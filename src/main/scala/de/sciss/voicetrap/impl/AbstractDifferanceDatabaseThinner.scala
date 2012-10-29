@@ -71,15 +71,15 @@ abstract class AbstractDifferanceDatabaseThinner extends DifferanceDatabaseThinn
    def remove( spans: IIdxSeq[ Span ])( implicit tx: InTxn ) : FutureResult[ Unit ] = {
       val dbLen   = database.length
       val instrs  = spans.map { span =>
-         val shrink     = shrinkMotion.step
-         val jitter     = secondsToFrames( jitterMotion.step )
+         val shrink     = shrinkMotion.step()
+         val jitter     = secondsToFrames( jitterMotion.step() )
          val start0     = (span.start + jitter + shrink * (span.length/2)).toLong
          val stop0      = (span.stop + jitter - shrink * ((span.length+1)/2)).toLong
          val start      = max( 0L, min( dbLen, start0 ))
          val stop       = max( start, min( dbLen, stop0 ))
          val spanT      = Span( start, stop )
 
-         val fade0      = secondsToFrames( fadeInMotion.step )
+         val fade0      = secondsToFrames( fadeInMotion.step() )
          val fiPre      = min( spanT.start, fade0/2 )
          val foPost     = min( dbLen - spanT.stop, fade0/2 )
 

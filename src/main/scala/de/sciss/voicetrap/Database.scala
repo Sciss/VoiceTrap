@@ -31,7 +31,7 @@ import java.io.File
 import concurrent.stm.InTxn
 
 object Database {
-   def apply( dir: File )( implicit tx: InTxn ) : Database = Impl( dir )
+   def apply( dir: File ) : Database = Impl( dir )
 }
 trait Database {
    def length( implicit tx: InTxn ): Long

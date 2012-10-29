@@ -26,10 +26,9 @@
 package de.sciss.voicetrap
 package impl
 
-import java.io.{FileFilter, File}
+import java.io.{IOException, FileFilter, File}
 import collection.immutable.{IndexedSeq => IIdxSeq}
-import de.sciss.strugatzki.FeatureExtraction
-import de.sciss.synth.io.{AudioFileType, SampleFormat, AudioFileSpec, AudioFile}
+import de.sciss.synth.io.{AudioFileSpec, AudioFile}
 import de.sciss.lucre.bitemp.Span
 import concurrent.stm.{InTxn, Ref}
 
@@ -41,7 +40,7 @@ object DatabaseImpl {
 
    private val identifier  = "database-impl"
 
-   def apply( dir: File )( implicit tx: InTxn ) : Database = {
+   def apply( dir: File ) : Database = {
       val normFile = new File( dir, normName )
       require( normFile.isFile, "Missing normalization file at " + normFile )
 
@@ -72,7 +71,7 @@ object DatabaseImpl {
 //                     (None, None)
 //                  }
                } catch {
-                  case e =>
+                  case e: IOException =>
                      e.printStackTrace()
                      None // (None, None)
                }

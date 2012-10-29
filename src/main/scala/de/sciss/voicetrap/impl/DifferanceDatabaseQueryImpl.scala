@@ -63,8 +63,8 @@ class DifferanceDatabaseQueryImpl private ( db: Database ) extends AbstractDiffe
 
       import synth._
 
-      val maxBoost   = maxBoostMotion.step.dbamp.toFloat
-      val minSpc     = secondsToFrames( minSpacingMotion.step )
+      val maxBoost   = maxBoostMotion.step().dbamp.toFloat
+      val minSpc     = secondsToFrames( minSpacingMotion.step() )
       val dirFut     = db.asStrugatziDatabase
       val metaFut    = phrase.asStrugatzkiInput
 

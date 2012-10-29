@@ -136,7 +136,7 @@ object GraphemeUtil {
       AudioFile.openWrite( f, AudioFileSpec( AudioFileType.AIFF, SampleFormat.Float, 1, sampleRate ))
 
 //   def strugatzkiDatabase = WritingMachine.strugatzkiDatabase
-   def databaseDir = databaseDirectory
+//   def databaseDir = databaseDirectory
 
    def createTempFile( suffix: String, dir: Option[ File ], keep: Boolean ) : File = {
       val res = File.createTempFile( "grapheme", suffix, dir.getOrElse( tmpDir ))

@@ -31,7 +31,7 @@ import java.io.File
 import concurrent.stm.InTxn
 
 object Phrase {
-   def fromFile( file: File )( implicit tx: InTxn ) : Phrase = PhraseImpl.fromFile( file )
+   def fromFile( file: File ) : Phrase = PhraseImpl.fromFile( file )
 }
 trait Phrase {
    def printFormat : String

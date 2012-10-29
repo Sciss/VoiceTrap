@@ -69,8 +69,8 @@ abstract class AbstractDifferanceDatabaseQuery extends DifferanceDatabaseQuery {
 
    private def matchLength()( implicit tx: InTxn ) : Long = {
 //      import synth._
-      val matchDur   = matchDurationMotion.step
-//      val matchDev   = matchDeviationMotion.step
+      val matchDur   = matchDurationMotion.step()
+//      val matchDev   = matchDeviationMotion.step()
 //      val minFact    = 1.0 / (1 + matchDev)
 //      val maxFact    = 1 + matchDev
 //      val fact       = random.linexp( 0, 1, minFact, maxFact )
@@ -83,9 +83,9 @@ abstract class AbstractDifferanceDatabaseQuery extends DifferanceDatabaseQuery {
                   minPunch: Long, maxPunch: Long, weight: Double )( implicit tx: InTxn ) : FutureResult[ Match ]
 
    def find( phrase: Phrase, overwrite: OverwriteInstruction )( implicit tx: InTxn ) : FutureResult[ Match ] = {
-      val spect      = spectralMotion.step
+      val spect      = spectralMotion.step()
 
-      val stretchDev = stretchDeviationMotion.step
+      val stretchDev = stretchDeviationMotion.step()
       val minConstr  = secondsToFrames( 0.1 )
 //      val minPunch   = max( minConstr, min( phrase.length/2, (overwrite.newLength / (1 + stretchDev)).toLong ))
 //      val maxPunch   = max( minConstr, min( phrase.length/2, (overwrite.newLength * (1 + stretchDev)).toLong ))
@@ -117,7 +117,7 @@ abstract class AbstractDifferanceDatabaseQuery extends DifferanceDatabaseQuery {
 if( verbose ) println( "---punch in" + formatSpan( punchIn ) + " / out " + formatSpan( punchOut ) + " / minPunch = " +
    formatSeconds( framesToSeconds( minPunch )) + " / maxPunch = " + formatSeconds( framesToSeconds( minPunch )))
 
-      val rank       = random( max( 0, rankMotion.step.toInt ) + 1 )
+      val rank       = random( max( 0, rankMotion.step().toInt ) + 1 )
 
       findMatch( rank, phrase, punchIn, punchOut, minPunch, maxPunch, spect )
    }

@@ -35,7 +35,7 @@ object PhraseImpl {
 
    private val identifier  = "phrase-impl"
 
-   def fromFile( file: File )( implicit tx: InTxn ) : Phrase = {
+   def fromFile( file: File ) : Phrase = {
       val path       = file.getAbsolutePath
       val spec       = audioFileSpec( path )
       require( spec.numChannels == 1 )    // we need this now for the overwriter implementation!
