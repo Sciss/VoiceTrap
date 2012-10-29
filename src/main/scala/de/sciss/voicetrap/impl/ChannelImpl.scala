@@ -10,6 +10,8 @@ import de.sciss.lucre.bitemp.Span
 import java.io.{IOException, File, FilenameFilter}
 import synth.proc.{Scan, Artifact, Grapheme}
 
+import VoiceTrap.{numColumns, numRows, matrixSize, sampleRate, phraseLength, loopLength}
+
 object ChannelImpl {
    private final val SER_VERSION = 1
 
@@ -67,6 +69,16 @@ object ChannelImpl {
 
          testRemove()
          testAdd()
+
+         implicit val itx = tx.peer
+         val heuristic  = (sampleRate * 10.0).toLong  // XXX TODO
+         val loop       = (loopLength.step() * sampleRate).toLong
+         val insTime    = (transport.time + heuristic) % loop
+         search( insTime, (phraseLength.step() * sampleRate).toLong, group )
+      }
+
+      private def search( time: Long, length: Long, group: ProcGroup ) {
+         ???
       }
 
       def stop()( implicit tx: Tx ) {
@@ -179,7 +191,6 @@ object ChannelImpl {
          val g          = group
 
          import implicits._
-         import VoiceTrap.{numColumns, numRows, matrixSize, sampleRate}
 
          val p = proc.Proc[ S ]
          p.name_=( chan.toString )

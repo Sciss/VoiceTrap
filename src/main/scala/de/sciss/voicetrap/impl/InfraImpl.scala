@@ -35,9 +35,9 @@ object InfraImpl {
             val as = AuralSystem[ S ].start( sCfg )
             as.whenStarted { implicit tx =>
                server =>
-                  server.peer.dumpOSC()
-                  proc.showLog      = true
-                  proc.showAuralLog = true
+//                  server.peer.dumpOSC()
+//                  proc.showLog      = true
+//                  proc.showAuralLog = true
                   document.get.start( as )
             }
          }
