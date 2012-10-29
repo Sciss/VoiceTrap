@@ -37,10 +37,10 @@ abstract class AbstractDifferanceDatabaseQuery extends DifferanceDatabaseQuery {
    import DifferanceDatabaseQuery._
 //   import AbstractDifferanceDatabaseQuery._
 
-   /**
-    * Approximate duration of the cross-correlation in seconds.
-    */
-   def matchDurationMotion : Motion
+//   /**
+//    * Approximate duration of the cross-correlation in seconds.
+//    */
+//   def matchDurationMotion : Motion
 
 //   /**
 //    * Maximum allowed deviation from match duration (factor-offset,

@@ -43,11 +43,11 @@ class DifferanceDatabaseQueryImpl private ( db: Database ) extends AbstractDiffe
 
    private val identifier  = "database-query-impl"
 
-   val matchDurationMotion    = Motion.coin(
-      1.0/33,
-      Motion.linexp( Motion.walk( 0, 1, 0.1 ), 0, 1, 0.4, 4.0 ), // Motion.exprand( 0.4, 4.0 )
-      Motion.exprand( 4.0, 16.0 )
-   )
+//   val matchDurationMotion    = Motion.coin(
+//      1.0/33,
+//      Motion.linexp( Motion.walk( 0, 1, 0.1 ), 0, 1, 0.4, 4.0 ), // Motion.exprand( 0.4, 4.0 )
+//      Motion.exprand( 4.0, 16.0 )
+//   )
 //   val matchDeviationMotion   = Motion.linrand( 0.2, 0.5 )
    val spectralMotion         = Motion.linrand( 0.25, 0.75 )
 //   val stretchDeviationMotion = Motion.walk( 0.111, 0.333, 0.05 ) // Motion.linrand( 0.2, 0.5 )

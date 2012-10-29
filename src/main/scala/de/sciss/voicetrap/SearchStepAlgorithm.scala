@@ -46,7 +46,8 @@ object SearchStepAlgorithm {
    }
    case class Open( af: AudioFile, stop: Long, fadeIn: SignalFader, fadeOut: SignalFader )
 
-   def apply( span: Span, group: ProcGroup, hidden: AudioArtifact )( implicit tx: Tx, artifactStore: ArtifactStore ) {
+   def apply( span: Span, group: ProcGroup, hidden: AudioArtifact )
+            ( implicit tx: Tx, artifactStore: ArtifactStore ) : FutureResult[ AudioArtifact ] = {
       // first, calculate all the 'cutted' audio segments within the given target span
       val posSegms = group.intersect( span ).toIndexedSeq.flatMap { case (sp, seq) =>
          seq.flatMap { timed =>
@@ -105,18 +106,26 @@ object SearchStepAlgorithm {
          Chunk( segm, fIn, fOut )
       }
 
-      implicit val itx = tx.peer
-      val fut = threadFuture( "Bounce + invoke query" ) {
+      val futPhrase = threadFuture( "bounce" )({
          val phrase = bounce( allChunks )
-         VoiceTrap.databaseQuery.find( phrase )
-//      DifferanceDatabaseQuery().find()
-         ???
-         FutureResult.Success( () )
+         FutureResult.Success( phrase )
+      })( tx.peer )
+      val futQuery = futPhrase.flatMapSuccess { phrase =>
+         atom( "query" ) { itx =>
+            VoiceTrap.databaseQuery.find( phrase )( itx )
+         }
+      }
+      val futArtifact = futQuery.flatMapSuccess { m =>
+         val artifact = matchToValue( m )
+         val futUnit  = atom( "thin" )( itx => VoiceTrap.databaseThinner.remove( IIdxSeq( m.span ))( itx ))
+         futUnit.mapSuccess( _ => artifact )
       }
 
-//      fut.flatMapSuccess { _ =>
-//
-//      }
+      futArtifact
+   }
+
+   def matchToValue( m: DifferanceDatabaseQuery.Match ) : AudioArtifact = {
+      ???
    }
 
    def bounce( chunks: IIdxSeq[ Chunk ])( implicit artifactStore: ArtifactStore ) : Phrase = {
