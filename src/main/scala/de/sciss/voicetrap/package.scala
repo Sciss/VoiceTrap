@@ -3,9 +3,10 @@ package de.sciss
 import lucre.confluent.reactive.ConfluentReactive
 import lucre.{DataOutput, DataInput, stm}
 import synth.expr.ExprImplicits
+import synth.io.AudioFileSpec
 import synth.proc
 import proc.Grapheme
-import concurrent.stm.Txn
+import concurrent.stm.{InTxn, Txn}
 import java.text.SimpleDateFormat
 import java.util.{Date, Locale}
 import annotation.elidable
@@ -99,4 +100,14 @@ package object voicetrap {
    @elidable(CONFIG) private[voicetrap] def log( what: => String ) {
       if( showLog ) Console.out.println( logHeader.format( new Date() ) + what )
    }
+
+   def atom[ A ]( info: => String )( fun: InTxn => A ) : A = {
+      import concurrent.stm.atomic
+      atomic { tx =>
+         log( info )
+         fun( tx )
+      }
+   }
+
+   def audioFileSpec( path: String ) : AudioFileSpec = AudioFileCache.spec( path )
 }

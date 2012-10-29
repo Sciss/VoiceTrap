@@ -126,6 +126,8 @@ extends Database /* AbstractDatabase */ with ExtractionImpl {
 //   private val specRef        = Ref( spec0 )
    private val stateRef       = Ref( state0 )
 
+   override def toString = "Database@" + hashCode.toHexString
+
 //   private val folderRef      = Ref( grapheme0.flatMap( _.extr.metaOutput ).map( _.getParentFile )
 //      .getOrElse( createDir( dir )))
 
