@@ -44,5 +44,5 @@ object DifferanceDatabaseQuery {
 trait DifferanceDatabaseQuery {
    import DifferanceDatabaseQuery._
 
-   def find( phrase: Phrase, overwrite: OverwriteInstruction )( implicit tx: InTxn ) : FutureResult[ Match ]
+   def find( phrase: Phrase /*, overwrite: OverwriteInstruction */ )( implicit tx: InTxn ) : FutureResult[ Match ]
 }

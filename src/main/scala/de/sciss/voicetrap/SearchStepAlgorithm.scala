@@ -105,26 +105,33 @@ object SearchStepAlgorithm {
          Chunk( segm, fIn, fOut )
       }
 
-//      DifferanceDatabaseQuery().find()
-
       implicit val itx = tx.peer
-      threadFuture( "Bounce + invoke query" ) {
+      val fut = threadFuture( "Bounce + invoke query" ) {
          val phrase = bounce( allChunks )
+         VoiceTrap.databaseQuery.find( phrase )
+//      DifferanceDatabaseQuery().find()
+         ???
          FutureResult.Success( () )
       }
+
+//      fut.flatMapSuccess { _ =>
+//
+//      }
    }
 
    def bounce( chunks: IIdxSeq[ Chunk ])( implicit artifactStore: ArtifactStore ) : Phrase = {
-      if( chunks.isEmpty ) {
-         ???
-      }
+//      if( chunks.isEmpty ) {
+//      }
 
       val sorted  = chunks.sortBy( _.segm.span.start )
       val outF    = GraphemeUtil.createTempFile( suffix = ".aif", dir = None, keep = false )
       val afSpec  = AudioFileSpec( fileType = AudioFileType.AIFF, sampleFormat = SampleFormat.Float,
                                    numChannels = 1, sampleRate = VoiceTrap.sampleRate )
       val afOut   = AudioFile.openWrite( outF, afSpec )
-      val buf     = afOut.buffer( 8192 )
+      val bufIn   = afOut.buffer( 8192 )
+      val bufInCh = bufIn( 0 )
+      val bufOut  = afOut.buffer( 8192 )
+      val bufOutCh = bufOut( 0 )
       var current = sorted.head.segm.span.start
       var remain  = sorted
       var active  = IIdxSeq.empty[ Open ]
@@ -140,13 +147,19 @@ object SearchStepAlgorithm {
          if( keepGoing ) {
             while( current < next ) {
                val chunkLen = math.min( next - current, 8192 ).toInt
-               ???
+               DSP.clear( bufOutCh, 0, chunkLen )
+               active.foreach { open =>
+                  open.af.read( bufIn, 0, chunkLen )
+                  open.fadeIn.process(  bufInCh, 0, bufInCh, 0, chunkLen )
+                  open.fadeOut.process( bufInCh, 0, bufInCh, 0, chunkLen )
+                  DSP.add( bufInCh, 0, bufOutCh, 0, chunkLen )
+               }
+               afOut.write( bufOut, 0, chunkLen )
                current -= chunkLen
             }
             val (remove, keep) = active.span( _.stop == current )
             remove.foreach( _.af.close() )
             active = keep
-
          }
       }
       afOut.close()

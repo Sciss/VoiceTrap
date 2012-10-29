@@ -50,16 +50,15 @@ class DifferanceDatabaseQueryImpl private ( db: Database ) extends AbstractDiffe
    )
 //   val matchDeviationMotion   = Motion.linrand( 0.2, 0.5 )
    val spectralMotion         = Motion.linrand( 0.25, 0.75 )
-   val stretchDeviationMotion = Motion.walk( 0.111, 0.333, 0.05 ) // Motion.linrand( 0.2, 0.5 )
-   val rankMotion             = Motion.linrand( 0, 11 )
+//   val stretchDeviationMotion = Motion.walk( 0.111, 0.333, 0.05 ) // Motion.linrand( 0.2, 0.5 )
+//   val rankMotion             = Motion.linrand( 0, 11 )
 
    val maxBoostMotion         = Motion.constant( 30 ) // 18
    val minSpacingMotion       = Motion.constant( 0.0 ) // 0.5
 
-   val minPhraseDur           = 10.0
+//   val minPhraseDur           = 10.0
 
-   def findMatch( rank: Int, phrase: Phrase, punchIn: Span, punchOut: Span,
-                  minPunch: Long, maxPunch: Long, weight: Double )( implicit tx: InTxn ) : FutureResult[ Match ] = {
+   def findMatch( rank: Int, phrase: Phrase, weight: Double )( implicit tx: InTxn ) : FutureResult[ Match ] = {
 
       import synth._
 
@@ -70,15 +69,13 @@ class DifferanceDatabaseQueryImpl private ( db: Database ) extends AbstractDiffe
 
       dirFut.flatMapSuccess { dir =>
          metaFut.flatMapSuccess { metaInput =>
-            findMatchIn( dir, metaInput, maxBoost, minSpc, rank, phrase, punchIn, punchOut,
-               minPunch, maxPunch, weight )
+            findMatchIn( dir, metaInput, maxBoost, minSpc, rank, phrase, weight )
          }
       }
    }
 
    private def findMatchIn( dir: File, metaInput: File, maxBoost: Float, minSpacing: Long, rank: Int, phrase: Phrase,
-                            punchIn: Span, punchOut: Span,
-                            minPunch: Long, maxPunch: Long, weight: Double ) : FutureResult[ Match ] = {
+                            weight: Double ) : FutureResult[ Match ] = {
 
       import FeatureCorrelation.{Match => _, _} // otherwise Match shadows DifferanceDatabaseQuery.Match
 
@@ -92,10 +89,12 @@ class DifferanceDatabaseQueryImpl private ( db: Database ) extends AbstractDiffe
       set.numMatches       = max( 2, rank + 1 )
       set.numPerFile       = max( 2, rank + 1 )
 
+      val punchIn          = Span( 0L, phrase.length )
+
       set.punchIn          = Punch( SSpan( punchIn.start, punchIn.stop ), weight.toFloat )
-      set.punchOut         = Some( Punch( SSpan( punchOut.start, punchOut.stop ), weight.toFloat ))
-      set.minPunch         = minPunch
-      set.maxPunch         = maxPunch
+      set.punchOut         = None // Some( Punch( SSpan( punchOut.start, punchOut.stop ), weight.toFloat ))
+//      set.minPunch         = minPunch
+//      set.maxPunch         = maxPunch
 
       val setb             = set.build
 
