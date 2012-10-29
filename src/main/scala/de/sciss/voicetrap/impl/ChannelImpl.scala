@@ -74,12 +74,13 @@ object ChannelImpl {
          val heuristic  = (sampleRate * 10.0).toLong  // XXX TODO
          val loop       = (loopLength.step() * sampleRate).toLong
          val insTime    = (transport.time + heuristic) % loop
-         search( insTime, (phraseLength.step() * sampleRate).toLong, group )
+//         search( insTime, (phraseLength.step() * sampleRate).toLong, group )
+         SearchStepAlgorithm( Span( insTime, insTime + (phraseLength.step() * sampleRate).toLong ), group, hiddenLayer )
       }
 
-      private def search( time: Long, length: Long, group: ProcGroup ) {
-         ???
-      }
+//      private def search( time: Long, length: Long, group: ProcGroup ) {
+//         ???
+//      }
 
       def stop()( implicit tx: Tx ) {
          transportVar.get( tx.peer ).foreach { t =>
