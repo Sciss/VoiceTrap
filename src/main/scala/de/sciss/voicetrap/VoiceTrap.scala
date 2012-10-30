@@ -27,6 +27,7 @@ package de.sciss.voicetrap
 
 import java.io.File
 import collection.immutable.{IndexedSeq => IIdxSeq}
+import de.sciss.synth.AudioBus
 
 object VoiceTrap {
    lazy val baseDirectory     : File   = new File( new File( sys.props( "user.home" ), "Desktop" ), "VoiceTrap" )
@@ -38,7 +39,7 @@ object VoiceTrap {
    val minimal                = true
    val liveInput              = false
 
-   lazy val numRows           = if( minimal ) 1 /* 2 */ else 4
+   lazy val numRows           = if( minimal ) 2 /* 1 */ else 4
    lazy val numColumns        = if( minimal ) 1 else 3
    lazy val matrixSize        = numRows * numColumns
 
@@ -46,6 +47,10 @@ object VoiceTrap {
    val audioInterface         = "MOTU 828mk2"
    val highestInputChannel    = 2
    val highestOutputChannel   = 22
+
+//   lazy val internalBusOffset = highestOutputChannel + highestInputChannel
+
+   var privateBus : AudioBus  = null      // XXX TODO: que se puede acer...
 
    lazy val phraseLength : Motion  = Motion.exprand( 8.0, 24.0 )
    lazy val loopLength : Motion    = Motion.constant( 90.0 )

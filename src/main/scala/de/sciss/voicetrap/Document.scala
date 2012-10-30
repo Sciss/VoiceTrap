@@ -3,7 +3,8 @@ package de.sciss.voicetrap
 //import collection.immutable.{IndexedSeq => IIdxSeq}
 import impl.{DocumentImpl => Impl}
 import de.sciss.lucre.Writable
-import de.sciss.synth.proc.AuralSystem
+import de.sciss.synth.proc.{RichAudioBus, AuralSystem}
+import de.sciss.synth.AudioBus
 
 object Document {
    implicit def serializer: Serializer[ Document ] = Impl.serializer

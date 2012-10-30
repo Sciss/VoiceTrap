@@ -4,8 +4,9 @@ package impl
 import de.sciss.lucre.confluent.reactive.ConfluentReactive
 import de.sciss.lucre.stm.impl.BerkeleyDB
 import java.io.File
-import de.sciss.synth.{proc, Server}
-import proc.AuralSystem
+import de.sciss.synth
+import synth.{addToTail, SynthGraph, Bus, proc, Server}
+import synth.proc.{ProcTxn, RichSynthDef, AuralSystem}
 import de.sciss.osc
 
 object InfraImpl {
@@ -13,9 +14,9 @@ object InfraImpl {
       val dir     = new File( VoiceTrap.baseDirectory, "db" )
       val store   = BerkeleyDB.factory( dir )
       val system  = ConfluentReactive( store )
-de.sciss.lucre.confluent.showCursorLog = true
+//de.sciss.lucre.confluent.showCursorLog = true
 //de.sciss.lucre.confluent.showLog       = true
-de.sciss.lucre.event.showLog           = true
+//de.sciss.lucre.event.showLog           = true
       val (access, cursor) = system.cursorRoot[ Document, Cursor ] { implicit tx => Document() } { _ => _.cursor }
 //de.sciss.lucre.confluent.showLog = false
       log( "main cursor is " + cursor )
@@ -54,7 +55,18 @@ de.sciss.lucre.event.showLog           = true
             val as = AuralSystem[ S ].start( sCfg )
             as.whenStarted { implicit tx =>
                server =>
-//                  server.peer.dumpOSC()
+                  val internalBus = Bus.audio( server.peer, numChannels = VoiceTrap.matrixSize )
+                  VoiceTrap.privateBus = internalBus
+                  val routeGraph = SynthGraph {
+                     import synth._
+                     import ugen._
+                     Out.ar( 0, In.ar( internalBus.index, numChannels = internalBus.numChannels ))
+                  }
+                  implicit val ptx = ProcTxn()
+                  val rd = RichSynthDef( server, routeGraph, nameHint = Some( "internal-bus" ))
+                  rd.play( target = server.defaultGroup, addAction = addToTail )
+
+                  //                  server.peer.dumpOSC()
 //                  proc.showLog      = true
 //                  proc.showAuralLog = true
                   document.get.start( as )

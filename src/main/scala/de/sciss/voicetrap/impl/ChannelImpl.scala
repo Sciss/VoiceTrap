@@ -29,11 +29,11 @@ package impl
 import de.sciss.lucre.{DataInput, DataOutput, stm}
 import de.sciss.synth
 import synth.io.AudioFile
-import synth.proc
+import synth.{addAfter, SynthGraph, proc}
 import concurrent.stm.Ref
 import de.sciss.lucre.bitemp.Span
 import java.io.{IOException, File, FilenameFilter}
-import synth.proc.{Scan, Artifact, Grapheme}
+import synth.proc.{ProcTxn, RichSynthDef, RichSynth, RichGroup, Scan, Artifact, Grapheme}
 
 import VoiceTrap.{numColumns, numRows, matrixSize, sampleRate, phraseLength, loopLength}
 
@@ -91,7 +91,25 @@ object ChannelImpl {
          log( "spawning " + chan + " with " + cursor + " (pos = " + cursor.position + ")" )
          implicit val aStore  = document.artifactStore
          val transport        = proc.Transport[ S, I ]( group, VoiceTrap.sampleRate )
-         /* val view = */ proc.AuralPresentation.run[ S, I ]( transport, auralSystem )
+         val view = proc.AuralPresentation.run[ S, I ]( transport, auralSystem )
+         view.group match {
+            case Some( rg ) =>
+               val routeGraph = SynthGraph {
+                  import synth._
+                  import ugen._
+                  val inBus   = "in".kr( 0 )
+                  val outBus  = "out".kr( 0 )
+                  val sig     = In.ar( inBus, 1 )
+                  Out.ar( outBus, sig ) // * SinOsc.ar( 444 )
+                  ReplaceOut.ar( inBus, sig * DC.ar( 0 ))
+               }
+               implicit val ptx = ProcTxn()
+               val sd = RichSynthDef( rg.server, routeGraph, nameHint = Some( "channel-route" ))
+               val matrixIndex = row * numColumns + column
+               sd.play( target = rg, args = Seq( "out" -> (VoiceTrap.privateBus.index + matrixIndex) ), addAction = addAfter )
+
+            case _ => logThis( "! WARNING ! aural presentation does not exhibit a group" )
+         }
          transport.play()
          transportVar.set( Some( transport ))( tx.peer )
 
@@ -202,16 +220,16 @@ object ChannelImpl {
          scanw.source_=( Some( Scan.Link.Grapheme( grw )))
          scand.source_=( Some( Scan.Link.Grapheme( grd )))
          p.graph_=( SynthGraph {
-            val sig  = scan( "sig" ).ar( 0 )
-            val duri = A2K.kr( scan( "dur" ).ar( 1 ))
-            val env  = EnvGen.ar( Env.linen( 0.2, (duri - 0.4).max( 0 ), 0.2 ))
+            val sig     = scan( "sig" ).ar( 0 )
+            val duri    = A2K.kr( scan( "dur" ).ar( 1 ))
+            val env     = EnvGen.ar( Env.linen( 0.2, (duri - 0.4).max( 0 ), 0.2 ))
             Out.ar( 0, sig * env )
          })
          val span    = Span( time, time + len )
          logThis( "adding process " + (span, p) + " in " + tx.inputAccess )
-de.sciss.lucre.event.showLog = true
+//de.sciss.lucre.event.showLog = true
          g.add( span, p )
-de.sciss.lucre.event.showLog = false
+//de.sciss.lucre.event.showLog = false
       }
 
       private def testReplay()( implicit tx: Tx ) {
