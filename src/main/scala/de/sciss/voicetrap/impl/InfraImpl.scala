@@ -23,18 +23,18 @@ object InfraImpl {
    extends Infra {
       def start() {
          log( "infra starting" )
-         val futFill = atom( "database fill" ) { implicit tx => VoiceTrap.databaseFiller.perform() }
-         GraphemeUtil.thread( "infra boot" ) {
-            futFill() match {
-               case FutureResult.Success( _ ) =>
-                  log( "database filled" )
+//         val futFill = atom( "database fill" ) { implicit tx => VoiceTrap.databaseFiller.perform() }
+//         GraphemeUtil.thread( "infra boot" ) {
+//            futFill() match {
+//               case FutureResult.Success( _ ) =>
+//                  log( "database filled" )
                   boot()
-               case FutureResult.Failure( e ) =>
-                  log( "database fill failed" )
-                  e.printStackTrace()
-                  // XXX TODO: reboot application
-            }
-         }
+//               case FutureResult.Failure( e ) =>
+//                  log( "database fill failed" )
+//                  e.printStackTrace()
+//                  // XXX TODO: reboot application
+//            }
+//         }
       }
 
       private def boot() {

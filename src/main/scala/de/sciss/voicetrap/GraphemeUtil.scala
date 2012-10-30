@@ -30,7 +30,7 @@ import de.sciss.synth.io.{SampleFormat, AudioFileType, AudioFileSpec, AudioFile}
 import de.sciss.lucre.bitemp.Span
 import concurrent.stm.{Txn, InTxn}
 
-import VoiceTrap.{sampleRate, databaseDirectory}
+import VoiceTrap.sampleRate
 
 object GraphemeUtil {
 

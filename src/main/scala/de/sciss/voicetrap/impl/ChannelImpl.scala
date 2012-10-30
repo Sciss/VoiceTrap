@@ -107,7 +107,7 @@ object ChannelImpl {
          val insTime    = (transport.time + heuristic) % loop
 //         search( insTime, (phraseLength.step() * sampleRate).toLong, group )
 
-         val futArtifact = SearchStepAlgorithm(
+         val futArtifact = SearchStepAlgorithm( this,
             Span( insTime, insTime + (phraseLength.step() * sampleRate).toLong ), group, hiddenLayer )
          GraphemeUtil.threadTxn( "await search " + this ) {
             futArtifact() match {

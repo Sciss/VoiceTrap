@@ -46,7 +46,7 @@ object SearchStepAlgorithm {
    }
    case class Open( af: AudioFile, stop: Long, fadeIn: SignalFader, fadeOut: SignalFader )
 
-   def apply( span: Span, group: ProcGroup, hidden: AudioArtifact )
+   def apply( channel: Channel, span: Span, group: ProcGroup, hidden: AudioArtifact )
             ( implicit tx: Tx, artifactStore: ArtifactStore ) : FutureResult[ AudioArtifact ] = {
       // first, calculate all the 'cutted' audio segments within the given target span
       val posSegms = group.intersect( span ).toIndexedSeq.flatMap { case (sp, seq) =>
@@ -106,18 +106,23 @@ object SearchStepAlgorithm {
          Chunk( segm, fIn, fOut )
       }
 
-      val futPhrase = threadFuture( "bounce" )({
+      val chanDB = VoiceTrap.databases( channel.row )( channel.column )
+
+      val futFill = chanDB.filler.perform()( tx.peer )
+
+      val futPhrase = futFill.mapSuccess { _ =>
          val phrase = bounce( allChunks )
          FutureResult.Success( phrase )
-      })( tx.peer )
+      }
+
       val futQuery = futPhrase.flatMapSuccess { phrase =>
          atom( "query" ) { itx =>
-            VoiceTrap.databaseQuery.find( phrase )( itx )
+            chanDB.query.find( phrase )( itx )
          }
       }
       val futArtifact = futQuery.flatMapSuccess { m =>
          val artifact = matchToValue( m )
-         val futUnit  = atom( "thin" )( itx => VoiceTrap.databaseThinner.remove( IIdxSeq( m.span ))( itx ))
+         val futUnit  = atom( "thin" )( itx => chanDB.thinner.remove( IIdxSeq( m.span ))( itx ))
          futUnit.mapSuccess( _ => artifact )
       }
 

@@ -26,11 +26,12 @@
 package de.sciss.voicetrap
 
 import java.io.File
+import collection.immutable.{IndexedSeq => IIdxSeq}
 
 object VoiceTrap {
    lazy val baseDirectory     : File   = new File( new File( sys.props( "user.home" ), "Desktop" ), "VoiceTrap" )
    lazy val artifactDirectory : File   = new File( baseDirectory, "artifacts" )
-   lazy val databaseDirectory : File   = new File( baseDirectory, "audio_db" )
+//   lazy val databaseDirectory : File   = new File( baseDirectory, "audio_db" )
    lazy val televisionFile    : File   = new File( new File( baseDirectory, "tv" ), "tv.aif" )
    lazy val temporaryDirectory: File   = new File( baseDirectory, "tmp" )
 
@@ -49,11 +50,24 @@ object VoiceTrap {
    lazy val phraseLength : Motion  = Motion.exprand( 8.0, 24.0 )
    lazy val loopLength : Motion    = Motion.constant( 90.0 )
 
-   lazy val database        : Database                   = Database( databaseDirectory )
-   lazy val databaseQuery   : DifferanceDatabaseQuery    = DifferanceDatabaseQuery(   database )
-   lazy val databaseThinner : DifferanceDatabaseThinner  = DifferanceDatabaseThinner( database )
+   case class ChannelDB( database: Database, query: DifferanceDatabaseQuery,
+                         thinner: DifferanceDatabaseThinner, filler: DifferanceDatabaseFiller )
+
+   lazy val databases = IIdxSeq.tabulate( numRows ) { row => IIdxSeq.tabulate( numColumns ) { col =>
+      val dir        = new File( baseDirectory, "audio_db_" + (row+1) + "_" + (col+1) )
+//      if( !dir.isDirectory ) dir.mkdir()
+      val database   = Database( dir )
+      val query      = DifferanceDatabaseQuery(   database )
+      val thinner    = DifferanceDatabaseThinner( database )
+      val filler     = DifferanceDatabaseFiller( database, television )
+      ChannelDB( database, query, thinner, filler )
+   }}
+
+//   lazy val database        : Database                   = Database( databaseDirectory )
+//   lazy val databaseQuery   : DifferanceDatabaseQuery    = DifferanceDatabaseQuery(   database )
+//   lazy val databaseThinner : DifferanceDatabaseThinner  = DifferanceDatabaseThinner( database )
+//   lazy val databaseFiller  : DifferanceDatabaseFiller   = DifferanceDatabaseFiller( database, television )
    lazy val television      : Television                 = if( liveInput ) Television.live() else Television.fromFile( televisionFile )
-   lazy val databaseFiller  : DifferanceDatabaseFiller   = DifferanceDatabaseFiller( database, television )
 
    def main( args: Array[ String ]) {
       Infra().start()
