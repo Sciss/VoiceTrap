@@ -25,10 +25,10 @@ trait Document extends Writable {
 
    def withChannel[ A ]( row: Int, column: Int )( fun: (Tx, Cursor, Channel) => Unit )( implicit tx: Tx ) : Unit
 
-   /**
-    * Fork random range bounds in seconds
-    */
-   def minMaxFork : (Double, Double) // Var[ (Double, Double) ]
+//   /**
+//    * Fork random range bounds in seconds
+//    */
+//   def minMaxFork : (Double, Double) // Var[ (Double, Double) ]
 
 //   /**
 //    * One group is shared across channels, which merely

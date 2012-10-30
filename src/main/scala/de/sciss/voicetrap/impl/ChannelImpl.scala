@@ -88,7 +88,7 @@ object ChannelImpl {
 //      def cursor( implicit tx: Tx ) : Cursor = cursorVar.get
 
       def start( document: Document, auralSystem: proc.AuralSystem[ S ])( implicit tx: Tx, cursor: Cursor ) {
-         log( "spawning " + chan + " with path " + cursor.position )
+         log( "spawning " + chan + " with " + cursor + " (pos = " + cursor.position + ")" )
          implicit val aStore  = document.artifactStore
          val transport        = proc.Transport[ S, I ]( group, VoiceTrap.sampleRate )
          /* val view = */ proc.AuralPresentation.run[ S, I ]( transport, auralSystem )
@@ -115,7 +115,7 @@ object ChannelImpl {
                   logThis( "search succeeded " + artifact )
                   document.cursor.step { implicit tx =>
                      document.withChannel( row = row, column = column ) {
-                        case (tx1, _, ch) => insert( Grapheme.Segment.Audio( insSpan, artifact ))( tx1 )
+                        case (tx1, _, ch) => ch.insert( Grapheme.Segment.Audio( insSpan, artifact ))( tx1 )
                      }
                   }
 
@@ -208,7 +208,7 @@ object ChannelImpl {
             Out.ar( 0, sig * env )
          })
          val span    = Span( time, time + len )
-         logThis( "adding process " + (span, p) )
+         logThis( "adding process " + (span, p) + " in " + tx.inputAccess )
 de.sciss.lucre.event.showLog = true
          g.add( span, p )
 de.sciss.lucre.event.showLog = false

@@ -70,10 +70,10 @@ object DocumentImpl {
 //      def group( implicit tx: Tx ) : ProcGroup = groupVar.get
       def artifactStore( implicit tx: Tx ) : ArtifactStore = artifactStoreVar.get
 
-      /**
-       * Fork random range bounds in seconds
-       */
-      val minMaxFork = (60.0, 240.0)
+//      /**
+//       * Fork random range bounds in seconds
+//       */
+//      val minMaxFork = (60.0, 240.0)
 
       /**
        * Wrapping duration in seconds for the performance time

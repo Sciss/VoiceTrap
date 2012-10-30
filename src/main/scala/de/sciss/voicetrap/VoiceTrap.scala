@@ -38,7 +38,7 @@ object VoiceTrap {
    val minimal                = true
    val liveInput              = false
 
-   lazy val numRows           = if( minimal ) 2 else 4
+   lazy val numRows           = if( minimal ) 1 /* 2 */ else 4
    lazy val numColumns        = if( minimal ) 1 else 3
    lazy val matrixSize        = numRows * numColumns
 

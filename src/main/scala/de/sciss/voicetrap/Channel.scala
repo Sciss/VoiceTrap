@@ -18,6 +18,8 @@ trait Channel extends Writable {
 
 //   def refresh( implicit tx: Tx ) : Channel
 
+   def insert( segm: AudioSegment )( implicit tx: Tx ) : Unit
+
    // ---- algorithm ----
 
 //   def start( document: Document, auralSystem: AuralSystem[ S ])( implicit tx: Tx ) : Unit
