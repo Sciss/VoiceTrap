@@ -81,14 +81,21 @@ object DocumentImpl {
       val pDur = 60.0
 
       def start( auralSystem: AuralSystem[ S ])( implicit tx: Tx ) {
-         for( i <- 0 until matrixSize ) {
-            val csr = chanCursorVars( i ).get
-            spawn( csr ) { implicit tx =>
-               val ch = chanHandles( i ).get
-               ch.start( doc, auralSystem )( tx, csr )
+         for( row <- 0 until numRows; column <- 0 until numColumns ) {
+            withChannel( row, column ) { case (tx1, csr, chan) =>
+               chan.start( doc, auralSystem )( tx1, csr )
             }
          }
 //         channels.valuesIterator.foreach( _.start( doc, auralSystem ))
+      }
+
+      def withChannel[ A ]( row: Int, column: Int )( fun: (Tx, Cursor, Channel) => Unit )( implicit tx: Tx ) {
+         val i    = row * numColumns + column
+         val csr  = chanCursorVars( i ).get
+         spawn( csr ) { implicit tx =>
+            val ch = chanHandles( i ).get
+            fun( tx, csr, ch )
+         }
       }
 
       def stop()( implicit tx: Tx ) {

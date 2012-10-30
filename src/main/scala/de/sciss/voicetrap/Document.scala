@@ -23,6 +23,8 @@ trait Document extends Writable {
 //    */
 //   def channels : Map[ (Int, Int), Channel ] // Var[ Map[ (Int, Int), Channel ]]
 
+   def withChannel[ A ]( row: Int, column: Int )( fun: (Tx, Cursor, Channel) => Unit )( implicit tx: Tx ) : Unit
+
    /**
     * Fork random range bounds in seconds
     */

@@ -50,9 +50,8 @@ abstract class AbstractDifferanceDatabaseFiller extends DifferanceDatabaseFiller
       val maxF    = secondsToFrames( maxCaptureDur )
       val inc     = min( inc0, maxF )
 
-      log( identifier + " : gathering " + formatSeconds( framesToSeconds( inc )))
-
-      if( inc > 0 ) {
+      if( inc > 44100L /* 0 */ ) {
+         log( identifier + " : gathering " + formatSeconds( framesToSeconds( inc )))
          television.capture( inc ).flatMapSuccess { f =>
             performWithFile( f, secondsToFrames( television.latency ), inc )
          }
