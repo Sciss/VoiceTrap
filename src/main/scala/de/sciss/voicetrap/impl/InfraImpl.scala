@@ -22,6 +22,22 @@ object InfraImpl {
    private final class Impl( val system: S, val document: Source[ Document ])( implicit cursor: Cursor )
    extends Infra {
       def start() {
+         log( "infra starting" )
+         val futFill = atom( "database fill" ) { implicit tx => VoiceTrap.databaseFiller.perform() }
+         GraphemeUtil.thread( "infra boot" ) {
+            futFill() match {
+               case FutureResult.Success( _ ) =>
+                  log( "database filled" )
+                  boot()
+               case FutureResult.Failure( e ) =>
+                  log( "database fill failed" )
+                  e.printStackTrace()
+                  // XXX TODO: reboot application
+            }
+         }
+      }
+
+      private def boot() {
          val sCfg = Server.Config()
          sCfg.deviceName         = Some( VoiceTrap.audioInterface )
          sCfg.inputBusChannels   = VoiceTrap.highestInputChannel
@@ -31,7 +47,7 @@ object InfraImpl {
          sCfg.pickPort()
 
          cursor.step { implicit tx =>
-            log( "infra started with path " + tx.inputAccess )
+            log( "infra booted with path " + tx.inputAccess )
             val as = AuralSystem[ S ].start( sCfg )
             as.whenStarted { implicit tx =>
                server =>

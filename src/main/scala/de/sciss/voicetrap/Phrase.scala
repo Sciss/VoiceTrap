@@ -40,7 +40,7 @@ trait Phrase {
 //   def player( implicit tx: Tx ) : Proc
    def asStrugatzkiInput( implicit tx: InTxn ) : FutureResult[ File ]
 
-   def reader( implicit tx: Tx ) : FrameReader.Factory
+   def reader : FrameReader.Factory
 
 //   /**
 //    * Plays this phrase into a given diffusion proc

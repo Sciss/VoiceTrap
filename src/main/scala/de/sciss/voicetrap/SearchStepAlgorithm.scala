@@ -26,7 +26,7 @@
 package de.sciss.voicetrap
 
 import de.sciss.lucre.bitemp.Span
-import de.sciss.synth.proc.{Scan, Grapheme}
+import de.sciss.synth.proc.{Artifact, Scan, Grapheme}
 import collection.immutable.{IndexedSeq => IIdxSeq}
 import GraphemeUtil.threadFuture
 import de.sciss.synth.io.{AudioFileType, SampleFormat, AudioFileSpec, AudioFile}
@@ -125,7 +125,33 @@ object SearchStepAlgorithm {
    }
 
    def matchToValue( m: DifferanceDatabaseQuery.Match ) : AudioArtifact = {
-      ???
+      val spanLen = m.span.length
+      val outF    = GraphemeUtil.createTempFile( suffix = ".aif", dir = Some( VoiceTrap.artifactDirectory ), keep = true )
+      val afSpec  = AudioFileSpec( fileType = AudioFileType.AIFF, sampleFormat = SampleFormat.Float,
+                                   numChannels = 1, sampleRate = VoiceTrap.sampleRate, numFrames = spanLen )
+      val afOut   = AudioFile.openWrite( outF, afSpec )
+      val frame   = m.database.reader.open()
+      val fadeLen = math.min( 22050L, spanLen / 2 )
+      val fadeIn  = SignalFader( off = 0L, len = fadeLen, start = 0f, stop = 1f, pow = 1f )
+      val fadeOut = SignalFader( off = spanLen - fadeLen, len = fadeLen, start = 1f, stop = 0f, pow = 1f )
+      val boost   = SignalFader( off = 0L, len = spanLen, start = m.boostIn, stop = m.boostOut, pow = 1f )
+      val buf     = afOut.buffer( 8192 )
+      val bufCh   = buf( 0 )
+      var off     = 0L
+      while( off < spanLen ) {
+         val chunkLen   = math.min( 8192, spanLen - off ).toInt
+         frame.read( buf, off, chunkLen )
+         fadeIn.process(  bufCh, 0, bufCh, 0, chunkLen )
+         fadeOut.process( bufCh, 0, bufCh, 0, chunkLen )
+         boost.process(   bufCh, 0, bufCh, 0, chunkLen )
+         afOut.write( buf, 0, chunkLen )
+         off += chunkLen
+      }
+      frame.close()
+      afOut.close()
+      val name       = outF.getName
+      val artifact   = Artifact( name )
+      Grapheme.Value.Audio( artifact, afSpec, offset = 0L, gain = 1.0 )
    }
 
    def bounce( chunks: IIdxSeq[ Chunk ])( implicit artifactStore: ArtifactStore ) : Phrase = {
@@ -164,7 +190,7 @@ object SearchStepAlgorithm {
                   DSP.add( bufInCh, 0, bufOutCh, 0, chunkLen )
                }
                afOut.write( bufOut, 0, chunkLen )
-               current -= chunkLen
+               current += chunkLen
             }
             val (remove, keep) = active.span( _.stop == current )
             remove.foreach( _.af.close() )

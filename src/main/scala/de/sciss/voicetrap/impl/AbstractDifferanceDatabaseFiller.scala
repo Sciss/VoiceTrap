@@ -43,7 +43,7 @@ abstract class AbstractDifferanceDatabaseFiller extends DifferanceDatabaseFiller
    def television : Television
    def maxCaptureDur : Double
 
-   def perform( implicit tx: InTxn ) : FutureResult[ Unit ] = {
+   def perform()( implicit tx: InTxn ) : FutureResult[ Unit ] = {
       val tgtLen  = secondsToFrames( durationMotion.step() )
       val dbLen   = database.length
       val inc0    = tgtLen - dbLen

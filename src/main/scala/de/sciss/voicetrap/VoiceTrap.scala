@@ -28,27 +28,32 @@ package de.sciss.voicetrap
 import java.io.File
 
 object VoiceTrap {
-   def baseDirectory     : File  = new File( new File( sys.props( "user.home" ), "Desktop" ), "VoiceTrap" )
-   def artifactDirectory : File  = new File( baseDirectory, "artifacts" )
-   def databaseDirectory : File  = new File( baseDirectory, "audio_db" )
+   lazy val baseDirectory     : File   = new File( new File( sys.props( "user.home" ), "Desktop" ), "VoiceTrap" )
+   lazy val artifactDirectory : File   = new File( baseDirectory, "artifacts" )
+   lazy val databaseDirectory : File   = new File( baseDirectory, "audio_db" )
+   lazy val televisionFile    : File   = new File( new File( baseDirectory, "tv" ), "tv.aif" )
+   lazy val temporaryDirectory: File   = new File( baseDirectory, "tmp" )
 
    val minimal                = true
+   val liveInput              = false
 
-   def numRows                = if( minimal ) 2 else 4
-   def numColumns             = if( minimal ) 1 else 3
-   def matrixSize             = numRows * numColumns
+   lazy val numRows           = if( minimal ) 2 else 4
+   lazy val numColumns        = if( minimal ) 1 else 3
+   lazy val matrixSize        = numRows * numColumns
 
-   def sampleRate             = 44100.0
-   def audioInterface         = "MOTU 828mk2"
-   def highestInputChannel    = 2
-   def highestOutputChannel   = 22
+   val sampleRate             = 44100.0
+   val audioInterface         = "MOTU 828mk2"
+   val highestInputChannel    = 2
+   val highestOutputChannel   = 22
 
-   def phraseLength : Motion  = Motion.exprand( 8.0, 24.0 )
-   def loopLength : Motion    = Motion.constant( 90.0 )
+   lazy val phraseLength : Motion  = Motion.exprand( 8.0, 24.0 )
+   lazy val loopLength : Motion    = Motion.constant( 90.0 )
 
    lazy val database        : Database                   = Database( databaseDirectory )
    lazy val databaseQuery   : DifferanceDatabaseQuery    = DifferanceDatabaseQuery(   database )
    lazy val databaseThinner : DifferanceDatabaseThinner  = DifferanceDatabaseThinner( database )
+   lazy val television      : Television                 = if( liveInput ) Television.live() else Television.fromFile( televisionFile )
+   lazy val databaseFiller  : DifferanceDatabaseFiller   = DifferanceDatabaseFiller( database, television )
 
    def main( args: Array[ String ]) {
       Infra().start()

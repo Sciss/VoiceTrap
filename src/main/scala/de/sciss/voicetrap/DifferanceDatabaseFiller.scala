@@ -29,9 +29,9 @@ import impl.{DifferanceDatabaseFillerImpl => Impl}
 import concurrent.stm.InTxn
 
 object DifferanceDatabaseFiller {
-   def apply( db: Database, tv: Television )( implicit tx: InTxn ) : DifferanceDatabaseFiller = Impl( db, tv )
+   def apply( db: Database, tv: Television ) : DifferanceDatabaseFiller = Impl( db, tv )
 }
 trait DifferanceDatabaseFiller {
    def database : Database
-   def perform( implicit tx: InTxn ) : FutureResult[ Unit ]
+   def perform()( implicit tx: InTxn ) : FutureResult[ Unit ]
 }

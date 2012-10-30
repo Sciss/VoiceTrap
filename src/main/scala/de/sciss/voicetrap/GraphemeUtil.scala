@@ -35,12 +35,12 @@ import VoiceTrap.{sampleRate, databaseDirectory}
 object GraphemeUtil {
 
 //   var logTransactions        = true
-   /**
-    * Important: there seem to be problems with communications between
-    * WritingMachine and scsynth when using `sys.props( "java.io.tmpdir" )`
-    * which gives you something terrible as `/var/folders/M9/M9W+ucwpFzaqGpC2mu3KZq0sUCc/-Tmp-/`
-    */
-   var tmpDir                 = new File( "/tmp" )
+//   /**
+//    * Important: there seem to be problems with communications between
+//    * WritingMachine and scsynth when using `sys.props( "java.io.tmpdir" )`
+//    * which gives you something terrible as `/var/folders/M9/M9W+ucwpFzaqGpC2mu3KZq0sUCc/-Tmp-/`
+//    */
+//   var tmpDir                 = new File( "/tmp" )
 
    val seed                   = System.currentTimeMillis()  // 0L
    private val rng            = new util.Random( seed )
@@ -139,7 +139,7 @@ object GraphemeUtil {
 //   def databaseDir = databaseDirectory
 
    def createTempFile( suffix: String, dir: Option[ File ], keep: Boolean ) : File = {
-      val res = File.createTempFile( "grapheme", suffix, dir.getOrElse( tmpDir ))
+      val res = File.createTempFile( "grapheme", suffix, dir.getOrElse( VoiceTrap.temporaryDirectory ))
 //if( keep ) println( "Created tmp file : " + res )
       if( !keep && deleteTempFilesOnExit ) res.deleteOnExit()
       res
@@ -156,24 +156,25 @@ object GraphemeUtil {
 
    def threadFuture[ A ]( name: String )( code: => FutureResult.Result[ A ])( implicit tx: InTxn ) : FutureResult[ A ] = {
       val ev = FutureResult.event[ A ]()
-      Txn.afterCommit { _ =>
-         new Thread( name ) {
-            start()
-            override def run() {
-               log( "threadFuture started : " + name )
-               ev.set( try {
-                  code
-               } catch {
-                  case e: Throwable => FutureResult.Failure( e )
-               })
-            }
-         }
+      threadTxn( name ) {
+         log( "threadFuture started : " + name )
+         ev.set( try {
+            code
+         } catch {
+            case e: Throwable => FutureResult.Failure( e )
+         })
       }
       ev
    }
 
    def warnToDo( what: => String ) {
       log( "+++MISSING+++ " + what )
+   }
+
+   def threadTxn( name: String )( code: => Unit )( implicit tx: InTxn ) {
+      Txn.afterCommit { _ =>
+         thread( name )( code )
+      }
    }
 
    def thread( name: String )( code: => Unit ) {

@@ -98,6 +98,6 @@ object PhraseImpl {
             }
       }
 
-      def reader( implicit tx: Tx ) : FrameReader.Factory = FrameReader.Factory( file )
+      def reader : FrameReader.Factory = FrameReader.Factory( file )
    }
 }

@@ -106,7 +106,19 @@ object ChannelImpl {
          val loop       = (loopLength.step() * sampleRate).toLong
          val insTime    = (transport.time + heuristic) % loop
 //         search( insTime, (phraseLength.step() * sampleRate).toLong, group )
-         SearchStepAlgorithm( Span( insTime, insTime + (phraseLength.step() * sampleRate).toLong ), group, hiddenLayer )
+
+         val futArtifact = SearchStepAlgorithm(
+            Span( insTime, insTime + (phraseLength.step() * sampleRate).toLong ), group, hiddenLayer )
+         GraphemeUtil.threadTxn( "await search " + this ) {
+            futArtifact() match {
+               case FutureResult.Success( artifact ) =>
+                  logThis( "search succeeded " + artifact )
+
+               case FutureResult.Failure( e ) =>
+                  logThis( "search failed" )
+                  e.printStackTrace()
+            }
+         }
       }
 
       def stop()( implicit tx: Tx ) {

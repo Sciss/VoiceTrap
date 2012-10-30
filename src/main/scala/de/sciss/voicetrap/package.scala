@@ -130,7 +130,7 @@ package object voicetrap {
    def atom[ A ]( info: => String )( fun: InTxn => A ) : A = {
       import concurrent.stm.atomic
       atomic { tx =>
-         log( "atomic:" + info )
+         log( "atomic: " + info )
          fun( tx )
       }
    }

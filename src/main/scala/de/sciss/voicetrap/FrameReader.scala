@@ -40,6 +40,14 @@ object FrameReader {
 
 }
 trait FrameReader {
+   /**
+    * Reads a chunk of frames into a buffer, starting at the beginning of the buffer
+    * and at a given frame offset into the reader.
+    *
+    * @param buf  the buffer to write out. data will be written starting from offset 0
+    * @param off  the offset into the frame reader source. this must be advanced for successive chunks
+    * @param len  the number of frames to read
+    */
    def read( buf: Frames, off: Long, len: Int ) : Unit
    def close() : Unit
 }

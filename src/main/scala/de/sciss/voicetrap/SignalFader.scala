@@ -32,5 +32,8 @@ object SignalFader{
       Impl( off, len, start, stop, pow )
 }
 trait SignalFader {
+   /**
+    * It is safe to use the same array for input and output, as long as `outOff <= inOff`.
+    */
    def process( in: Array[ Float ], inOff: Int, out: Array[ Float ], outOff: Int, len: Int ) : Unit
 }

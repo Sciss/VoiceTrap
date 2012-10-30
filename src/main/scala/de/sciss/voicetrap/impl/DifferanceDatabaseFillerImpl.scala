@@ -29,7 +29,7 @@ package impl
 import concurrent.stm.InTxn
 
 object DifferanceDatabaseFillerImpl {
-   def apply( db: Database, tv: Television )( implicit tx: InTxn ) : DifferanceDatabaseFiller = {
+   def apply( db: Database, tv: Television ) : DifferanceDatabaseFiller = {
       new Impl( db, tv )
    }
 

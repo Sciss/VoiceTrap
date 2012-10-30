@@ -58,6 +58,14 @@ trait ExtractionImpl {
                res.fail( e )
 
             case Success( _ ) =>
+               var keepWaiting = 10
+               while( keepWaiting > 0 ) {
+                  if( meta.isFile && meta.length() > 0L ) keepWaiting = 0
+                  if( keepWaiting > 0 ) {
+                     keepWaiting -= 1
+                     Thread.sleep( 100 )
+                  }
+               }
                res.succeed( meta )
 
             case Progress( p ) =>
