@@ -98,6 +98,13 @@ package object voicetrap {
 
    private val fullDecouple = false
 
+   def submit( fun: => Unit ) {
+      require( Txn.findCurrent.isEmpty, "submit must not be called within a txn" )
+      proc.SoundProcesses.pool.submit( new Runnable {
+         def run() { fun }
+      })
+   }
+
    def spawn( cursor: Cursor )( fun: Tx => Unit )( implicit tx: Tx ) {
 //      Txn.afterCommit( _ => pool.submit( new Runnable {
 //         def run() {

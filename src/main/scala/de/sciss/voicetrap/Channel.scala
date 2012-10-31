@@ -20,6 +20,8 @@ trait Channel extends Writable {
 
    def insert( segm: AudioSegment )( implicit tx: Tx ) : Unit
 
+   def removeAt( time: Long )( implicit tx: Tx ) : Unit
+
    // ---- algorithm ----
 
 //   def start( document: Document, auralSystem: AuralSystem[ S ])( implicit tx: Tx ) : Unit

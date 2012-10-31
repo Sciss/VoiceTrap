@@ -131,9 +131,14 @@ object ChannelImpl {
             futArtifact() match {
                case FutureResult.Success( artifact ) =>
                   logThis( "search succeeded " + artifact )
-                  document.cursor.step { implicit tx =>
-                     document.withChannel( row = row, column = column ) {
-                        case (tx1, _, ch) => ch.insert( Grapheme.Segment.Audio( insSpan, artifact ))( tx1 )
+                  submit {
+                     document.cursor.step { implicit tx =>
+                        document.withChannel( row = row, column = column ) {
+                           case (tx1, _, ch) =>
+                              val middle = insSpan.start + (insSpan.length / 2)
+                              ch.removeAt( middle )
+                              ch.insert( Grapheme.Segment.Audio( insSpan, artifact ))( tx1 )
+                        }
                      }
                   }
 
@@ -176,15 +181,16 @@ object ChannelImpl {
          log( chan.toString + " : " + what )
       }
 
-      private def testRemove()( implicit tx: Tx ) {
+      def removeAt( time: Long )( implicit tx: Tx ) {
          val g = group
-         val transport = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
-         transport.iterator.toList.headOption.foreach { case (span, timed) =>
-            logThis( "removing process " + timed )
-//de.sciss.lucre.event.showLog = true
-            val ok = g.remove( timed.span, timed.value )
-//de.sciss.lucre.event.showLog = false
-            logThis( "removing process - success? " + ok )
+//         val transport = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
+         group.intersect( time ).foreach { case (span, seq) =>
+            seq.foreach { timed =>
+               logThis( "removing process " + timed )
+               /* val ok = */ g.remove( timed.span, timed.value )
+   //de.sciss.lucre.event.showLog = false
+//               logThis( "removing process - success? " + ok )
+            }
          }
       }
 
@@ -232,41 +238,41 @@ object ChannelImpl {
 //de.sciss.lucre.event.showLog = false
       }
 
-      private def testReplay()( implicit tx: Tx ) {
-         val g = group
-         val transport  = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
-         transport.seek( 0L )
-         logThis( "FOUND in path " + tx.inputAccess + " : " + transport.iterator.toList )
-//de.sciss.lucre.confluent.showLog = true
-         logThis( "GROUP " + g + " has first event at " + g.nearestEventAfter( Long.MinValue ))
-         transport.play()
-      }
+//      private def testReplay()( implicit tx: Tx ) {
+//         val g = group
+//         val transport  = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
+//         transport.seek( 0L )
+//         logThis( "FOUND in path " + tx.inputAccess + " : " + transport.iterator.toList )
+////de.sciss.lucre.confluent.showLog = true
+//         logThis( "GROUP " + g + " has first event at " + g.nearestEventAfter( Long.MinValue ))
+//         transport.play()
+//      }
 
-      private def testSpawn()( implicit tx: Tx ) {
-         val transport  = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
-         val time       = transport.time
-         val g          = group
-
-         import implicits._
-
-         val p = proc.Proc[ S ]
-         p.name_=( chan.toString )
-         p.graph_=( synth.SynthGraph {
-            import synth._
-            import ugen._
-
-            val freq = (row * numColumns + column).linexp( 0, math.max( 1, matrixSize - 1 ), 300, 3000 )
-            val beat = LFPulse.ar( column.linexp( 0, math.max( 1, numColumns - 1 ), 1, 8.0/5 ))
-            val sig  = SinOsc.ar( freq ) * beat / matrixSize
-            Out.ar( 0, sig )
-         })
-
-//         println( "ADDING in " + chan + " and path " + tx.inputAccess + " at " + time )
+//      private def testSpawn()( implicit tx: Tx ) {
+//         val transport  = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
+//         val time       = transport.time
+//         val g          = group
 //
-//de.sciss.lucre.confluent.showLog = true
-logThis( "ADDING TO GROUP " + g )
-         g.add( Span( time, time + (sampleRate * 4).toLong ), p )
-//         de.sciss.lucre.confluent.showLog = true
-      }
+//         import implicits._
+//
+//         val p = proc.Proc[ S ]
+//         p.name_=( chan.toString )
+//         p.graph_=( synth.SynthGraph {
+//            import synth._
+//            import ugen._
+//
+//            val freq = (row * numColumns + column).linexp( 0, math.max( 1, matrixSize - 1 ), 300, 3000 )
+//            val beat = LFPulse.ar( column.linexp( 0, math.max( 1, numColumns - 1 ), 1, 8.0/5 ))
+//            val sig  = SinOsc.ar( freq ) * beat / matrixSize
+//            Out.ar( 0, sig )
+//         })
+//
+////         println( "ADDING in " + chan + " and path " + tx.inputAccess + " at " + time )
+////
+////de.sciss.lucre.confluent.showLog = true
+//logThis( "ADDING TO GROUP " + g )
+//         g.add( Span( time, time + (sampleRate * 4).toLong ), p )
+////         de.sciss.lucre.confluent.showLog = true
+//      }
    }
 }

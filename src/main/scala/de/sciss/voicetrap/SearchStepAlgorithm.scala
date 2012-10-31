@@ -28,7 +28,6 @@ package de.sciss.voicetrap
 import de.sciss.lucre.bitemp.Span
 import de.sciss.synth.proc.{Artifact, Scan, Grapheme}
 import collection.immutable.{IndexedSeq => IIdxSeq}
-import GraphemeUtil.threadFuture
 import de.sciss.synth.io.{AudioFileType, SampleFormat, AudioFileSpec, AudioFile}
 
 object SearchStepAlgorithm {
