@@ -32,7 +32,7 @@ import synth.{addAfter, SynthGraph, proc}
 import concurrent.stm.Ref
 import de.sciss.lucre.bitemp.Span
 import java.io.File
-import synth.proc.{ProcTxn, RichSynthDef, Scan, Artifact, Grapheme}
+import synth.proc.{RichServer, ProcTxn, RichSynthDef, Scan, Artifact, Grapheme}
 import GraphemeUtil.formatSpan
 
 import VoiceTrap.{numColumns, numRows, matrixSize, sampleRate, phraseLength, loopLength}
@@ -87,7 +87,7 @@ object ChannelImpl {
 
 //      def cursor( implicit tx: Tx ) : Cursor = cursorVar.get
 
-      def start( document: Document, auralSystem: proc.AuralSystem[ S ])( implicit tx: Tx, cursor: Cursor ) {
+      def start( document: Document, server: RichServer, auralSystem: proc.AuralSystem[ S ])( implicit tx: Tx, cursor: Cursor ) {
          log( "spawning " + chan + " with " + cursor + " (pos = " + cursor.position + ")" )
          implicit val aStore  = document.artifactStore
          val transport        = proc.Transport[ S, I ]( group, VoiceTrap.sampleRate )
@@ -119,16 +119,16 @@ object ChannelImpl {
 //         testRemove()
 //         testAdd()
 
-         nextSearch( document, transport )
+         nextSearch( document, server, transport )
       }
 
-      def nextSearch( document: Document, transport: Transport )( implicit tx: Tx ) {
+      def nextSearch( document: Document, server: RichServer, transport: Transport )( implicit tx: Tx ) {
          implicit val itx = tx.peer
          val heuristic  = (sampleRate * 10.0).toLong  // XXX TODO
          val loop       = (loopLength.step() * sampleRate).toLong
          var timeNow    = transport.time
          if( timeNow >= loop ) {
-            timeNow    %= loop
+            timeNow = 0L //    %= loop
             transport.seek( timeNow )
          }
          val insTime    = (timeNow + heuristic) % loop
@@ -136,7 +136,7 @@ object ChannelImpl {
          val insSpan    = Span( insTime, insTime + (phraseLength.step() * sampleRate).toLong )
 
          implicit val aStore  = document.artifactStore
-         val futArtifact = SearchStepAlgorithm( this, insSpan, group, hiddenLayer )
+         val futArtifact = SearchStepAlgorithm( this, server, insSpan, group, hiddenLayer )
          GraphemeUtil.threadTxn( "await search " + this ) {
             val artOpt = futArtifact() match {
                case FutureResult.Success( artifact ) =>
@@ -160,7 +160,7 @@ object ChannelImpl {
                            ch.insert( Grapheme.Segment.Audio( insSpan, artifact ))( tx1 )
    //                              val transport = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
                         }
-                        ch.nextSearch( document, transport )
+                        ch.nextSearch( document, server, transport )
                   }
                }
             }

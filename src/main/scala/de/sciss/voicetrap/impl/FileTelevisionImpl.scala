@@ -29,14 +29,15 @@ package impl
 import java.io.File
 import de.sciss.synth.io.{AudioFileSpec, AudioFile}
 import concurrent.stm.{InTxn, Ref}
+import de.sciss.synth.proc.RichServer
 
 object FileTelevisionImpl {
-   private val identifier  = "file-television-impl"
+//   private val identifier  = "file-television-impl"
 
    def apply( f: File ) : Television = {
       val spec = AudioFile.readSpec( f )
-      require( spec.numChannels == 1, identifier + " : must be mono" )
-      require( spec.numFrames > 0, identifier + " : file is empty" )
+      require( spec.numChannels == 1, /* identifier + */ " : must be mono" )
+      require( spec.numFrames > 0, /* identifier + */ " : file is empty" )
       new FileTelevisionImpl( f, spec )
    }
 }
@@ -49,7 +50,8 @@ class FileTelevisionImpl private ( f: File, spec: AudioFileSpec ) extends Televi
 
    def latency = 0.0
 
-   def capture( length: Long )( implicit tx: InTxn ) : FutureResult[ File ] = {
+   def capture( identifier: String, server: RichServer, length: Long )( implicit tx: Tx ) : FutureResult[ File ] = {
+      implicit val itx = tx.peer
       val oldPos = posRef()
       threadFuture( identifier + " : capture" ) {
          try {

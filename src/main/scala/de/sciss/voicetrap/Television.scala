@@ -28,13 +28,14 @@ package de.sciss.voicetrap
 import impl.{FileTelevisionImpl => FileImpl, LiveTelevisionImpl => LiveImpl}
 import java.io.File
 import concurrent.stm.InTxn
+import de.sciss.synth.proc.RichServer
 
 object Television {
    def fromFile( f: File ) : Television = FileImpl( f )
    def live() : Television = LiveImpl()
 }
 trait Television {
-   def capture( length: Long )( implicit tx: InTxn ) : FutureResult[ File ]
+   def capture( identifier: String, server: RichServer, length: Long )( implicit tx: Tx ) : FutureResult[ File ]
 
    /**
     * Latency in capture result in seconds

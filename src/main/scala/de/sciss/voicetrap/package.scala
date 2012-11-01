@@ -105,6 +105,10 @@ package object voicetrap {
       })
    }
 
+   def submitTxn( fun: => Unit )( implicit tx: InTxn ) {
+      Txn.afterCommit( _ => submit( fun ))
+   }
+
    def spawn( cursor: Cursor )( fun: Tx => Unit )( implicit tx: Tx ) {
 //      Txn.afterCommit( _ => pool.submit( new Runnable {
 //         def run() {

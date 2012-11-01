@@ -3,6 +3,7 @@ package de.sciss.voicetrap
 import impl.{ChannelImpl => Impl}
 import de.sciss.lucre.Writable
 import de.sciss.synth.proc
+import de.sciss.synth.proc.RichServer
 
 object Channel {
    implicit def serializer: Serializer[ Channel ] = Impl.serializer
@@ -22,12 +23,12 @@ trait Channel extends Writable {
 
    def removeAt( time: Long )( implicit tx: Tx ) : Unit
 
-   def nextSearch( document: Document, transport: Transport )( implicit tx: Tx ) : Unit
+   def nextSearch( document: Document, server: RichServer, transport: Transport )( implicit tx: Tx ) : Unit
 
    // ---- algorithm ----
 
 //   def start( document: Document, auralSystem: AuralSystem[ S ])( implicit tx: Tx ) : Unit
-   def start( document: Document, auralSystem: proc.AuralSystem[ S ])( implicit tx: Tx, cursor: Cursor ) : Unit
+   def start( document: Document, server: RichServer, auralSystem: proc.AuralSystem[ S ])( implicit tx: Tx, cursor: Cursor ) : Unit
    def stop()( implicit tx: Tx ) : Unit
 
 //   def fork()( implicit tx: Tx ) : Unit

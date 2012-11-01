@@ -28,6 +28,7 @@ package impl
 
 import java.io.File
 import concurrent.stm.InTxn
+import de.sciss.synth.proc.RichServer
 
 abstract class AbstractDifferanceDatabaseFiller extends DifferanceDatabaseFiller {
    import GraphemeUtil._
@@ -43,7 +44,8 @@ abstract class AbstractDifferanceDatabaseFiller extends DifferanceDatabaseFiller
    def television : Television
    def maxCaptureDur : Double
 
-   def perform()( implicit tx: InTxn ) : FutureResult[ Unit ] = {
+   def perform( server: RichServer )( implicit tx: Tx ) : FutureResult[ Unit ] = {
+      implicit val itx = tx.peer
       val tgtLen  = secondsToFrames( durationMotion.step() )
       val dbLen   = database.length
       val inc0    = tgtLen - dbLen
@@ -52,7 +54,7 @@ abstract class AbstractDifferanceDatabaseFiller extends DifferanceDatabaseFiller
 
       if( inc > 44100L /* 0 */ ) {
          log( identifier + " : gathering " + formatSeconds( framesToSeconds( inc )))
-         television.capture( inc ).flatMapSuccess { f =>
+         television.capture( identifier, server, inc ).flatMapSuccess { f =>
             performWithFile( f, secondsToFrames( television.latency ), inc )
          }
       } else {

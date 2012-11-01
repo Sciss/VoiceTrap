@@ -3,7 +3,7 @@ package de.sciss.voicetrap
 //import collection.immutable.{IndexedSeq => IIdxSeq}
 import impl.{DocumentImpl => Impl}
 import de.sciss.lucre.Writable
-import de.sciss.synth.proc.{RichAudioBus, AuralSystem}
+import de.sciss.synth.proc.{RichServer, RichAudioBus, AuralSystem}
 import de.sciss.synth.AudioBus
 
 object Document {
@@ -42,6 +42,6 @@ trait Document extends Writable {
     */
    def pDur : Double // Var[ Double ]
 
-   def start( auralSystem: AuralSystem[ S ])( implicit tx: Tx ) : Unit
+   def start( server: RichServer, auralSystem: AuralSystem[ S ])( implicit tx: Tx ) : Unit
    def stop()( implicit tx: Tx ) : Unit
 }

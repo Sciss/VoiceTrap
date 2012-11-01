@@ -27,13 +27,14 @@ package de.sciss.voicetrap
 
 import impl.{DifferanceDatabaseFillerImpl => Impl}
 import concurrent.stm.InTxn
+import de.sciss.synth.proc.RichServer
 
 object DifferanceDatabaseFiller {
    def apply( db: Database, tv: Television ) : DifferanceDatabaseFiller = Impl( db, tv )
 }
 trait DifferanceDatabaseFiller {
    def database : Database
-   def perform()( implicit tx: InTxn ) : FutureResult[ Unit ]
+   def perform( server: RichServer )( implicit tx: Tx ) : FutureResult[ Unit ]
 
    def identifier: String
 }

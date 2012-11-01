@@ -4,7 +4,7 @@ package impl
 import de.sciss.lucre.{stm, DataOutput, DataInput}
 import de.sciss.synth
 import synth.proc
-import proc.AuralSystem
+import synth.proc.{RichServer, AuralSystem}
 import java.io.File
 import collection.immutable.{IndexedSeq => IIdxSeq}
 
@@ -80,10 +80,10 @@ object DocumentImpl {
        */
       val pDur = 60.0
 
-      def start( auralSystem: AuralSystem[ S ])( implicit tx: Tx ) {
+      def start( server: RichServer, auralSystem: AuralSystem[ S ])( implicit tx: Tx ) {
          for( row <- 0 until numRows; column <- 0 until numColumns ) {
             withChannel( row, column ) { case (tx1, csr, chan) =>
-               chan.start( doc, auralSystem )( tx1, csr )
+               chan.start( doc, server, auralSystem )( tx1, csr )
             }
          }
 //         channels.valuesIterator.foreach( _.start( doc, auralSystem ))

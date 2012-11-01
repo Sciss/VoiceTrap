@@ -26,13 +26,14 @@
 package de.sciss.voicetrap
 package impl
 
-import java.io.File
+import java.io.{IOException, File}
 import de.sciss.synth
 import synth.io.{AudioFile, SampleFormat, AudioFileType}
 import concurrent.stm.{InTxn, Ref}
+import synth.proc.RichServer
 
 object LiveTelevisionImpl {
-   private val identifier  = "live-television-impl"
+//   private val identifier  = "live-television-impl"
 
    def apply() : Television = new LiveTelevisionImpl()
 }
@@ -45,22 +46,24 @@ final class LiveTelevisionImpl private () extends Television {
    def latency = lookAheadLim * 2
 
 //   private val procRef  = Ref( Option.empty[ synth.proc.Proc ])
-   private val futRef   = Ref({
-      val ev = FutureResult.event[ File ]()
-      ev.fail( new RuntimeException( identifier + " : capture file not yet initialized" ))
-      ev
-   })
+//   private val futRef   = Ref({
+//      val ev = FutureResult.event[ File ]()
+//      ev.fail( new RuntimeException( identifier + " : capture file not yet initialized" ))
+//      ev
+//   })
 
-   def capture( length: Long )( implicit tx: InTxn ) : FutureResult[ File ] = {
+   def capture( identifier: String, server: RichServer, length: Long )( implicit tx: Tx ) : FutureResult[ File ] = {
       import synth._
       import ugen._
-      import proc._
+      import proc.{log => _, _}
 //      import DSL._
+
+      log( identifier + " : capture begin" )
 
       val dur     = framesToSeconds( length ) + latency
       val res     = FutureResult.event[ File ]()
-      val oldFut  = futRef.swap( res )
-      require( oldFut.isSet, identifier + " : still in previous capture" )
+//      val oldFut  = futRef.swap( res )( tx.peer )
+//      require( oldFut.isSet, identifier + " : still in previous capture" )
 
       val graph   = SynthGraph {
          val in      = In.ar( NumOutputBuses.ir + VoiceTrap.microphoneChannel, 1 )
@@ -73,8 +76,7 @@ final class LiveTelevisionImpl private () extends Television {
          DiskOut.ar( buf, mix )
       }
 
-      val server: RichServer = ???
-
+      implicit val ptx = ProcTxn()
       val rd   = RichSynthDef( server, graph )
       val path = createTempFile( ".aif", None, keep = false )
 //      val buf = bufRecord( path.getAbsolutePath, 1, AudioFileType.AIFF, SampleFormat.Int24 )
@@ -88,18 +90,27 @@ final class LiveTelevisionImpl private () extends Television {
       )
 
       rs.onEndTxn { implicit ptx =>
+         log( identifier + " : capture closing" )
          buf.closeAndFree()
-         threadTxn( identifier + " : capture completed" ) {
-            ???
+         // trick to make the transaction commit wait for the buffer closing confirmation
+         ptx.add( msg = osc.StatusMessage, change = None, audible = true, dependencies = Map( buf.isAlive -> false ))
+         implicit val itx = ptx.peer
+         submitTxn { // threadTxn( identifier + " : capture completed" )
+            try {
+               AudioFile.readSpec( path )
+               log( identifier + " : capture completed" )
+               res.succeed( path )
+            } catch {
+               case e: IOException =>
+                  log( identifier + " : capture failed" )
+                  res.fail( e )
+            }
          }
       }
 
-//      p.control( "dur" ).v = dur
-//      p.play
 // XXX TODO : this should be somewhat handled (ProcTxn needs addition)
 //      tx.afterFailure { e => res.fail( e )}
 
-//      res
-      ???
+      res
    }
 }

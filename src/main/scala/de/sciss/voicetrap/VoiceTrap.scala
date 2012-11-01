@@ -37,7 +37,7 @@ object VoiceTrap {
    lazy val temporaryDirectory: File   = new File( baseDirectory, "tmp" )
 
    val minimal                = false
-   val liveInput              = false
+   val liveInput              = false // true
    val stereoOutput           = true
 
    lazy val numRows           = if( minimal ) 2 /* 1 */ else 4

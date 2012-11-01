@@ -71,7 +71,7 @@ object InfraImpl {
                   //                  server.peer.dumpOSC()
 //                  proc.showLog      = true
 //                  proc.showAuralLog = true
-                  document.get.start( as )
+                  document.get.start( server, as )
             }
          }
       }
