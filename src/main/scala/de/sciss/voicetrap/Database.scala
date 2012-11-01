@@ -31,10 +31,12 @@ import java.io.File
 import concurrent.stm.InTxn
 
 object Database {
-   def apply( dir: File ) : Database = Impl( dir )
+   def apply( name: String, dir: File ) : Database = Impl( name, dir )
 }
 trait Database {
    def length( implicit tx: InTxn ): Long
+
+   def identifier: String
 
 //   def remove( spans: IIdxSeq[ Span ])( implicit tx: Tx ) : FutureResult[ Unit ]
 

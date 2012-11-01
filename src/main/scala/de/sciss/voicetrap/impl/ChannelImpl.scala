@@ -75,7 +75,7 @@ object ChannelImpl {
 
       private val transportVar = Ref( Option.empty[ Transport ])
 
-      override def toString = "Chan" + id + "(r=" + row + ", c=" + column + ")"
+      override def toString = "chan_" + (row+1) + "_" + (column+1)
 
       def hiddenLayer : AudioArtifact = {
          val name    = "hidden_" + (row+1) + "_" + (column+1) + ".aif"

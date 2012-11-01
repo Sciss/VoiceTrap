@@ -115,13 +115,13 @@ object SearchStepAlgorithm {
       }
 
       val futQuery = futPhrase.flatMapSuccess { phrase =>
-         atom( "query" ) { itx =>
+         atom( "query " + channel ) { itx =>
             chanDB.query.find( phrase )( itx )
          }
       }
       val futArtifact = futQuery.flatMapSuccess { m =>
          val artifact = matchToValue( m )
-         val futUnit  = atom( "thin" )( itx => chanDB.thinner.remove( IIdxSeq( m.span ))( itx ))
+         val futUnit  = atom( "thin " + channel )( itx => chanDB.thinner.remove( IIdxSeq( m.span ))( itx ))
          futUnit.mapSuccess( _ => artifact )
       }
 

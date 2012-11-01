@@ -32,7 +32,7 @@ import concurrent.stm.InTxn
 abstract class AbstractDifferanceDatabaseFiller extends DifferanceDatabaseFiller {
    import GraphemeUtil._
 
-   private val identifier = "a-database-filler"
+//   private val identifier = "a-database-filler"
 
    /**
     * Target database length in seconds.

@@ -38,9 +38,9 @@ object DatabaseImpl {
 //   private val xmlName     = "grapheme.xml"
    private val audioName   = "grapheme.aif"
 
-   private val identifier  = "database-impl"
+//   private val identifier  = "database-impl"
 
-   def apply( dir: File ) : Database = {
+   def apply( name: String, dir: File ) : Database = {
       val normFile = new File( dir, normName )
       require( normFile.isFile, "Missing normalization file at " + normFile )
 
@@ -80,7 +80,7 @@ object DatabaseImpl {
          case None => None // (None, None)
       }
 
-      new DatabaseImpl( dir, normFile, State( spec, None /* extr */))
+      new DatabaseImpl( name, dir, normFile, State( spec, None /* extr */))
    }
 
    /*
@@ -92,10 +92,10 @@ object DatabaseImpl {
       sub.forall( _.delete() ) && dir.delete()
    }
 
-   private def copyAudioFile( source: File, target: File )( implicit tx: InTxn ) : FutureResult[ Unit ] = {
+   private def copyAudioFile( name: String, source: File, target: File )( implicit tx: InTxn ) : FutureResult[ Unit ] = {
       import GraphemeUtil._
 
-      threadFuture( identifier + " : copy file" ) {
+      threadFuture( name + " : copy file" ) {
          val afSrc = AudioFile.openRead( source )
          try {
             val afTgt = AudioFile.openWrite( target, afSrc.spec )
@@ -114,12 +114,12 @@ object DatabaseImpl {
 //   final case class Entry( extr: FeatureExtraction.Settings, spec: AudioFileSpec )
    final case class State( spec: Option[ (File, AudioFileSpec) ], extr: Option[ File ])
 }
-class DatabaseImpl private ( dir: File, normFile: File, state0: DatabaseImpl.State )
+class DatabaseImpl private ( val identifier: String, dir: File, normFile: File, state0: DatabaseImpl.State )
 extends Database /* AbstractDatabase */ with ExtractionImpl {
    import GraphemeUtil._
    import DatabaseImpl._
 
-   def identifier = DatabaseImpl.identifier
+//   def identifier = DatabaseImpl.identifier
 
 //   private val extrRef        = Ref( extr0 )
 //   private val specRef        = Ref( spec0 )
@@ -326,7 +326,7 @@ extends Database /* AbstractDatabase */ with ExtractionImpl {
          case None =>
             val audioInput = state.spec.map( _._1 ).getOrElse( sys.error( identifier + " : contains no file" ))
             val sub        = audioInput.getParentFile
-            copyAudioFile( normFile, new File( sub, normName )).flatMap { _ =>
+            copyAudioFile( identifier, normFile, new File( sub, normName )).flatMap { _ =>
                extractAndUpdate( audioInput, sub )
             }
       }

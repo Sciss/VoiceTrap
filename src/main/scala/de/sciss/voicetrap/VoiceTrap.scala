@@ -36,8 +36,9 @@ object VoiceTrap {
    lazy val televisionFile    : File   = new File( new File( baseDirectory, "tv" ), "tv.aif" )
    lazy val temporaryDirectory: File   = new File( baseDirectory, "tmp" )
 
-   val minimal                = true
+   val minimal                = false
    val liveInput              = false
+   val stereoOutput           = true
 
    lazy val numRows           = if( minimal ) 2 /* 1 */ else 4
    lazy val numColumns        = if( minimal ) 1 else 3
@@ -59,9 +60,10 @@ object VoiceTrap {
                          thinner: DifferanceDatabaseThinner, filler: DifferanceDatabaseFiller )
 
    lazy val databases = IIdxSeq.tabulate( numRows ) { row => IIdxSeq.tabulate( numColumns ) { col =>
-      val dir        = new File( baseDirectory, "audio_db_" + (row+1) + "_" + (col+1) )
+      val mStr       = "_" + (row+1) + "_" + (col+1)
+      val dir        = new File( baseDirectory, "audio_db" + mStr )
 //      if( !dir.isDirectory ) dir.mkdir()
-      val database   = Database( dir )
+      val database   = Database( "db" + mStr, dir )
       val query      = DifferanceDatabaseQuery(   database )
       val thinner    = DifferanceDatabaseThinner( database )
       val filler     = DifferanceDatabaseFiller( database, television )

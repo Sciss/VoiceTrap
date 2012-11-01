@@ -60,7 +60,9 @@ object InfraImpl {
                   val routeGraph = SynthGraph {
                      import synth._
                      import ugen._
-                     Out.ar( 0, In.ar( internalBus.index, numChannels = internalBus.numChannels ))
+                     val sig0 = In.ar( internalBus.index, numChannels = internalBus.numChannels )
+                     val sig  = if( VoiceTrap.stereoOutput ) SplayAz.ar( 2, sig0 ) else sig0
+                     Out.ar( 0, sig )
                   }
                   implicit val ptx = ProcTxn()
                   val rd = RichSynthDef( server, routeGraph, nameHint = Some( "internal-bus" ))

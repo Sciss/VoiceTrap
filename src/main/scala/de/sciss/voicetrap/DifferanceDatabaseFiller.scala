@@ -34,4 +34,6 @@ object DifferanceDatabaseFiller {
 trait DifferanceDatabaseFiller {
    def database : Database
    def perform()( implicit tx: InTxn ) : FutureResult[ Unit ]
+
+   def identifier: String
 }

@@ -26,8 +26,6 @@
 package de.sciss.voicetrap
 package impl
 
-import concurrent.stm.InTxn
-
 object DifferanceDatabaseFillerImpl {
    def apply( db: Database, tv: Television ) : DifferanceDatabaseFiller = {
       new Impl( db, tv )
@@ -37,6 +35,8 @@ object DifferanceDatabaseFillerImpl {
    extends AbstractDifferanceDatabaseFiller {
       val durationMotion   = Motion.constant( 180.0 )
       val maxCaptureDur    = 45.0
+
+      def identifier = "fill(" + database.identifier + ")"
 
       override def toString = "DifferanceDatabaseFiller@" + hashCode.toHexString
    }
