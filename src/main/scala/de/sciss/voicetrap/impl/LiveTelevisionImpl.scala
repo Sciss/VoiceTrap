@@ -62,58 +62,38 @@ final class LiveTelevisionImpl private () extends Television {
       val oldFut  = futRef.swap( res )
       require( oldFut.isSet, identifier + " : still in previous capture" )
 
-//      val p = procRef().getOrElse {
-//         val fact = diff( "$live-tv" ) {
-//            val pBoost  = pControl( "boost", ParamSpec( 1.0, 10.0, ExpWarp ), 1.0 )
-//            val pDur    = pScalar(  "dur",   ParamSpec( 0.0, 600.0 ), 10.0 )
-//            graph { in0: In =>
-//               val path = createTempFile( ".aif", None, keep = false )
-//               val in   = if( WritingMachine.tvPhaseFlip ) in0 * Seq( 1, -1 ) else in0
-//               val mix  = Limiter.ar( Mix.mono( in ) * pBoost.kr, 0.97, 0.01 )
-//               val buf  = bufRecord( path.getAbsolutePath, 1, AudioFileType.AIFF, SampleFormat.Int24 )
-//               val dura = pDur.ir
-//               val me   = Proc.local
-//               Done.kr( Line.kr( dur = dura )).react {
-//                  thread( identifier + " : capture completed" ) {
-//                     atomic( identifier + " stop process" ) { implicit tx => me.stop }
-//                     var len = 0L
-//                     var i = 10
-//                     // some effort to make sure the file was closed by the server
-//                     // ; unfortunately we can't guarantee this with the current
-//                     // sound processes (or can we?)
-//                     var e: Throwable = null
-//                     while( len == 0L && i > 0 ) {
-//                        try {
-//                           val spec = AudioFile.readSpec( path )
-//                           len      = spec.numFrames
-//                        } catch {
-//                           case _e: Throwable => e = _e
-//                        }
-//                        if( len == 0L ) Thread.sleep( 200 )
-//                        i -= 1
-//                     }
-////                     res.set( path )
-//                     atomic( identifier + " return path" ) { implicit tx =>
-////                        futRef().succeed( path )
-//                        futRef().set( if( (len == 0L) && (e != null) ) {
-//                           FutureResult.Failure( e )
-//                        } else {
-//                           FutureResult.Success( path )
-//                        })
-//                     }
-//                  }
-//               }
-//               DiskOut.ar( buf.id, mix )
-//            }
-//         }
-//         val _p = fact.make
-//         procRef.set( Some( _p ))
-//         _p.audioInput( "in" ).bus  = Some( RichBus.soundIn( Server.default,
-//            WritingMachine.tvNumChannels, WritingMachine.tvChannelOffset ))
-//         _p.control( "boost" ).v    = WritingMachine.tvBoostDB.dbamp
-//         _p
-//      }
-//
+      val graph   = SynthGraph {
+         val in      = In.ar( NumOutputBuses.ir + VoiceTrap.microphoneChannel, 1 )
+         val boost   = "boost".kr
+         val mix     = Limiter.ar( Mix.mono( in ) * boost, 0.97, 0.01 )
+         val buf     = "buf".ir
+         val dura    = "dur".ir
+//         val done    = Done.kr( Line.kr( dur = dura ))
+         Line.kr( dur = dura, doneAction = freeSelf )
+         DiskOut.ar( buf, mix )
+      }
+
+      val server: RichServer = ???
+
+      val rd   = RichSynthDef( server, graph )
+      val path = createTempFile( ".aif", None, keep = false )
+//      val buf = bufRecord( path.getAbsolutePath, 1, AudioFileType.AIFF, SampleFormat.Int24 )
+      val buf  = RichBuffer( server )
+      buf.alloc( numFrames = 32768, numChannels = 1 )
+      buf.record( path.getAbsolutePath, AudioFileType.AIFF, SampleFormat.Int24 )
+      val rs = rd.play(
+         target = server.defaultGroup,
+         args = Seq( "boost" -> VoiceTrap.microphoneGain, "dur" -> dur, "buf" -> buf.id ),
+         buffers = Seq( buf )
+      )
+
+      rs.onEndTxn { implicit ptx =>
+         buf.closeAndFree()
+         threadTxn( identifier + " : capture completed" ) {
+            ???
+         }
+      }
+
 //      p.control( "dur" ).v = dur
 //      p.play
 // XXX TODO : this should be somewhat handled (ProcTxn needs addition)

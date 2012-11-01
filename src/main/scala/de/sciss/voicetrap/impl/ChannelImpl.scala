@@ -128,8 +128,8 @@ object ChannelImpl {
          val loop       = (loopLength.step() * sampleRate).toLong
          var timeNow    = transport.time
          if( timeNow >= loop ) {
-            transport.seek( 0L )
-            timeNow     = 0L
+            timeNow    %= loop
+            transport.seek( timeNow )
          }
          val insTime    = (timeNow + heuristic) % loop
 //         search( insTime, (phraseLength.step() * sampleRate).toLong, group )

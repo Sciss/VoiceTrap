@@ -48,6 +48,8 @@ object VoiceTrap {
    val audioInterface         = "MOTU 828mk2"
    val highestInputChannel    = 2
    val highestOutputChannel   = 22
+   val microphoneChannel      = 0
+   var microphoneGain         = 1.0 // amp linear
 
 //   lazy val internalBusOffset = highestOutputChannel + highestInputChannel
 
