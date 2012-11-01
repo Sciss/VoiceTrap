@@ -27,7 +27,7 @@ package de.sciss.voicetrap
 
 import java.io.File
 import de.sciss.synth.io.{SampleFormat, AudioFileType, AudioFileSpec, AudioFile}
-import de.sciss.lucre.bitemp.Span
+import de.sciss.lucre.bitemp.{SpanLike, Span}
 import concurrent.stm.{Txn, InTxn}
 
 import VoiceTrap.sampleRate
@@ -65,12 +65,18 @@ object GraphemeUtil {
       if( i < 0 ) n else n.substring( 0, i )
    }
 
-   def formatSpan( span: Span ) : String = {
+   def formatSpan( span: SpanLike ) : String = {
       val sb   = new StringBuilder( 24 )
       sb.append( '[' )
-      sb.append( formatSeconds( framesToSeconds( span.start )))
+      sb.append( span match {
+         case s: Span.HasStart => formatSeconds( framesToSeconds( s.start ))
+         case _ => "?"
+      })
       sb.append( '-' )
-      sb.append( formatSeconds( framesToSeconds( span.stop )))
+      sb.append( span match {
+         case s: Span.HasStop => formatSeconds( framesToSeconds( s.stop ))
+         case _ => "?"
+      })
       sb.append( ']' )
       sb.toString()
    }

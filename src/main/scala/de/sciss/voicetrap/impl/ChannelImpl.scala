@@ -28,12 +28,12 @@ package impl
 
 import de.sciss.lucre.{DataInput, DataOutput, stm}
 import de.sciss.synth
-import synth.io.AudioFile
 import synth.{addAfter, SynthGraph, proc}
 import concurrent.stm.Ref
 import de.sciss.lucre.bitemp.Span
-import java.io.{IOException, File, FilenameFilter}
-import synth.proc.{ProcTxn, RichSynthDef, RichSynth, RichGroup, Scan, Artifact, Grapheme}
+import java.io.File
+import synth.proc.{ProcTxn, RichSynthDef, Scan, Artifact, Grapheme}
+import GraphemeUtil.formatSpan
 
 import VoiceTrap.{numColumns, numRows, matrixSize, sampleRate, phraseLength, loopLength}
 
@@ -119,32 +119,50 @@ object ChannelImpl {
 //         testRemove()
 //         testAdd()
 
+         nextSearch( document, transport )
+      }
+
+      def nextSearch( document: Document, transport: Transport )( implicit tx: Tx ) {
          implicit val itx = tx.peer
          val heuristic  = (sampleRate * 10.0).toLong  // XXX TODO
          val loop       = (loopLength.step() * sampleRate).toLong
-         val insTime    = (transport.time + heuristic) % loop
+         var timeNow    = transport.time
+         if( timeNow >= loop ) {
+            transport.seek( 0L )
+            timeNow     = 0L
+         }
+         val insTime    = (timeNow + heuristic) % loop
 //         search( insTime, (phraseLength.step() * sampleRate).toLong, group )
          val insSpan    = Span( insTime, insTime + (phraseLength.step() * sampleRate).toLong )
 
+         implicit val aStore  = document.artifactStore
          val futArtifact = SearchStepAlgorithm( this, insSpan, group, hiddenLayer )
          GraphemeUtil.threadTxn( "await search " + this ) {
-            futArtifact() match {
+            val artOpt = futArtifact() match {
                case FutureResult.Success( artifact ) =>
                   logThis( "search succeeded " + artifact )
-                  submit {
-                     document.cursor.step { implicit tx =>
-                        document.withChannel( row = row, column = column ) {
-                           case (tx1, _, ch) =>
-                              val middle = insSpan.start + (insSpan.length / 2)
-                              ch.removeAt( middle )
-                              ch.insert( Grapheme.Segment.Audio( insSpan, artifact ))( tx1 )
-                        }
-                     }
-                  }
+                  Some( artifact )
 
                case FutureResult.Failure( e ) =>
                   logThis( "search failed" )
                   e.printStackTrace()
+                  None
+
+            }
+
+            submit {
+               document.cursor.step { implicit tx =>
+                  document.withChannel( row = row, column = column ) {
+                     case (tx1, _, ch) =>
+                        artOpt.foreach { artifact =>
+                           val middle = insSpan.start + (insSpan.length / 2)
+                           ch.removeAt( middle )
+                           ch.insert( Grapheme.Segment.Audio( insSpan, artifact ))( tx1 )
+   //                              val transport = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
+                        }
+                        ch.nextSearch( document, transport )
+                  }
+               }
             }
          }
       }
@@ -186,7 +204,7 @@ object ChannelImpl {
 //         val transport = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
          group.intersect( time ).foreach { case (span, seq) =>
             seq.foreach { timed =>
-               logThis( "removing process " + timed )
+               logThis( "removing process " + formatSpan( timed.span.value ) + " " + timed.value )
                /* val ok = */ g.remove( timed.span, timed.value )
    //de.sciss.lucre.event.showLog = false
 //               logThis( "removing process - success? " + ok )
@@ -232,7 +250,7 @@ object ChannelImpl {
             Out.ar( 0, sig * env )
          })
          val span    = Span( time, time + len )
-         logThis( "adding process " + (span, p) + " in " + tx.inputAccess )
+         logThis( "adding process " + formatSpan( span ) + " " + p + " in " + tx.inputAccess )
 //de.sciss.lucre.event.showLog = true
          g.add( span, p )
 //de.sciss.lucre.event.showLog = false
