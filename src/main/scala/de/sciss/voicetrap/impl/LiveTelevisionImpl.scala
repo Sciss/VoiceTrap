@@ -73,7 +73,7 @@ final class LiveTelevisionImpl private () extends Television {
          val dura    = "dur".ir
 //         val done    = Done.kr( Line.kr( dur = dura ))
          Line.kr( dur = dura, doneAction = freeSelf )
-         DiskOut.ar( buf, mix )
+         DiskOut.ar( buf, mix ) // WhiteNoise.ar( 0.2 )) // mix * DC.ar(0) )
       }
 
       implicit val ptx = ProcTxn()
@@ -84,27 +84,21 @@ final class LiveTelevisionImpl private () extends Television {
       buf.alloc( numFrames = 32768, numChannels = 1 )
       buf.record( path.getAbsolutePath, AudioFileType.AIFF, SampleFormat.Int24 )
       val rs = rd.play(
-         target = server.defaultGroup,
-         args = Seq( "boost" -> VoiceTrap.microphoneGain, "dur" -> dur, "buf" -> buf.id ),
-         buffers = Seq( buf )
+         target   = server.defaultGroup,
+         args     = Seq( "boost" -> VoiceTrap.microphoneGain, "dur" -> dur, "buf" -> buf.id ),
+         buffers  = Seq( buf )
       )
 
+//val thr = Thread.currentThread()
+
       rs.onEndTxn { implicit ptx =>
-         log( identifier + " : capture closing" )
+         log( identifier + " : capture closing " ) // + (Thread.currentThread() == thr) )
          buf.closeAndFree()
          // trick to make the transaction commit wait for the buffer closing confirmation
          ptx.add( msg = osc.StatusMessage, change = None, audible = true, dependencies = Map( buf.isAlive -> false ))
          implicit val itx = ptx.peer
          submitTxn { // threadTxn( identifier + " : capture completed" )
-            try {
-               AudioFile.readSpec( path )
-               log( identifier + " : capture completed" )
-               res.succeed( path )
-            } catch {
-               case e: IOException =>
-                  log( identifier + " : capture failed" )
-                  res.fail( e )
-            }
+            finishCapture( identifier, path, res )
          }
       }
 
@@ -112,5 +106,17 @@ final class LiveTelevisionImpl private () extends Television {
 //      tx.afterFailure { e => res.fail( e )}
 
       res
+   }
+
+   private def finishCapture( identifier: String, path: File, fut: FutureResult.Event[ File ]) {
+      try {
+         AudioFile.readSpec( path )
+         log( identifier + " : capture completed" )
+         fut.succeed( path )
+      } catch {
+         case e: IOException =>
+            log( identifier + " : capture failed" )
+            fut.fail( e )
+      }
    }
 }

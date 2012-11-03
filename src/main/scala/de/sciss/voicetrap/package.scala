@@ -96,7 +96,7 @@ package object voicetrap {
 //     pool.shutdown()
 //   }
 
-   private val fullDecouple = false
+   private val fullDecouple = true  // LEAVE THIS IN 'TRUE' !!!
 
    def submit( fun: => Unit ) {
       require( Txn.findCurrent.isEmpty, "submit must not be called within a txn" )

@@ -1,0 +1,3 @@
+- The problem is there are rollbacks, and messages have already been sent out
+- circumvention is to ensure again a call to submit (single threaded executor)
+- In the long term, ProcTxn needs to be a real lucre.stm.Sys, and share the external decider with the data store

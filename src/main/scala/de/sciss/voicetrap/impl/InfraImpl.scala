@@ -68,7 +68,10 @@ object InfraImpl {
                   val rd = RichSynthDef( server, routeGraph, nameHint = Some( "internal-bus" ))
                   rd.play( target = server.defaultGroup, addAction = addToTail )
 
-                  //                  server.peer.dumpOSC()
+//                  server.peer.dumpOSC()
+//                  proc.showAllocLog = true
+//                  proc.showTxnLog   = true
+
 //                  proc.showLog      = true
 //                  proc.showAuralLog = true
                   document.get.start( server, as )
