@@ -21,9 +21,11 @@ trait Channel extends Writable {
 
    def insert( segm: AudioSegment )( implicit tx: Tx ) : Unit
 
-   def removeAt( time: Long )( implicit tx: Tx ) : Unit
+   def removeAt(   time: Long )( implicit tx: Tx ) : Unit
+   def removeFrom( time: Long )( implicit tx: Tx ) : Unit
 
-   def nextSearch( iter: Int, iterZeroTime: Long, document: Document, server: RichServer, transport: Transport )( implicit tx: Tx ) : Unit
+   def nextSearch( iter: Int, iterZeroTime: Long, document: Document, auralSystem: proc.AuralSystem[ S ],
+                   server: RichServer, _transport: Transport )( implicit tx: Tx, cursor: Cursor ) : Unit
 
    // ---- algorithm ----
 

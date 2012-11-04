@@ -6,7 +6,7 @@ import de.sciss.lucre.stm.impl.BerkeleyDB
 import java.io.File
 import de.sciss.synth
 import synth.{addToTail, SynthGraph, Bus, proc, Server}
-import synth.proc.{SoundProcesses, ProcTxn, RichSynthDef, AuralSystem}
+import synth.proc.{RichGroup, SoundProcesses, ProcTxn, RichSynthDef, AuralSystem}
 import de.sciss.osc
 
 object InfraImpl {
@@ -77,7 +77,10 @@ object InfraImpl {
                   }
                   implicit val ptx = ProcTxn()
                   val rd = RichSynthDef( server, routeGraph, nameHint = Some( "internal-bus" ))
-                  rd.play( target = server.defaultGroup, addAction = addToTail )
+                  val mg = RichGroup( server )
+                  mg.play( target = server.defaultGroup, addAction = addToTail )
+                  rd.play( target = mg )
+                  VoiceTrap.masterGroup = mg
 
 //                  server.peer.dumpOSC()
 //                  proc.showAllocLog = true

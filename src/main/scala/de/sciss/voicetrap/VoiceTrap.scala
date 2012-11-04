@@ -28,6 +28,7 @@ package de.sciss.voicetrap
 import java.io.File
 import collection.immutable.{IndexedSeq => IIdxSeq}
 import de.sciss.synth.AudioBus
+import de.sciss.synth.proc.RichGroup
 
 object VoiceTrap {
    lazy val baseDirectory     : File   = new File( new File( sys.props( "user.home" ), "Desktop" ), "VoiceTrap" )
@@ -58,7 +59,7 @@ object VoiceTrap {
    var privateBus : AudioBus  = null      // XXX TODO: que se puede acer...
 
    lazy val phraseLength : Motion  = Motion.exprand( 8.0, 24.0 )
-   lazy val loopLength : Motion    = Motion.constant( 90.0 )
+   lazy val loopLength : Motion    = Motion.exprand( 90.0 / 1.1, 90.0 * 1.1 ) // Motion.constant( 90.0 )
 
    case class ChannelDB( database: Database, query: DifferanceDatabaseQuery,
                          thinner: DifferanceDatabaseThinner, filler: DifferanceDatabaseFiller )
@@ -81,6 +82,8 @@ object VoiceTrap {
    lazy val television      : Television                 = if( liveInput ) Television.live() else Television.fromFile( televisionFile )
 
    var txnThread : Thread = null
+
+   var masterGroup : RichGroup = null
 
    def main( args: Array[ String ]) {
       Infra().start()

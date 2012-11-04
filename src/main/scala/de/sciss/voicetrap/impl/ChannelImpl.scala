@@ -26,13 +26,13 @@
 package de.sciss.voicetrap
 package impl
 
-import de.sciss.lucre.{DataInput, DataOutput, stm}
+import de.sciss.lucre.{DataInput, DataOutput, stm, data}
 import de.sciss.synth
 import synth.{addAfter, SynthGraph, proc}
 import concurrent.stm.Ref
-import de.sciss.lucre.bitemp.Span
+import de.sciss.lucre.bitemp.{BiGroup, Span}
 import java.io.File
-import synth.proc.{RichServer, ProcTxn, RichSynthDef, Scan, Artifact, Grapheme}
+import synth.proc.{Proc, RichServer, ProcTxn, RichSynthDef, Scan, Artifact, Grapheme}
 import GraphemeUtil.formatSpan
 
 import VoiceTrap.{numColumns, sampleRate, phraseLength, loopLength, forkIterations}
@@ -90,28 +90,6 @@ object ChannelImpl {
       def start( document: Document, server: RichServer, auralSystem: proc.AuralSystem[ S ])( implicit tx: Tx, cursor: Cursor ) {
          log( "spawning " + chan + " with " + cursor + " (pos = " + cursor.position + ")" )
          implicit val aStore  = document.artifactStore
-         val transport        = proc.Transport[ S, I ]( group, VoiceTrap.sampleRate )
-         val view = proc.AuralPresentation.run[ S, I ]( transport, auralSystem )
-         view.group match {
-            case Some( rg ) =>
-               val routeGraph = SynthGraph {
-                  import synth._
-                  import ugen._
-                  val inBus   = "in".kr( 0 )
-                  val outBus  = "out".kr( 0 )
-                  val sig     = In.ar( inBus, 1 )
-                  Out.ar( outBus, sig ) // * SinOsc.ar( 444 )
-                  ReplaceOut.ar( inBus, sig * DC.ar( 0 ))
-               }
-               implicit val ptx = ProcTxn()
-               val sd = RichSynthDef( rg.server, routeGraph, nameHint = Some( "channel-route" ))
-               val matrixIndex = row * numColumns + column
-               sd.play( target = rg, args = Seq( "out" -> (VoiceTrap.privateBus.index + matrixIndex) ), addAction = addAfter )
-
-            case _ => logThis( "! WARNING ! aural presentation does not exhibit a group" )
-         }
-         transport.play()
-         transportVar.set( Some( transport ))( tx.peer )
 
 //         testSpawn()
 //         testReplay()
@@ -119,13 +97,51 @@ object ChannelImpl {
 //         testRemove()
 //         testAdd()
 
-         nextSearch( 0, tx.info.timeStamp, document, server, transport )
+         nextSearch( 0, tx.info.timeStamp, document, auralSystem, server, _transport = null )
       }
 
-      def nextSearch( iter: Int, iterZeroTime: Long, document: Document, server: RichServer, transport: Transport )( implicit tx: Tx ) {
+      def nextSearch( iter: Int, iterZeroTime: Long, document: Document, auralSystem: proc.AuralSystem[ S ],
+                      server: RichServer, _transport: Transport )( implicit tx: Tx, cursor: Cursor ) {
          implicit val itx = tx.peer
 
-         logThis( "iteration " + iter )
+         implicit val aStore  = document.artifactStore
+         val transport = if( _transport == null ) {
+            logThis( "new transport" )
+//            transportVar.get( tx.peer ).foreach { tOld =>
+//               tOld.stop()
+//            }
+            val t    = proc.Transport[ S, I ]( group, sampleRate )
+            val view = proc.AuralPresentation.run[ S, I ]( t, auralSystem )
+            view.group match {
+               case Some( rg ) =>
+                  implicit val ptx = ProcTxn()
+                  rg.moveBefore( audible = true, target = VoiceTrap.masterGroup )
+                  val routeGraph = SynthGraph {
+                     import synth._
+                     import ugen._
+                     val inBus   = "in".kr( 0 )
+                     val outBus  = "out".kr( 0 )
+                     val sig     = In.ar( inBus, 1 )
+                     Out.ar( outBus, sig ) // * SinOsc.ar( 444 )
+                     ReplaceOut.ar( inBus, sig * DC.ar( 0 ))
+                  }
+                  val sd = RichSynthDef( rg.server, routeGraph, nameHint = Some( "channel-route" ))
+                  val matrixIndex = row * numColumns + column
+                  sd.play( target = rg, args = Seq( "out" -> (VoiceTrap.privateBus.index + matrixIndex) ), addAction = addAfter )
+
+                  // XXX TODO:
+//                  val pingGraph = SynthGraph {
+//
+//                  }
+
+               case _ => logThis( "! WARNING ! aural presentation does not exhibit a group" )
+            }
+            t.play()
+            transportVar.set( Some( t ))( tx.peer )
+            t
+         } else _transport
+
+//         logThis( "iteration " + iter )
 
          val heuristic  = (sampleRate * 10.0).toLong  // XXX TODO
          val loop       = (loopLength.step() * sampleRate).toLong
@@ -139,7 +155,6 @@ object ChannelImpl {
 //         search( insTime, (phraseLength.step() * sampleRate).toLong, group )
          val insSpan    = Span( insTime, insTime + (phraseLength.step() * sampleRate).toLong )
 
-         implicit val aStore  = document.artifactStore
          val futArtifact = SearchStepAlgorithm( this, server, insSpan, group, hiddenLayer )
 //         GraphemeUtil.threadTxn( "await search " + this ) { ... }
          awaitFuture( "await search " + this, futArtifact ) { futRes =>
@@ -157,6 +172,14 @@ object ChannelImpl {
 
             logThis( "running post search block" )
             document.cursor.step { implicit tx =>
+               val timeNow       = transport.time
+               val incIter       = timeNow >= loop
+               val nextIter      = if( incIter ) (iter + 1) % forkIterations else iter
+               val nextIterTime  = tx.info.timeStamp
+               val jumpBack      = if( incIter && (nextIter == 0) ) Some( (nextIterTime + iterZeroTime) / 2 ) else None
+
+               if( incIter ) logThis( "iteration " + nextIter + jumpBack.map( " @" + _ ).getOrElse( "" ))
+
                document.withChannel( row = row, column = column, jumpBack = None ) {
                   case (tx1, _, ch) =>
                      artOpt.foreach { artifact =>
@@ -165,14 +188,16 @@ object ChannelImpl {
                         ch.insert( Grapheme.Segment.Audio( insSpan, artifact ))( tx1 )
 //                              val transport = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
                      }
+
+                     if( jumpBack.isDefined ) {
+                        ch.removeFrom( transport.time + (10 * sampleRate).toLong )
+                     }
                }
 
-               val nextIter   = (iter + 1) % forkIterations
-               val iterTime   = tx.info.timeStamp
-               val jumpBack   = if( nextIter == 0 ) Some( (iterTime + iterZeroTime) / 2 ) else None
                document.withChannel( row = row, column = column, jumpBack = jumpBack ) {
-                  case (tx1, _, ch) =>
-                     ch.nextSearch( nextIter, if( nextIter == 0 ) iterTime else iterZeroTime, document, server, transport )( tx1 )
+                  case (tx1, csr, ch) =>
+                     ch.nextSearch( nextIter, if( jumpBack.isDefined ) nextIterTime else iterZeroTime, document,
+                        auralSystem, server, if( jumpBack.isEmpty ) transport else null )( tx1, csr )
                }
             }
          }
@@ -212,8 +237,18 @@ object ChannelImpl {
 
       def removeAt( time: Long )( implicit tx: Tx ) {
          val g = group
+         removeAll( g, g.intersect( time ))
+      }
+
+      def removeFrom( time: Long )( implicit tx: Tx ) {
+         val g = group
+         removeAll( g, g.intersect( Span.from( time )))
+      }
+
+      private def removeAll( g: ProcGroup, it: data.Iterator[ S#Tx, BiGroup.Leaf[ S, Proc[ S ]]])( implicit tx: Tx ) {
+//         val g = group
 //         val transport = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
-         group.intersect( time ).foreach { case (span, seq) =>
+         it.foreach { case (span, seq) =>
             seq.foreach { timed =>
                logThis( "removing process " + formatSpan( timed.span.value ) + " " + timed.value )
                /* val ok = */ g.remove( timed.span, timed.value )
