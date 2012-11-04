@@ -42,6 +42,7 @@ final class LiveTelevisionImpl private () extends Television {
    import LiveTelevisionImpl._
 
    val lookAheadLim = 0.01
+//   val DEBUG = false
 
    def latency = lookAheadLim * 2
 
@@ -61,9 +62,11 @@ final class LiveTelevisionImpl private () extends Television {
       log( identifier + " : capture begin" )
 
       val dur     = framesToSeconds( length ) + latency
-      val res     = FutureResult.event[ File ]()
+      val res     = FutureResult.event[ File ]( identifier + " capture" )
 //      val oldFut  = futRef.swap( res )( tx.peer )
 //      require( oldFut.isSet, identifier + " : still in previous capture" )
+
+//      if( DEBUG ) log( identifier + " : capture begin [1]" )
 
       val graph   = SynthGraph {
          val in      = In.ar( NumOutputBuses.ir + VoiceTrap.microphoneChannel, 1 )
@@ -76,6 +79,8 @@ final class LiveTelevisionImpl private () extends Television {
          DiskOut.ar( buf, mix ) // WhiteNoise.ar( 0.2 )) // mix * DC.ar(0) )
       }
 
+//      if( DEBUG ) log( identifier + " : capture begin [2]" )
+
       implicit val ptx = ProcTxn()
       val rd   = RichSynthDef( server, graph )
       val path = createTempFile( ".aif", None, keep = false )
@@ -83,11 +88,16 @@ final class LiveTelevisionImpl private () extends Television {
       val buf  = RichBuffer( server )
       buf.alloc( numFrames = 32768, numChannels = 1 )
       buf.record( path.getAbsolutePath, AudioFileType.AIFF, SampleFormat.Int24 )
+
+//      if( DEBUG ) log( identifier + " : capture begin [3]" )
+
       val rs = rd.play(
          target   = server.defaultGroup,
          args     = Seq( "boost" -> VoiceTrap.microphoneGain, "dur" -> dur, "buf" -> buf.id ),
          buffers  = Seq( buf )
       )
+
+//      if( DEBUG ) log( identifier + " : capture begin [4]" )
 
 //val thr = Thread.currentThread()
 
@@ -99,8 +109,12 @@ final class LiveTelevisionImpl private () extends Television {
          implicit val itx = ptx.peer
          submitTxn { // threadTxn( identifier + " : capture completed" )
             finishCapture( identifier, path, res )
+         } { e =>
+            res.fail( e )
          }
       }
+
+//      if( DEBUG ) log( identifier + " : capture begin [5]" )
 
 // XXX TODO : this should be somewhat handled (ProcTxn needs addition)
 //      tx.afterFailure { e => res.fail( e )}

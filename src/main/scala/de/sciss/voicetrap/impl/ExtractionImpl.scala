@@ -41,7 +41,7 @@ trait ExtractionImpl {
     * the future result of the meta file thus generated.
     */
    protected def extract( audioInput : File, dir: Option[ File ], keep: Boolean ) /* ( implicit tx: Tx ) */ : FutureResult[ File ] = {
-      val res = FutureResult.event[ File ]()
+      val res = FutureResult.event[ File ]( "extract")
 //      Txn.afterCommit { _ =>
          import FeatureExtraction._
          val set           = SettingsBuilder()

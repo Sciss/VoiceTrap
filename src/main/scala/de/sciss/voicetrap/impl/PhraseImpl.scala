@@ -88,9 +88,9 @@ object PhraseImpl {
 //      def player( implicit tx: InTxn ) : Proc = fact.make
 
       def asStrugatzkiInput( implicit tx: InTxn ) : FutureResult[ File ] = featureRef() match {
-         case Some( res ) => futureOf( res )
+         case Some( res ) => futureOf( identifier + " ready", res )
          case None =>
-            extract( file, None, keep = false ).mapSuccess { res =>
+            extract( file, None, keep = false ).mapSuccess( identifier + " map extracted" ) { res =>
 //               atomic( identifier + " : cache feature extraction" ) { implicit tx =>
                   featureRef.single.set( Some( res ))
 //               }

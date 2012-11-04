@@ -158,17 +158,20 @@ object GraphemeUtil {
       f
    }
 
-   def futureOf[ A ]( value: A ) : FutureResult[ A ] = FutureResult.nowSucceed( value )
+   def futureOf[ A ]( name: String, value: A ) : FutureResult[ A ] = FutureResult.nowSucceed( name, value )
 
    def threadFuture[ A ]( name: String )( code: => FutureResult.Result[ A ])( implicit tx: InTxn ) : FutureResult[ A ] = {
-      val ev = FutureResult.event[ A ]()
+      val ev = FutureResult.event[ A ]( name )
       threadTxn( name ) {
          log( "threadFuture started : " + name )
-         ev.set( try {
-            code
-         } catch {
-            case e: Throwable => FutureResult.Failure( e )
-         })
+         ev.set( code )
+//         ev.set( try {
+//            code
+//         } catch {
+//            case e: Throwable => FutureResult.Failure( e )
+//         })
+      } { e =>
+         ev.fail( e )
       }
       ev
    }
@@ -177,14 +180,27 @@ object GraphemeUtil {
       log( "+++MISSING+++ " + what )
    }
 
-   def threadTxn( name: String )( code: => Unit )( implicit tx: InTxn ) {
+   def threadTxn( name: String )( code: => Unit )( failure: Throwable => Unit )( implicit tx: InTxn ) {
       Txn.afterCommit { _ =>
-         thread( name )( code )
+         thread( name ) {
+            try( code ) catch {
+               case e: Throwable =>
+                  e.printStackTrace()
+                  failure( e )
+            }
+         }
+      }
+      Txn.afterRollback {
+         case Txn.RolledBack( Txn.UncaughtExceptionCause( e )) =>
+            e.printStackTrace()
+            failure( e )
+         case _ =>
       }
    }
 
    def thread( name: String )( code: => Unit ) {
       new Thread( name ) {
+         log( name )
          start()
          override def run() {
             code

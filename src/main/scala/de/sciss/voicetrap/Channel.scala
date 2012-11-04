@@ -23,7 +23,7 @@ trait Channel extends Writable {
 
    def removeAt( time: Long )( implicit tx: Tx ) : Unit
 
-   def nextSearch( document: Document, server: RichServer, transport: Transport )( implicit tx: Tx ) : Unit
+   def nextSearch( iter: Int, iterZeroTime: Long, document: Document, server: RichServer, transport: Transport )( implicit tx: Tx ) : Unit
 
    // ---- algorithm ----
 

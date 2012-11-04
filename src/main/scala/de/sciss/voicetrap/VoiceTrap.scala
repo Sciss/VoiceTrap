@@ -51,6 +51,8 @@ object VoiceTrap {
    val microphoneChannel      = 0
    var microphoneGain         = 1.0 // amp linear
 
+   val forkIterations         = 6
+
 //   lazy val internalBusOffset = highestOutputChannel + highestInputChannel
 
    var privateBus : AudioBus  = null      // XXX TODO: que se puede acer...

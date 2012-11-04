@@ -41,7 +41,7 @@ class DifferanceDatabaseQueryImpl private ( db: Database ) extends AbstractDiffe
    import GraphemeUtil._
    import DifferanceDatabaseQuery._
 
-   private val identifier  = "database-query-impl"
+   private val identifier  = "query_" + db.identifier
 
 //   val matchDurationMotion    = Motion.coin(
 //      1.0/33,
@@ -67,8 +67,8 @@ class DifferanceDatabaseQueryImpl private ( db: Database ) extends AbstractDiffe
       val dirFut     = db.asStrugatziDatabase
       val metaFut    = phrase.asStrugatzkiInput
 
-      dirFut.flatMapSuccess { dir =>
-         metaFut.flatMapSuccess { metaInput =>
+      dirFut.flatMapSuccess( identifier + " map dir" ) { dir =>
+         metaFut.flatMapSuccess( identifier + " find match" ) { metaInput =>
             findMatchIn( dir, metaInput, maxBoost, minSpc, rank, phrase, weight )
          }
       }
@@ -79,7 +79,7 @@ class DifferanceDatabaseQueryImpl private ( db: Database ) extends AbstractDiffe
 
       import FeatureCorrelation.{Match => _, _} // otherwise Match shadows DifferanceDatabaseQuery.Match
 
-      val res              = FutureResult.event[ Match ]()
+      val res              = FutureResult.event[ Match ]( identifier + " match" )
       val set              = SettingsBuilder()
       set.databaseFolder   = dir
       set.normalize        = true

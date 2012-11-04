@@ -109,20 +109,22 @@ object SearchStepAlgorithm {
 
       val futFill = chanDB.filler.perform( server )
 
-      val futPhrase = futFill.mapSuccess { _ =>
+      val futPhrase = futFill.mapSuccess( "bounce " + channel ) { _ =>
          val phrase = bounce( allChunks )
          FutureResult.Success( phrase )
       }
 
-      val futQuery = futPhrase.flatMapSuccess { phrase =>
-         atom( "query " + channel ) { itx =>
+      val queryMsg = "query " + channel
+      val futQuery = futPhrase.flatMapSuccess( queryMsg ) { phrase =>
+         atom( queryMsg ) { itx =>
             chanDB.query.find( phrase )( itx )
          }
       }
-      val futArtifact = futQuery.flatMapSuccess { m =>
+      val thinMsg = "thin " + channel
+      val futArtifact = futQuery.flatMapSuccess( thinMsg ) { m =>
          val artifact = matchToValue( m )
-         val futUnit  = atom( "thin " + channel )( itx => chanDB.thinner.remove( IIdxSeq( m.span ))( itx ))
-         futUnit.mapSuccess( _ => artifact )
+         val futUnit  = atom( thinMsg )( itx => chanDB.thinner.remove( IIdxSeq( m.span ))( itx ))
+         futUnit.mapSuccess( thinMsg )( _ => artifact )
       }
 
       futArtifact

@@ -53,12 +53,14 @@ abstract class AbstractDifferanceDatabaseFiller extends DifferanceDatabaseFiller
       val inc     = min( inc0, maxF )
 
       if( inc > 44100L /* 0 */ ) {
+         val fillMsg = identifier + " fill"
          log( identifier + " : gathering " + formatSeconds( framesToSeconds( inc )))
-         television.capture( identifier, server, inc ).flatMapSuccess { f =>
+         television.capture( identifier, server, inc ).flatMapSuccess( fillMsg ) { f =>
+//            log( identifier + " : mapping capture success" )
             performWithFile( f, secondsToFrames( television.latency ), inc )
          }
       } else {
-         futureOf( () )
+         futureOf( identifier + " no fill needed", () )
       }
    }
 

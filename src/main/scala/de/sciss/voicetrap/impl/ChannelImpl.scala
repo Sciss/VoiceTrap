@@ -35,7 +35,7 @@ import java.io.File
 import synth.proc.{RichServer, ProcTxn, RichSynthDef, Scan, Artifact, Grapheme}
 import GraphemeUtil.formatSpan
 
-import VoiceTrap.{numColumns, numRows, matrixSize, sampleRate, phraseLength, loopLength}
+import VoiceTrap.{numColumns, sampleRate, phraseLength, loopLength, forkIterations}
 
 object ChannelImpl {
    private final val SER_VERSION = 1
@@ -119,10 +119,10 @@ object ChannelImpl {
 //         testRemove()
 //         testAdd()
 
-         nextSearch( document, server, transport )
+         nextSearch( 0, tx.info.timeStamp, document, server, transport )
       }
 
-      def nextSearch( document: Document, server: RichServer, transport: Transport )( implicit tx: Tx ) {
+      def nextSearch( iter: Int, iterZeroTime: Long, document: Document, server: RichServer, transport: Transport )( implicit tx: Tx ) {
          implicit val itx = tx.peer
          val heuristic  = (sampleRate * 10.0).toLong  // XXX TODO
          val loop       = (loopLength.step() * sampleRate).toLong
@@ -137,8 +137,10 @@ object ChannelImpl {
 
          implicit val aStore  = document.artifactStore
          val futArtifact = SearchStepAlgorithm( this, server, insSpan, group, hiddenLayer )
-         GraphemeUtil.threadTxn( "await search " + this ) {
-            val artOpt = futArtifact() match {
+//         GraphemeUtil.threadTxn( "await search " + this ) { ... }
+         awaitFuture( "await search " + this, futArtifact ) { futRes =>
+//            val artOpt = futArtifact()
+            val artOpt = futRes match {
                case FutureResult.Success( artifact ) =>
                   logThis( "search succeeded " + artifact )
                   Some( artifact )
@@ -147,12 +149,13 @@ object ChannelImpl {
                   logThis( "search failed" )
                   e.printStackTrace()
                   None
-
             }
 
+            logThis( "submitting post search block" )
             submit {
+               logThis( "running post search block" )
                document.cursor.step { implicit tx =>
-                  document.withChannel( row = row, column = column ) {
+                  document.withChannel( row = row, column = column, jumpBack = None ) {
                      case (tx1, _, ch) =>
                         artOpt.foreach { artifact =>
                            val middle = insSpan.start + (insSpan.length / 2)
@@ -160,7 +163,14 @@ object ChannelImpl {
                            ch.insert( Grapheme.Segment.Audio( insSpan, artifact ))( tx1 )
    //                              val transport = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
                         }
-                        ch.nextSearch( document, server, transport )
+                  }
+
+                  val nextIter   = (iter + 1) % forkIterations
+                  val iterTime   = tx.info.timeStamp
+                  val jumpBack   = if( nextIter == 0 ) Some( (iterTime + iterZeroTime) / 2 ) else None
+                  document.withChannel( row = row, column = column, jumpBack = jumpBack ) {
+                     case (tx1, _, ch) =>
+                        ch.nextSearch( nextIter, if( nextIter == 0 ) iterTime else iterZeroTime, document, server, transport )
                   }
                }
             }

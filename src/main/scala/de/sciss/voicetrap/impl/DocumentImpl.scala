@@ -5,13 +5,16 @@ import de.sciss.lucre.{stm, DataOutput, DataInput}
 import de.sciss.synth
 import synth.proc
 import synth.proc.{RichServer, AuralSystem}
-import java.io.File
 import collection.immutable.{IndexedSeq => IIdxSeq}
+import java.text.SimpleDateFormat
+import java.util.{Date, Locale}
 
 object DocumentImpl {
    private final val SER_VERSION = 1
 
    import VoiceTrap.{numRows, numColumns, matrixSize}
+
+   private lazy val df = new SimpleDateFormat( "HH:mm''ss.SSS", Locale.US )
 
    implicit object serializer extends stm.Serializer[ Tx, Acc, Document ] {
       def write( v: Document, out: DataOutput ) { v.write( out )}
@@ -82,17 +85,24 @@ object DocumentImpl {
 
       def start( server: RichServer, auralSystem: AuralSystem[ S ])( implicit tx: Tx ) {
          for( row <- 0 until numRows; column <- 0 until numColumns ) {
-            withChannel( row, column ) { case (tx1, csr, chan) =>
+            withChannel( row, column, jumpBack = None ) { case (tx1, csr, chan) =>
                chan.start( doc, server, auralSystem )( tx1, csr )
             }
          }
 //         channels.valuesIterator.foreach( _.start( doc, auralSystem ))
       }
 
-      def withChannel[ A ]( row: Int, column: Int )( fun: (Tx, Cursor, Channel) => Unit )( implicit tx: Tx ) {
+      def withChannel[ A ]( row: Int, column: Int, jumpBack: Option[ Long ])( fun: (Tx, Cursor, Channel) => Unit )( implicit tx: Tx ) {
          val i    = row * numColumns + column
          val csr  = chanCursorVars( i ).get
-         spawn( csr ) { implicit tx =>
+
+         jumpBack.foreach { timeStamp =>
+            log( "::::::::::::::::::" )
+            log( "jump back " + (row+1) + "_" + (column+1) + " to " + df.format( new Date( timeStamp )))
+            log( "::::::::::::::::::" )
+         }
+
+         spawn( csr, jumpBack ) { implicit tx =>
             val ch = chanHandles( i ).get
             fun( tx, csr, ch )
          }

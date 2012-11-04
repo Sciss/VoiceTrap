@@ -178,7 +178,7 @@ extends Database /* AbstractDatabase */ with ExtractionImpl {
                // add a dummy instruction to the end, so we can easier traverse the list
                removalBody( f, merged :+ RemovalInstruction( Span( len, len ), 0L ))
             }
-         case None => futureOf( () )
+         case None => futureOf( identifier + " no remove needed", () )
       }
    }
 
@@ -322,11 +322,11 @@ extends Database /* AbstractDatabase */ with ExtractionImpl {
    def asStrugatziDatabase( implicit tx: InTxn ) : FutureResult[ File ] = {
       val state = stateRef()
       state.extr match {
-         case Some( meta ) => futureOf( meta.getParentFile )
+         case Some( meta ) => futureOf( identifier + " meta ready", meta.getParentFile )
          case None =>
             val audioInput = state.spec.map( _._1 ).getOrElse( sys.error( identifier + " : contains no file" ))
             val sub        = audioInput.getParentFile
-            copyAudioFile( identifier, normFile, new File( sub, normName )).flatMap { _ =>
+            copyAudioFile( identifier, normFile, new File( sub, normName )).flatMap( identifier + " extract+update" ) { _ =>
                extractAndUpdate( audioInput, sub )
             }
       }
@@ -334,7 +334,7 @@ extends Database /* AbstractDatabase */ with ExtractionImpl {
 
    private def extractAndUpdate( audioInput: File, sub: File ) : FutureResult[ File ] = {
 //      atomic( identifier + " : extract" ) { implicit tx =>
-         extract( audioInput, Some( sub ), keep = true ).mapSuccess { meta =>
+         extract( audioInput, Some( sub ), keep = true ).mapSuccess( identifier + " update state" ) { meta =>
             assert( meta.getParentFile == sub )
             updateState( meta )
             sub

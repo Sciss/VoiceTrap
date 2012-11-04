@@ -101,15 +101,28 @@ package object voicetrap {
    def submit( fun: => Unit ) {
       require( Txn.findCurrent.isEmpty, "submit must not be called within a txn" )
       proc.SoundProcesses.pool.submit( new Runnable {
-         def run() { fun }
+         def run() {
+            try {
+               fun
+            } catch {
+               case e: Throwable =>
+                  e.printStackTrace()
+            }
+         }
       })
    }
 
-   def submitTxn( fun: => Unit )( implicit tx: InTxn ) {
+   def submitTxn( fun: => Unit )( failure: Throwable => Unit )( implicit tx: InTxn ) {
       Txn.afterCommit( _ => submit( fun ))
+      Txn.afterRollback {
+         case Txn.RolledBack( Txn.UncaughtExceptionCause( e )) =>
+            e.printStackTrace()
+            submit( failure( e ))
+         case _ =>
+      }
    }
 
-   def spawn( cursor: Cursor )( fun: Tx => Unit )( implicit tx: Tx ) {
+   def spawn( cursor: Cursor, jumpBack: Option[ Long ] = None )( fun: Tx => Unit )( implicit tx: Tx ) {
 //      Txn.afterCommit( _ => pool.submit( new Runnable {
 //         def run() {
 //            cursor.step { implicit tx => fun( tx )}
@@ -118,7 +131,13 @@ package object voicetrap {
       Txn.afterCommit( _ => {
          val r = new Runnable {
             def run() {
-               cursor.step { implicit tx => fun( tx )}
+               jumpBack match {
+                  case Some( timeStamp ) =>
+                     val path = cursor.position.takeUntil( timeStamp )
+                     cursor.stepFrom( path )( fun( _ ))
+                  case _ =>
+                     cursor.step( fun( _ ))
+               }
             }
          }
 
@@ -129,6 +148,26 @@ package object voicetrap {
          }
 
       })( tx.peer )
+
+      Txn.afterRollback({
+         case Txn.RolledBack( Txn.UncaughtExceptionCause( e )) =>
+            log( "!! spawn failed !!" )
+            e.printStackTrace()
+         case _ =>
+      })( tx.peer )
+   }
+
+   def awaitFuture[ A ]( info: => String, fut: FutureResult[ A ])
+                       ( fun: FutureResult.Result[ A ] => Unit )( implicit tx: InTxn ) {
+      GraphemeUtil.threadTxn( info ) {
+         val h = Thread.currentThread().hashCode().toHexString
+         log( " --- await future begin --- " + h + " (" + fut.name + ")" )
+         val futRes = fut()
+         log( " --- await future done  --- " + h )
+         fun( futRes )
+      } { e =>
+         fun( FutureResult.Failure( e ))
+      }
    }
 
    private lazy val logHeader = new SimpleDateFormat( "[d MMM yyyy, HH:mm''ss.SSS] 'voice' - ", Locale.US )
