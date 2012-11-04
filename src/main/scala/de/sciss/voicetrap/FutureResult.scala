@@ -28,6 +28,7 @@ package de.sciss.voicetrap
 import actors.sciss.FutureActor
 import actors.{Futures, Future}
 import concurrent.stm.Txn
+import collection.immutable.{IndexedSeq => IIdxSeq}
 
 trait FutureResult[ +A ] {
    import FutureResult._
@@ -52,6 +53,8 @@ trait FutureResult[ +A ] {
       }
 
    /* private[grapheme] */ def peer : Future[ Result[ A ]]
+
+   override def toString = "FutureResult(name=" + name + ")@" + hashCode.toHexString
 }
 
 object FutureResult {
@@ -118,22 +121,44 @@ object FutureResult {
       }
    }
 
+   private val sync = new AnyRef
+   private var openFuts = IIdxSeq.empty[ FutureResult[ _ ]]
+
+   private def open( fut: FutureResult[ _ ]) {
+      sync.synchronized( openFuts :+= fut )
+   }
+
+   private def close( fut: FutureResult[ _ ]) {
+      sync.synchronized( openFuts = openFuts.filterNot( _ == fut ))
+   }
+
+   def dumpOpenFutures() {
+      val futs = sync.synchronized( openFuts )
+      futs.foreach( println )
+   }
+
    private sealed trait Basic[ A ] {
       me: FutureResult[ A ] =>
 
       def map[ B ]( name: String )( fun: Result[ A ] => Result[ B ]) : FutureResult[ B ] = wrap( name, Futures.future {
+         open( this )
          try {
-            fun( me.peer.apply() )
+            fun( apply() )
          } catch {
             case e: Throwable => Failure( e )
+         } finally {
+            close( this )
          }
       })
 
       def flatMap[ B ]( name: String )( fun: Result[ A ] => FutureResult[ B ]) : FutureResult[ B ] = wrap( name, Futures.future {
+         open( this )
          try {
-            fun( me.peer.apply() ).peer.apply()
+            fun( apply() ).apply()
          } catch {
             case e: Throwable => Failure( e )
+         } finally {
+            close( this )
          }
       })
 

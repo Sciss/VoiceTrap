@@ -75,6 +75,15 @@ object InfraImpl {
 //                  proc.showLog      = true
 //                  proc.showAuralLog = true
                   document.get.start( server, as )
+
+new Thread( "dump futs" ) {
+   start()
+   override def run() {
+      Thread.sleep( 60 * 1000L )
+      FutureResult.dumpOpenFutures()
+   }
+}
+
             }
          }
       }
