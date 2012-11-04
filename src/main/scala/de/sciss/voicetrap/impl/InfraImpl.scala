@@ -6,14 +6,18 @@ import de.sciss.lucre.stm.impl.BerkeleyDB
 import java.io.File
 import de.sciss.synth
 import synth.{addToTail, SynthGraph, Bus, proc, Server}
-import synth.proc.{ProcTxn, RichSynthDef, AuralSystem}
+import synth.proc.{SoundProcesses, ProcTxn, RichSynthDef, AuralSystem}
 import de.sciss.osc
 
 object InfraImpl {
    def apply() : Infra = {
       // prevent actor starvation!!!
       // --> http://scala-programming-language.1934581.n4.nabble.com/Scala-Actors-Starvation-td2281657.html
+      // DOESN'T HELP
       System.setProperty( "actors.enableForkJoin", "false" )
+
+//      // DOESN'T HELP
+//      SoundProcesses.poolSize = Some( 2 )
 
       val dir     = new File( VoiceTrap.baseDirectory, "db" )
       val store   = BerkeleyDB.factory( dir )
@@ -83,13 +87,13 @@ object InfraImpl {
 //                  proc.showAuralLog = true
                   document.get.start( server, as )
 
-new Thread( "dump futs" ) {
-   start()
-   override def run() {
-      Thread.sleep( 90 * 1000L )
-      FutureResult.dumpOpenFutures()
-   }
-}
+//new Thread( "dump futs" ) {
+//   start()
+//   override def run() {
+//      Thread.sleep( 90 * 1000L )
+//      FutureResult.dumpOpenFutures()
+//   }
+//}
 
             }
          }

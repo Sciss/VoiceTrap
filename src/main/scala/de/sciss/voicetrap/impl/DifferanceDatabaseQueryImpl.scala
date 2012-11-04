@@ -68,9 +68,9 @@ class DifferanceDatabaseQueryImpl private ( db: Database ) extends AbstractDiffe
       val minSpc     = secondsToFrames( minSpacingMotion.step() )
 //log( "----find match 2" )
       val dirFut     = db.asStrugatziDatabase
-log( "----find match 3" )
+//log( "----find match 3" )
       val metaFut    = phrase.asStrugatzkiInput
-log( "----find match 4" )
+//log( "----find match 4" )
 
       val res = dirFut.flatMapSuccess( identifier + " map dir" ) { dir =>
          log( "dir ready for " + db.identifier )
@@ -81,7 +81,7 @@ log( "----find match 4" )
             res
          }
       }
-log( "----find match 5" )
+//log( "----find match 5" )
       res
    }
 
