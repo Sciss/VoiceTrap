@@ -62,16 +62,27 @@ class DifferanceDatabaseQueryImpl private ( db: Database ) extends AbstractDiffe
 
       import synth._
 
+//log( "----find match 0" )
       val maxBoost   = maxBoostMotion.step().dbamp.toFloat
+//log( "----find match 1" )
       val minSpc     = secondsToFrames( minSpacingMotion.step() )
+//log( "----find match 2" )
       val dirFut     = db.asStrugatziDatabase
+log( "----find match 3" )
       val metaFut    = phrase.asStrugatzkiInput
+log( "----find match 4" )
 
-      dirFut.flatMapSuccess( identifier + " map dir" ) { dir =>
+      val res = dirFut.flatMapSuccess( identifier + " map dir" ) { dir =>
+         log( "dir ready for " + db.identifier )
          metaFut.flatMapSuccess( identifier + " find match" ) { metaInput =>
-            findMatchIn( dir, metaInput, maxBoost, minSpc, rank, phrase, weight )
+            log( "meta ready for " + db.identifier )
+            val res = findMatchIn( dir, metaInput, maxBoost, minSpc, rank, phrase, weight )
+            log( "future match ready for " + db.identifier )
+            res
          }
       }
+log( "----find match 5" )
+      res
    }
 
    private def findMatchIn( dir: File, metaInput: File, maxBoost: Float, minSpacing: Long, rank: Int, phrase: Phrase,

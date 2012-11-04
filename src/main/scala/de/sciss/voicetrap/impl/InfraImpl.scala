@@ -11,6 +11,10 @@ import de.sciss.osc
 
 object InfraImpl {
    def apply() : Infra = {
+      // prevent actor starvation!!!
+      // --> http://scala-programming-language.1934581.n4.nabble.com/Scala-Actors-Starvation-td2281657.html
+      System.setProperty( "actors.enableForkJoin", "false" )
+
       val dir     = new File( VoiceTrap.baseDirectory, "db" )
       val store   = BerkeleyDB.factory( dir )
       val system  = ConfluentReactive( store )
@@ -32,7 +36,10 @@ object InfraImpl {
 //            futFill() match {
 //               case FutureResult.Success( _ ) =>
 //                  log( "database filled" )
-                  boot()
+         submit {
+            VoiceTrap.txnThread = Thread.currentThread()
+            boot()
+         }
 //               case FutureResult.Failure( e ) =>
 //                  log( "database fill failed" )
 //                  e.printStackTrace()
@@ -79,7 +86,7 @@ object InfraImpl {
 new Thread( "dump futs" ) {
    start()
    override def run() {
-      Thread.sleep( 60 * 1000L )
+      Thread.sleep( 90 * 1000L )
       FutureResult.dumpOpenFutures()
    }
 }

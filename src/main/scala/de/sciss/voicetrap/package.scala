@@ -98,8 +98,12 @@ package object voicetrap {
 
    private val fullDecouple = true  // LEAVE THIS IN 'TRUE' !!!
 
+   def requireNotInTxn() {
+      require( Txn.findCurrent.isEmpty, "Must not be called within a txn" )
+   }
+
    def submit( fun: => Unit ) {
-      require( Txn.findCurrent.isEmpty, "submit must not be called within a txn" )
+      requireNotInTxn()
       proc.SoundProcesses.pool.submit( new Runnable {
          def run() {
             try {
@@ -112,7 +116,12 @@ package object voicetrap {
       })
    }
 
+   def requireTxnThread() {
+      require( Thread.currentThread() == VoiceTrap.txnThread, "Txn not on the correct thread" )
+   }
+
    def submitTxn( fun: => Unit )( failure: Throwable => Unit )( implicit tx: InTxn ) {
+//      requireTxnThread()
       Txn.afterCommit( _ => submit( fun ))
       Txn.afterRollback {
          case Txn.RolledBack( Txn.UncaughtExceptionCause( e )) =>
@@ -123,6 +132,8 @@ package object voicetrap {
    }
 
    def spawn( cursor: Cursor, jumpBack: Option[ Long ] = None )( fun: Tx => Unit )( implicit tx: Tx ) {
+//      requireTxnThread()
+
 //      Txn.afterCommit( _ => pool.submit( new Runnable {
 //         def run() {
 //            cursor.step { implicit tx => fun( tx )}
@@ -159,14 +170,15 @@ package object voicetrap {
 
    def awaitFuture[ A ]( info: => String, fut: FutureResult[ A ])
                        ( fun: FutureResult.Result[ A ] => Unit )( implicit tx: InTxn ) {
+//      requireTxnThread()
       GraphemeUtil.threadTxn( info ) {
          val h = Thread.currentThread().hashCode().toHexString
          log( " --- await future begin --- " + h + " (" + fut.name + ")" )
          val futRes = fut()
          log( " --- await future done  --- " + h )
-         fun( futRes )
+         submit( fun( futRes ))
       } { e =>
-         fun( FutureResult.Failure( e ))
+         submit( fun( FutureResult.Failure( e )))
       }
    }
 
@@ -178,6 +190,8 @@ package object voicetrap {
    }
 
    def atom[ A ]( info: => String )( fun: InTxn => A ) : A = {
+      requireNotInTxn()
+//      requireTxnThread()
       import concurrent.stm.atomic
       atomic { tx =>
          log( "atomic: " + info )

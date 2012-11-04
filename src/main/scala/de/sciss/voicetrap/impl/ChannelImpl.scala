@@ -151,27 +151,24 @@ object ChannelImpl {
                   None
             }
 
-            logThis( "submitting post search block" )
-            submit {
-               logThis( "running post search block" )
-               document.cursor.step { implicit tx =>
-                  document.withChannel( row = row, column = column, jumpBack = None ) {
-                     case (tx1, _, ch) =>
-                        artOpt.foreach { artifact =>
-                           val middle = insSpan.start + (insSpan.length / 2)
-                           ch.removeAt( middle )
-                           ch.insert( Grapheme.Segment.Audio( insSpan, artifact ))( tx1 )
-   //                              val transport = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
-                        }
-                  }
+            logThis( "running post search block" )
+            document.cursor.step { implicit tx =>
+               document.withChannel( row = row, column = column, jumpBack = None ) {
+                  case (tx1, _, ch) =>
+                     artOpt.foreach { artifact =>
+                        val middle = insSpan.start + (insSpan.length / 2)
+                        ch.removeAt( middle )
+                        ch.insert( Grapheme.Segment.Audio( insSpan, artifact ))( tx1 )
+//                              val transport = transportVar.get( tx.peer ).getOrElse( sys.error( "No transport" ))
+                     }
+               }
 
-                  val nextIter   = (iter + 1) % forkIterations
-                  val iterTime   = tx.info.timeStamp
-                  val jumpBack   = if( nextIter == 0 ) Some( (iterTime + iterZeroTime) / 2 ) else None
-                  document.withChannel( row = row, column = column, jumpBack = jumpBack ) {
-                     case (tx1, _, ch) =>
-                        ch.nextSearch( nextIter, if( nextIter == 0 ) iterTime else iterZeroTime, document, server, transport )
-                  }
+               val nextIter   = (iter + 1) % forkIterations
+               val iterTime   = tx.info.timeStamp
+               val jumpBack   = if( nextIter == 0 ) Some( (iterTime + iterZeroTime) / 2 ) else None
+               document.withChannel( row = row, column = column, jumpBack = jumpBack ) {
+                  case (tx1, _, ch) =>
+                     ch.nextSearch( nextIter, if( nextIter == 0 ) iterTime else iterZeroTime, document, server, transport )
                }
             }
          }

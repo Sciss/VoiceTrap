@@ -123,6 +123,7 @@ final class LiveTelevisionImpl private () extends Television {
    }
 
    private def finishCapture( identifier: String, path: File, fut: FutureResult.Event[ File ]) {
+      requireTxnThread()
       try {
          AudioFile.readSpec( path )
          log( identifier + " : capture completed" )

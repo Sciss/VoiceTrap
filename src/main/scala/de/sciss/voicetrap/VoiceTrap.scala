@@ -80,6 +80,8 @@ object VoiceTrap {
 //   lazy val databaseFiller  : DifferanceDatabaseFiller   = DifferanceDatabaseFiller( database, television )
    lazy val television      : Television                 = if( liveInput ) Television.live() else Television.fromFile( televisionFile )
 
+   var txnThread : Thread = null
+
    def main( args: Array[ String ]) {
       Infra().start()
    }

@@ -117,7 +117,8 @@ object SearchStepAlgorithm {
       val queryMsg = "query " + channel
       val futQuery = futPhrase.flatMapSuccess( queryMsg ) { phrase =>
          atom( queryMsg ) { itx =>
-            chanDB.query.find( phrase )( itx )
+            val q = chanDB.query
+            q.find( phrase )( itx )
          }
       }
       val thinMsg = "thin " + channel

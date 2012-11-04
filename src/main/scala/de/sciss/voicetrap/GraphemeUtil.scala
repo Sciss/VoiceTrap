@@ -161,17 +161,19 @@ object GraphemeUtil {
    def futureOf[ A ]( name: String, value: A ) : FutureResult[ A ] = FutureResult.nowSucceed( name, value )
 
    def threadFuture[ A ]( name: String )( code: => FutureResult.Result[ A ])( implicit tx: InTxn ) : FutureResult[ A ] = {
+//      requireTxnThread()
       val ev = FutureResult.event[ A ]( name )
       threadTxn( name ) {
          log( "threadFuture started : " + name )
-         ev.set( code )
+         val res = code
+         submit( ev.set( res ))
 //         ev.set( try {
 //            code
 //         } catch {
 //            case e: Throwable => FutureResult.Failure( e )
 //         })
       } { e =>
-         ev.fail( e )
+         submit( ev.fail( e ))
       }
       ev
    }
@@ -181,6 +183,7 @@ object GraphemeUtil {
    }
 
    def threadTxn( name: String )( code: => Unit )( failure: Throwable => Unit )( implicit tx: InTxn ) {
+//      requireTxnThread()
       Txn.afterCommit { _ =>
          thread( name ) {
             try( code ) catch {
@@ -199,6 +202,7 @@ object GraphemeUtil {
    }
 
    def thread( name: String )( code: => Unit ) {
+      requireNotInTxn()
       new Thread( name ) {
          log( name )
          start()

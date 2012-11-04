@@ -86,8 +86,8 @@ object FutureResult {
       ev
    }
 
-   def nowSucceed[ A ]( name: String, value: A ) : FutureResult[ A ] = now( name, Success( value ))
-   def nowFail[ A ]( name: String, e: Throwable ) : FutureResult[ A ] = now( name, Failure( e ))
+   def nowSucceed[ A ]( name: String, value: A )     : FutureResult[ A ] = now( name, Success( value ))
+   def nowFail[ A ](    name: String, e: Throwable ) : FutureResult[ A ] = now( name, Failure( e ))
 
    trait Event[ A ] extends FutureResult[ A ] {
       def set( result: Result[ A ]) : Unit
@@ -103,8 +103,11 @@ object FutureResult {
          val name = name0
          val c = FutureActor.newChannel[ Result[ A ]]()
          val peer: FutureActor[ Result[ A ]] = new FutureActor[ Result[ A ]]({ syncVar =>
+            open( this )
             peer.react {
-               case Set( value ) => syncVar.set( value )
+               case Set( value ) =>
+                  close( this )
+                  syncVar.set( value )
             }
          }, c )
          peer.start()
@@ -141,20 +144,29 @@ object FutureResult {
       me: FutureResult[ A ] =>
 
       def map[ B ]( name: String )( fun: Result[ A ] => Result[ B ]) : FutureResult[ B ] = wrap( name, Futures.future {
-         open( this )
          try {
-            fun( apply() )
+            open( this )
+            val res = try {
+               apply()
+            } finally {
+               close( this )
+            }
+            fun( res )
          } catch {
             case e: Throwable => Failure( e )
-         } finally {
-            close( this )
          }
       })
 
       def flatMap[ B ]( name: String )( fun: Result[ A ] => FutureResult[ B ]) : FutureResult[ B ] = wrap( name, Futures.future {
-         open( this )
          try {
-            fun( apply() ).apply()
+            open( this )
+            val res = try {
+               apply()
+            } finally {
+               close( this )
+            }
+            fun( res ).apply()
+
          } catch {
             case e: Throwable => Failure( e )
          } finally {
