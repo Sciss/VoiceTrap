@@ -28,7 +28,7 @@ package impl
 
 import de.sciss.lucre.{DataInput, DataOutput, stm, data}
 import de.sciss.synth
-import synth.{addAfter, SynthGraph, proc}
+import synth.{SynthDef, addAfter, SynthGraph, proc}
 import concurrent.stm.Ref
 import de.sciss.lucre.bitemp.{BiGroup, Span}
 import java.io.File
@@ -169,6 +169,36 @@ object ChannelImpl {
          }
       }
 
+      private def playJumpBackSound( server: RichServer )( implicit ptx: ProcTxn ) {
+         val gr = SynthGraph {
+            import synth._
+            import ugen._
+
+            val bus = "bus".kr
+            val f = Line.ar( 60, 120, dur = 2 ) // 80       // fundamental frequency
+            val p = 10       // number of partials per channel
+            val trig0 = XLine.kr(10, 0.1, 60) // trigger probability decreases over time
+            val trig1 = EnvGen.kr(Env.linen(0, 2.75, 1, 1, stepShape))
+            val trig = trig0 * trig1
+            FreeSelf.kr(TDelay.kr(Done.kr(trig1), 1))
+            val sig = Mix.tabulate(p){ i =>
+               val dust = Dust.ar( trig )
+               val freq = Latch.ar( in = f, trig = dust )
+               val sig = SinOsc.ar( freq * (i+1.5)) *     // freq of partial
+                  Decay2.ar(
+                     dust * 0.02,     // trigger amplitude
+                     0.005,        // grain attack time
+                     Rand(0,0.5)   // grain decay time
+                  )
+               sig
+            }
+            Out.ar( bus, sig * 0.5 )
+         }
+         val rd = RichSynthDef( server, gr )
+         val ch = row * numColumns + column + VoiceTrap.privateBus.index
+         rd.play( target = server.defaultGroup, args = Seq( "bus" -> ch ))
+      }
+
       private def postStep( server: RichServer, auralSystem: proc.AuralSystem[ S ], insSpan: Span,
                             artOpt: Option[ AudioArtifact ],
                             document: Document, transport: Transport, iter: Int, iterZeroTime: Long ) {
@@ -181,6 +211,8 @@ object ChannelImpl {
             val jumpBack      = if( incIter && (nextIter == 0) ) Some( (nextIterTime + iterZeroTime) / 2 ) else None
 
             if( incIter ) logThis( "iteration " + nextIter + jumpBack.map( " @" + _ ).getOrElse( "" ))
+
+            if( jumpBack.isDefined && VoiceTrap.jumpBackSound ) playJumpBackSound( server )( ProcTxn() )
 
             document.withChannel( row = row, column = column, jumpBack = None )(
                exchangeArtifact( artOpt, insSpan, jumpBack, transport ))

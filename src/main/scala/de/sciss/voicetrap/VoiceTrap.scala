@@ -43,6 +43,8 @@ object VoiceTrap {
    val limiterLevel           = 0.9
    val hpfFreq                = 50.0
 
+   val jumpBackSound          = true
+
    lazy val numRows           = if( minimal ) /* 2 */ 1 else 4
    lazy val numColumns        = if( minimal ) 1 else 3
    lazy val matrixSize        = numRows * numColumns
