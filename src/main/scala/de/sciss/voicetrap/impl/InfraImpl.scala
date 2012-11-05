@@ -59,12 +59,16 @@ object InfraImpl {
          sCfg.inputBusChannels   = VoiceTrap.highestInputChannel
          sCfg.outputBusChannels  = VoiceTrap.highestOutputChannel
          sCfg.loadSynthDefs      = false
-         sCfg.transport          = osc.TCP
-         sCfg.pickPort()
+         sCfg.transport          = VoiceTrap.protocol
+         if( VoiceTrap.bootServer ) {
+            sCfg.pickPort()
+         } else {
+            sCfg.port   = 57110
+         }
 
          cursor.step { implicit tx =>
             log( "infra booted with path " + tx.inputAccess )
-            val as = AuralSystem[ S ].start( sCfg )
+            val as = AuralSystem[ S ].start( sCfg, connect = !VoiceTrap.bootServer )
             as.whenStarted { implicit tx =>
                server =>
                   val internalBus = Bus.audio( server.peer, numChannels = VoiceTrap.matrixSize )

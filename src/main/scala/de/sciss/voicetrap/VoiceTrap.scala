@@ -29,6 +29,7 @@ import java.io.File
 import collection.immutable.{IndexedSeq => IIdxSeq}
 import de.sciss.synth.AudioBus
 import de.sciss.synth.proc.RichGroup
+import de.sciss.osc
 
 object VoiceTrap {
    lazy val baseDirectory     : File   = new File( new File( sys.props( "user.home" ), "Desktop" ), "VoiceTrap" )
@@ -45,7 +46,9 @@ object VoiceTrap {
    val hpfFreq                = 50.0
 
    val jumpBackSound          = true
+   val jumpBackSoundVolume    = 1.0
    val shrinkAmount           = 0.15
+//   val keepOneProbability     = 0.2
 
    lazy val numRows           = if( minimal ) /* 2 */ 1 else 4
    lazy val numColumns        = if( minimal ) 1 else 3
@@ -53,6 +56,8 @@ object VoiceTrap {
 
    val sampleRate             = 44100.0
    val audioInterface         = "MOTU 828mk2"
+   val protocol: osc.Transport.Net = osc.UDP
+   val bootServer             = true
    val highestInputChannel    = 2
    val highestOutputChannel   = 22
    val microphoneChannel      = 0
@@ -61,7 +66,7 @@ object VoiceTrap {
 
    val forkIterations         = if( minimal ) 1 else 6
 
-   val drainProbability       = 0.1
+   val drainProbability       = 0.05 // 0.1
 
 //   lazy val internalBusOffset = highestOutputChannel + highestInputChannel
 

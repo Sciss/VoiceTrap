@@ -175,6 +175,7 @@ object ChannelImpl {
             import ugen._
 
             val bus = "bus".kr
+            val amp = "amp".kr( 1 )
             val f = Line.ar( 60, 120, dur = 2 ) // 80       // fundamental frequency
             val p = 10       // number of partials per channel
             val trig0 = XLine.kr(10, 0.1, 60) // trigger probability decreases over time
@@ -192,11 +193,11 @@ object ChannelImpl {
                   )
                sig
             }
-            Out.ar( bus, sig * 0.5 )
+            Out.ar( bus, sig * amp )
          }
          val rd = RichSynthDef( server, gr )
          val ch = row * numColumns + column + VoiceTrap.privateBus.index
-         rd.play( target = server.defaultGroup, args = Seq( "bus" -> ch ))
+         rd.play( target = server.defaultGroup, args = Seq( "bus" -> ch, "amp" -> VoiceTrap.jumpBackSoundVolume ))
       }
 
       private def postStep( server: RichServer, auralSystem: proc.AuralSystem[ S ], insSpan: Span,
