@@ -55,7 +55,23 @@ object SearchStepAlgorithm {
                case Some( Scan.Link.Grapheme( peer )) =>
                   peer.segment( span.start ) match {
                      case Some( segm @ Grapheme.Segment.Audio( _, _ )) =>
-                        intersect( segm, span )
+                        val res0 = intersect( segm, span )
+                        val res1: Option[ AudioSegment ] = if( VoiceTrap.shrinkAmount > 0.0 ) {
+                           res0.flatMap { segm =>
+                              segm.span match {
+                                 case sp @ Span( _, _ ) =>
+                                    val len     = ((sp.length * VoiceTrap.shrinkAmount)/2).toLong
+                                    if( len > 0 ) {
+                                       val shrink  = Span( sp.start + len, sp.stop - len )
+                                       intersect( segm, shrink )
+                                    } else {
+                                       Some( segm )
+                                    }
+                                 case _ => Some( segm )
+                              }
+                           }
+                        } else res0
+                        res1
 
                      case _ => None
                   }

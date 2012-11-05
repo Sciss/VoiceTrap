@@ -44,6 +44,7 @@ object VoiceTrap {
    val hpfFreq                = 50.0
 
    val jumpBackSound          = true
+   val shrinkAmount           = 0.15
 
    lazy val numRows           = if( minimal ) /* 2 */ 1 else 4
    lazy val numColumns        = if( minimal ) 1 else 3
