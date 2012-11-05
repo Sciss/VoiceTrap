@@ -41,7 +41,7 @@ object VoiceTrap {
    val liveInput              = true
    val stereoOutput           = true
 
-   lazy val numRows           = if( minimal ) 2 /* 1 */ else 4
+   lazy val numRows           = if( minimal ) /* 2 */ 1 else 4
    lazy val numColumns        = if( minimal ) 1 else 3
    lazy val matrixSize        = numRows * numColumns
 
@@ -52,14 +52,14 @@ object VoiceTrap {
    val microphoneChannel      = 0
    var microphoneGain         = 1.0 // amp linear
 
-   val forkIterations         = 6
+   val forkIterations         = if( minimal ) 1 else 6
 
 //   lazy val internalBusOffset = highestOutputChannel + highestInputChannel
 
    var privateBus : AudioBus  = null      // XXX TODO: que se puede acer...
 
    lazy val phraseLength : Motion  = Motion.exprand( 8.0, 24.0 )
-   lazy val loopLength : Motion    = Motion.exprand( 90.0 / 1.1, 90.0 * 1.1 ) // Motion.constant( 90.0 )
+   lazy val loopLength : Motion    = if( minimal ) Motion.constant( 45.0 ) else Motion.exprand( 90.0 / 1.1, 90.0 * 1.1 ) // Motion.constant( 90.0 )
 
    case class ChannelDB( database: Database, query: DifferanceDatabaseQuery,
                          thinner: DifferanceDatabaseThinner, filler: DifferanceDatabaseFiller )

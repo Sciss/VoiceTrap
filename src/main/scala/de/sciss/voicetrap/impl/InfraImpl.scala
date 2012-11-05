@@ -88,6 +88,8 @@ object InfraImpl {
 
 //                  proc.showLog      = true
 //                  proc.showAuralLog = true
+
+//                  proc.showTransportLog = true
                   document.get.start( server, as )
 
 //new Thread( "dump futs" ) {

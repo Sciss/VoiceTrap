@@ -131,7 +131,22 @@ package object voicetrap {
       }
    }
 
+   def debug() {
+      println( "debug" )
+   }
+
    def spawn( cursor: Cursor, jumpBack: Option[ Long ] = None )( fun: Tx => Unit )( implicit tx: Tx ) {
+      val cursorPath = jumpBack.map { timeStamp =>
+         val oldPath = cursor.position
+         val newPath = oldPath.takeUntil( timeStamp )
+         newPath
+      }
+//if( jumpBack.isDefined ) {
+//   println( "DEM UNA POSITION" )
+//   val pos = cursor.position
+//   log( "spawned with jumpBack " + cursor + " - " + jumpBack )
+//}
+
 //      requireTxnThread()
 
 //      Txn.afterCommit( _ => pool.submit( new Runnable {
@@ -142,9 +157,8 @@ package object voicetrap {
       Txn.afterCommit( _ => {
          val r = new Runnable {
             def run() {
-               jumpBack match {
-                  case Some( timeStamp ) =>
-                     val path = cursor.position.takeUntil( timeStamp )
+               cursorPath match {
+                  case Some( path ) =>
                      cursor.stepFrom( path )( fun( _ ))
                   case _ =>
                      cursor.step( fun( _ ))

@@ -24,8 +24,8 @@ trait Channel extends Writable {
    def removeAt(   time: Long )( implicit tx: Tx ) : Unit
    def removeFrom( time: Long )( implicit tx: Tx ) : Unit
 
-   def nextSearch( iter: Int, iterZeroTime: Long, document: Document, auralSystem: proc.AuralSystem[ S ],
-                   server: RichServer, _transport: Transport )( implicit tx: Tx, cursor: Cursor ) : Unit
+   def nextSearch( loop: Long, iter: Int, iterZeroTime: Long, document: Document, auralSystem: proc.AuralSystem[ S ],
+                   server: RichServer, transportOption: Option[ Transport ])( implicit tx: Tx, cursor: Cursor ) : Unit
 
    // ---- algorithm ----
 
