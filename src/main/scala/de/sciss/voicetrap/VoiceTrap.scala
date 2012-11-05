@@ -32,7 +32,15 @@ import de.sciss.synth.proc.RichGroup
 import de.sciss.osc
 
 object VoiceTrap {
-   lazy val baseDirectory     : File   = new File( new File( sys.props( "user.home" ), "Desktop" ), "VoiceTrap" )
+   val useMnemo               = true
+
+   lazy val baseDirectory     : File   = {
+      if( useMnemo ) {
+         new File( new File( "/Volumes", "Mnemo2" ), "VoiceTrap" )
+      } else {
+         new File( new File( sys.props( "user.home" ), "Desktop" ), "VoiceTrap" )
+      }
+   }
    lazy val artifactDirectory : File   = new File( baseDirectory, "artifacts" )
 //   lazy val databaseDirectory : File   = new File( baseDirectory, "audio_db" )
    lazy val televisionFile    : File   = new File( new File( baseDirectory, "tv" ), "tv.aif" )
@@ -57,7 +65,7 @@ object VoiceTrap {
    val sampleRate             = 44100.0
    val audioInterface         = "MOTU 828mk2"
    val protocol: osc.Transport.Net = osc.UDP
-   val bootServer             = true
+   val bootServer             = false // true
    val highestInputChannel    = 2
    val highestOutputChannel   = 22
    val microphoneChannel      = 0

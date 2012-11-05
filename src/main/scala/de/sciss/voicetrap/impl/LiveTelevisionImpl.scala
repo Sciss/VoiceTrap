@@ -59,8 +59,6 @@ final class LiveTelevisionImpl private () extends Television {
       import proc.{log => _, _}
 //      import DSL._
 
-      log( identifier + " : capture begin" )
-
       val dur     = framesToSeconds( length ) + latency
       val res     = FutureResult.event[ File ]( identifier + " capture" )
 //      val oldFut  = futRef.swap( res )( tx.peer )
@@ -70,7 +68,7 @@ final class LiveTelevisionImpl private () extends Television {
 
       val graph   = SynthGraph {
          val boost   = "boost".kr
-         val buf     = "buf".ir
+         val buf     = "buf".kr // ir
          val dura    = "dur".ir
          val in0     = In.ar( NumOutputBuses.ir + VoiceTrap.microphoneChannel, 1 )
          val in1     = if( VoiceTrap.hpfFreq >= 16 ) HPF.ar( in0, VoiceTrap.hpfFreq ) else in0
@@ -93,6 +91,8 @@ final class LiveTelevisionImpl private () extends Television {
       val buf  = RichBuffer( server )
       buf.alloc( numFrames = VoiceTrap.recordBufferSize, numChannels = 1 )
       buf.record( path.getAbsolutePath, AudioFileType.AIFF, SampleFormat.Int24 )
+
+      log( identifier + " : capture begin " + path )
 
 //      if( DEBUG ) log( identifier + " : capture begin [3]" )
 

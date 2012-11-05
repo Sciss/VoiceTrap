@@ -95,7 +95,8 @@ object InfraImpl {
                   rd.play( target = mg )
                   VoiceTrap.masterGroup = mg
 
-                  server.peer.dumpOSC()
+//                  server.peer.dumpOSC()
+                  de.sciss.voicetrap.showLog = true
 //                  proc.showAllocLog = true
 //                  proc.showTxnLog   = true
 
