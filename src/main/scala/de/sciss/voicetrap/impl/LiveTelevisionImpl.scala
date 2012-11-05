@@ -69,12 +69,16 @@ final class LiveTelevisionImpl private () extends Television {
 //      if( DEBUG ) log( identifier + " : capture begin [1]" )
 
       val graph   = SynthGraph {
-         val in0     = In.ar( NumOutputBuses.ir + VoiceTrap.microphoneChannel, 1 )
-         val in      = if( VoiceTrap.hpfFreq >= 16 ) HPF.ar( in0, VoiceTrap.hpfFreq ) else in0
          val boost   = "boost".kr
-         val mix     = Limiter.ar( Mix.mono( in ) * boost, 0.97, 0.01 )
          val buf     = "buf".ir
          val dura    = "dur".ir
+         val in0     = In.ar( NumOutputBuses.ir + VoiceTrap.microphoneChannel, 1 )
+         val in1     = if( VoiceTrap.hpfFreq >= 16 ) HPF.ar( in0, VoiceTrap.hpfFreq ) else in0
+         val in      = if( VoiceTrap.compander ) {
+            Compander.ar( in1, in1, thresh = (-24).dbamp, ratioBelow = 1, ratioAbove = 0.33, attack = 0.2, release = 1 )
+         } else in1
+
+         val mix     = Limiter.ar( in * boost, 0.97, 0.01 )
 //         val done    = Done.kr( Line.kr( dur = dura ))
          Line.kr( dur = dura, doneAction = freeSelf )
          DiskOut.ar( buf, mix ) // WhiteNoise.ar( 0.2 )) // mix * DC.ar(0) )

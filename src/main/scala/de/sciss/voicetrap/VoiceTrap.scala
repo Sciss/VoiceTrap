@@ -41,6 +41,7 @@ object VoiceTrap {
    val liveInput              = true
    val stereoOutput           = false
    val limiterLevel           = 0.9
+   val compander              = true
    val hpfFreq                = 50.0
 
    val jumpBackSound          = true
