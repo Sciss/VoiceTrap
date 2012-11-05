@@ -89,9 +89,11 @@ object SearchStepAlgorithm {
       // ... and convert them into segments from the hidden layer
       val hiddenFrames  = hidden.spec.numFrames
       val hiddenLen     = hiddenFrames - hidden.offset
+      val sysOffset     = ((System.currentTimeMillis() - VoiceTrap.startTime) / 1000.0 * VoiceTrap.sampleRate).toLong
       val negSegms = negSpans.flatMap { sp =>
          var hSegm   = IIdxSeq.empty[ AudioSegment ]
-         var afStart = (sp.start % hiddenLen) + hidden.offset
+//         var afStart = (sp.start % hiddenLen) + hidden.offset
+         var afStart = (sysOffset % hiddenLen) + hidden.offset
          var timOff  = sp.start
          val timStop = sp.stop
          while( timOff < timStop ) {
@@ -140,7 +142,11 @@ object SearchStepAlgorithm {
       val thinMsg = "thin " + channel
       val futArtifact = futQuery.flatMapSuccess( thinMsg ) { m =>
          val artifact = matchToValue( m )
-         val futUnit  = atom( thinMsg )( itx => chanDB.thinner.remove( IIdxSeq( m.span ))( itx ))
+         val remSpans = if( (VoiceTrap.drainProbability) > 0.0 && util.Random.nextDouble() < VoiceTrap.drainProbability ) {
+            IIdxSeq( Span( 0, chanDB.database.lengthSingle / 3 ))
+         } else IIdxSeq( m.span )
+
+         val futUnit  = atom( thinMsg )( itx => chanDB.thinner.remove( remSpans )( itx ))
          futUnit.mapSuccess( thinMsg )( _ => artifact )
       }
 

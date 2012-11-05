@@ -35,6 +35,7 @@ object Database {
 }
 trait Database {
    def length( implicit tx: InTxn ): Long
+   def lengthSingle : Long
 
    def identifier: String
 

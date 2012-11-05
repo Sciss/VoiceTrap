@@ -18,7 +18,7 @@ object InfraImpl {
 
 //      // DOESN'T HELP
 //      SoundProcesses.poolSize = Some( 2 )
-      SoundProcesses.cueBufferSize = 16384
+      SoundProcesses.cueBufferSize = 65536 // 32678
 
       val dir     = new File( VoiceTrap.baseDirectory, "db" )
       val store   = BerkeleyDB.factory( dir )

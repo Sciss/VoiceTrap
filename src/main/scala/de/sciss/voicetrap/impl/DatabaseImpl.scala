@@ -312,7 +312,8 @@ extends Database /* AbstractDatabase */ with ExtractionImpl {
       }
    }
 
-   def length( implicit tx: InTxn ) : Long = stateRef().spec.map( _._2.numFrames ).getOrElse( 0L )
+   def length( implicit tx: InTxn ) : Long   = stateRef().spec.map( _._2.numFrames ).getOrElse( 0L )
+   def lengthSingle : Long            = stateRef.single().spec.map( _._2.numFrames ).getOrElse( 0L )
 
    def reader : FrameReader.Factory = {
       val f = stateRef.single().spec.map( _._1 ).getOrElse( sys.error( identifier + " : contains no file" ))

@@ -61,12 +61,16 @@ object VoiceTrap {
 
    val forkIterations         = if( minimal ) 1 else 6
 
+   val drainProbability       = 0.1
+
 //   lazy val internalBusOffset = highestOutputChannel + highestInputChannel
 
    var privateBus : AudioBus  = null      // XXX TODO: que se puede acer...
 
    lazy val phraseLength : Motion  = Motion.exprand( 8.0, 24.0 )
    lazy val loopLength : Motion    = if( minimal ) Motion.constant( 45.0 ) else Motion.exprand( 90.0 / 1.1, 90.0 * 1.1 ) // Motion.constant( 90.0 )
+
+   lazy val startTime         = System.currentTimeMillis()
 
    case class ChannelDB( database: Database, query: DifferanceDatabaseQuery,
                          thinner: DifferanceDatabaseThinner, filler: DifferanceDatabaseFiller )
