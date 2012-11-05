@@ -91,7 +91,7 @@ final class LiveTelevisionImpl private () extends Television {
       val path = createTempFile( ".aif", None, keep = false )
 //      val buf = bufRecord( path.getAbsolutePath, 1, AudioFileType.AIFF, SampleFormat.Int24 )
       val buf  = RichBuffer( server )
-      buf.alloc( numFrames = 32768, numChannels = 1 )
+      buf.alloc( numFrames = VoiceTrap.recordBufferSize, numChannels = 1 )
       buf.record( path.getAbsolutePath, AudioFileType.AIFF, SampleFormat.Int24 )
 
 //      if( DEBUG ) log( identifier + " : capture begin [3]" )

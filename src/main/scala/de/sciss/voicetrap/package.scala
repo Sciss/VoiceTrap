@@ -197,7 +197,7 @@ package object voicetrap {
    }
 
    private lazy val logHeader = new SimpleDateFormat( "[d MMM yyyy, HH:mm''ss.SSS] 'voice' - ", Locale.US )
-   var showLog = true
+   var showLog = false
 
    @elidable(CONFIG) private[voicetrap] def log( what: => String ) {
       if( showLog ) Console.out.println( logHeader.format( new Date() ) + what )

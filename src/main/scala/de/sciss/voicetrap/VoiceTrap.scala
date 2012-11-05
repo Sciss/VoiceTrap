@@ -68,6 +68,8 @@ object VoiceTrap {
 
    val drainProbability       = 0.05 // 0.1
 
+   val recordBufferSize       = 65536 // 32768
+
 //   lazy val internalBusOffset = highestOutputChannel + highestInputChannel
 
    var privateBus : AudioBus  = null      // XXX TODO: que se puede acer...

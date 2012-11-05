@@ -1,0 +1,4413 @@
+s: [ #bundle, <now>,
+  [ "/d_recv", DATA ],
+  [ "/sync", 0 ] ]
+r: [ "/done", "/d_recv" ]
+r: [ "/synced", 0 ]
+s: [ #bundle, <now>,
+  [ "/g_new", 1000, 1, 1 ],
+  [ "/s_new", "internal-bus_0", 1001, 0, 1000 ] ]
+r: [ "/n_go", 1000, 1, -1, -1, 1, -1, -1 ]
+r: [ "/n_go", 1001, 1000, -1, -1, 0 ]
+s: [ #bundle, <now>,
+  [ "/d_recv", DATA ],
+  [ "/sync", 1 ] ]
+r: [ "/done", "/d_recv" ]
+r: [ "/synced", 1 ]
+s: [ #bundle, <now>,
+  [ "/g_new", 1002, 0, 1 ],
+  [ "/n_before", 1002, 1000 ],
+  [ "/s_new", "channel-route_1", 1003, 3, 1002, "out", 24.0 ] ]
+r: [ "/n_go", 1002, 1, -1, 1000, 1, -1, -1 ]
+r: [ "/n_move", 1002, 1, -1, 1000, 1, -1, -1 ]
+r: [ "/n_go", 1003, 1, 1002, 1000, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 0, 65536, 1 ],
+  [ "/b_write", 0, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme5713407161910349117.aif", "aiff", "int24", 0, 0, true ],
+  [ "/d_recv", DATA ],
+  [ "/sync", 2 ] ]
+r: [ "/done", "/b_alloc", 0 ]
+r: [ "/done", "/b_write", 0 ]
+r: [ "/done", "/d_recv" ]
+r: [ "/synced", 2 ]
+s: [ #bundle, <now>,
+  [ "/g_new", 1004, 0, 1 ],
+  [ "/n_before", 1004, 1000 ],
+  [ "/s_new", "channel-route_1", 1005, 3, 1004, "out", 25.0 ],
+  [ "/s_new", "proc_2", 1006, 0, 1, "boost", 1.0, "dur", 9.72517, "buf", 0.0 ] ]
+r: [ "/n_go", 1004, 1, -1, 1002, 1, -1, -1 ]
+r: [ "/n_move", 1004, 1, 1003, 1000, 1, -1, -1 ]
+r: [ "/n_go", 1005, 1, 1004, 1000, 0 ]
+r: [ "/n_go", 1006, 1, -1, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 1, 65536, 1 ],
+  [ "/b_write", 1, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme6843376774567596803.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 3 ] ]
+r: [ "/done", "/b_alloc", 1 ]
+r: [ "/done", "/b_write", 1 ]
+r: [ "/synced", 3 ]
+s: [ #bundle, <now>,
+  [ "/g_new", 1007, 0, 1 ],
+  [ "/n_before", 1007, 1000 ],
+  [ "/s_new", "channel-route_1", 1008, 3, 1007, "out", 26.0 ],
+  [ "/s_new", "proc_2", 1009, 0, 1, "boost", 1.0, "dur", 17.724897, "buf", 1.0 ] ]
+r: [ "/n_go", 1007, 1, -1, 1006, 1, -1, -1 ]
+r: [ "/n_move", 1007, 1, 1005, 1000, 1, -1, -1 ]
+r: [ "/n_go", 1008, 1, 1007, 1000, 0 ]
+r: [ "/n_go", 1009, 1, -1, 1006, 0 ]
+s: [ #bundle, <now>,
+  [ "/g_new", 1010, 0, 1 ],
+  [ "/n_before", 1010, 1000 ],
+  [ "/s_new", "channel-route_1", 1011, 3, 1010, "out", 27.0 ] ]
+r: [ "/n_go", 1010, 1, -1, 1009, 1, -1, -1 ]
+r: [ "/n_move", 1010, 1, 1008, 1000, 1, -1, -1 ]
+r: [ "/n_go", 1011, 1, 1010, 1000, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 2, 65536, 1 ],
+  [ "/b_write", 2, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme6082816450188621465.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 4 ] ]
+r: [ "/done", "/b_alloc", 2 ]
+r: [ "/done", "/b_write", 2 ]
+r: [ "/synced", 4 ]
+s: [ #bundle, <now>,
+  [ "/g_new", 1012, 0, 1 ],
+  [ "/n_before", 1012, 1000 ],
+  [ "/s_new", "channel-route_1", 1013, 3, 1012, "out", 28.0 ],
+  [ "/s_new", "proc_2", 1014, 0, 1, "boost", 1.0, "dur", 21.347937, "buf", 2.0 ] ]
+r: [ "/n_go", 1012, 1, -1, 1009, 1, -1, -1 ]
+r: [ "/n_move", 1012, 1, 1011, 1000, 1, -1, -1 ]
+r: [ "/n_go", 1013, 1, 1012, 1000, 0 ]
+r: [ "/n_go", 1014, 1, -1, 1009, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 3, 65536, 1 ],
+  [ "/b_write", 3, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme3418361067142467713.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 5 ] ]
+r: [ "/done", "/b_alloc", 3 ]
+r: [ "/done", "/b_write", 3 ]
+r: [ "/synced", 5 ]
+s: [ #bundle, <now>,
+  [ "/g_new", 1015, 0, 1 ],
+  [ "/n_before", 1015, 1000 ],
+  [ "/s_new", "channel-route_1", 1016, 3, 1015, "out", 29.0 ],
+  [ "/s_new", "proc_2", 1017, 0, 1, "boost", 1.0, "dur", 3.5917234, "buf", 3.0 ] ]
+r: [ "/n_go", 1015, 1, -1, 1014, 1, -1, -1 ]
+r: [ "/n_move", 1015, 1, 1013, 1000, 1, -1, -1 ]
+r: [ "/n_go", 1016, 1, 1015, 1000, 0 ]
+r: [ "/n_go", 1017, 1, -1, 1014, 0 ]
+s: [ #bundle, <now>,
+  [ "/g_new", 1018, 0, 1 ],
+  [ "/n_before", 1018, 1000 ],
+  [ "/s_new", "channel-route_1", 1019, 3, 1018, "out", 30.0 ] ]
+r: [ "/n_go", 1018, 1, -1, 1017, 1, -1, -1 ]
+r: [ "/n_move", 1018, 1, 1016, 1000, 1, -1, -1 ]
+r: [ "/n_go", 1019, 1, 1018, 1000, 0 ]
+s: [ #bundle, <now>,
+  [ "/g_new", 1020, 0, 1 ],
+  [ "/n_before", 1020, 1000 ],
+  [ "/s_new", "channel-route_1", 1021, 3, 1020, "out", 31.0 ] ]
+r: [ "/n_go", 1020, 1, -1, 1017, 1, -1, -1 ]
+r: [ "/n_move", 1020, 1, 1019, 1000, 1, -1, -1 ]
+r: [ "/n_go", 1021, 1, 1020, 1000, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 4, 65536, 1 ],
+  [ "/b_write", 4, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme1151246404275477983.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 6 ] ]
+r: [ "/done", "/b_alloc", 4 ]
+r: [ "/done", "/b_write", 4 ]
+r: [ "/synced", 6 ]
+s: [ #bundle, <now>,
+  [ "/g_new", 1022, 0, 1 ],
+  [ "/n_before", 1022, 1000 ],
+  [ "/s_new", "channel-route_1", 1023, 3, 1022, "out", 32.0 ],
+  [ "/s_new", "proc_2", 1024, 0, 1, "boost", 1.0, "dur", 18.445238, "buf", 4.0 ] ]
+r: [ "/n_go", 1022, 1, -1, 1017, 1, -1, -1 ]
+r: [ "/n_move", 1022, 1, 1021, 1000, 1, -1, -1 ]
+r: [ "/n_go", 1023, 1, 1022, 1000, 0 ]
+r: [ "/n_go", 1024, 1, -1, 1017, 0 ]
+s: [ #bundle, <now>,
+  [ "/g_new", 1025, 0, 1 ],
+  [ "/n_before", 1025, 1000 ],
+  [ "/s_new", "channel-route_1", 1026, 3, 1025, "out", 33.0 ] ]
+r: [ "/n_go", 1025, 1, -1, 1024, 1, -1, -1 ]
+r: [ "/n_move", 1025, 1, 1023, 1000, 1, -1, -1 ]
+r: [ "/n_go", 1026, 1, 1025, 1000, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 5, 65536, 1 ],
+  [ "/b_write", 5, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme8200860375301181765.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 7 ] ]
+r: [ "/done", "/b_alloc", 5 ]
+r: [ "/done", "/b_write", 5 ]
+r: [ "/synced", 7 ]
+s: [ #bundle, <now>,
+  [ "/g_new", 1027, 0, 1 ],
+  [ "/n_before", 1027, 1000 ],
+  [ "/s_new", "channel-route_1", 1028, 3, 1027, "out", 34.0 ],
+  [ "/s_new", "proc_2", 1029, 0, 1, "boost", 1.0, "dur", 2.4598186, "buf", 5.0 ] ]
+r: [ "/n_go", 1027, 1, -1, 1024, 1, -1, -1 ]
+r: [ "/n_move", 1027, 1, 1026, 1000, 1, -1, -1 ]
+r: [ "/n_go", 1028, 1, 1027, 1000, 0 ]
+r: [ "/n_go", 1029, 1, -1, 1024, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 6, 65536, 1 ],
+  [ "/b_write", 6, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme7409977349794614931.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 8 ] ]
+r: [ "/done", "/b_alloc", 6 ]
+r: [ "/done", "/b_write", 6 ]
+r: [ "/synced", 8 ]
+s: [ #bundle, <now>,
+  [ "/g_new", 1030, 0, 1 ],
+  [ "/n_before", 1030, 1000 ],
+  [ "/s_new", "channel-route_1", 1031, 3, 1030, "out", 35.0 ],
+  [ "/s_new", "proc_2", 1032, 0, 1, "boost", 1.0, "dur", 2.13483, "buf", 6.0 ] ]
+r: [ "/n_go", 1030, 1, -1, 1029, 1, -1, -1 ]
+r: [ "/n_move", 1030, 1, 1028, 1000, 1, -1, -1 ]
+r: [ "/n_go", 1031, 1, 1030, 1000, 0 ]
+r: [ "/n_go", 1032, 1, -1, 1029, 0 ]
+r: [ "/n_end", 1032, 1, -1, 1029, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 6 ],
+  [ "/b_free", 6 ],
+  [ "/sync", 9 ] ]
+r: [ "/done", "/b_close", 6 ]
+r: [ "/done", "/b_free", 6 ]
+r: [ "/synced", 9 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1029, 1, -1, 1024, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 5 ],
+  [ "/b_free", 5 ],
+  [ "/sync", 10 ] ]
+r: [ "/done", "/b_close", 5 ]
+r: [ "/done", "/b_free", 5 ]
+r: [ "/synced", 10 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1017, 1, 1024, 1014, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 3 ],
+  [ "/b_free", 3 ],
+  [ "/sync", 11 ] ]
+r: [ "/done", "/b_close", 3 ]
+r: [ "/done", "/b_free", 3 ]
+r: [ "/synced", 11 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1006, 1, 1009, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 0 ],
+  [ "/b_free", 0 ],
+  [ "/sync", 12 ] ]
+r: [ "/done", "/b_close", 0 ]
+r: [ "/done", "/b_free", 0 ]
+r: [ "/synced", 12 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/d_recv", DATA ],
+  [ "/b_alloc", 3, 65536, 1 ],
+  [ "/b_read", 3, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme8947451955898666064.aif", 0, 65536, 0, true ],
+  [ "/d_recv", DATA ],
+  [ "/sync", 13 ] ]
+r: [ "/done", "/d_recv" ]
+r: [ "/done", "/b_alloc", 3 ]
+r: [ "/done", "/b_read", 3 ]
+r: [ "/done", "/d_recv" ]
+r: [ "/synced", 13 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1033, 0, 1010 ],
+  [ "/s_new", "audio-artifact_4", 1034, 0, 1, "buf", 3.0, "dur", 20.25941 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1034, "out", 24.0 ],
+  [ "/n_set", 1034, "out", 25.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1033, "$in_sig", 25, 1 ],
+  [ "/n_set", 1033, "$in_dur", 20.26365 ] ]
+r: [ "/n_go", 1033, 1010, -1, -1, 0 ]
+r: [ "/n_go", 1034, 1, -1, 1024, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 0, 65536, 1 ],
+  [ "/b_write", 0, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme8584691770993886498.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 14 ] ]
+r: [ "/done", "/b_alloc", 0 ]
+r: [ "/done", "/b_write", 0 ]
+r: [ "/synced", 14 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1035, 0, 1, "boost", 1.0, "dur", 13.578005, "buf", 0.0 ] ]
+r: [ "/n_go", 1035, 1, -1, 1034, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 5, 65536, 1 ],
+  [ "/b_read", 5, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme5360775536016915766.aif", 0, 65536, 0, true ],
+  [ "/sync", 15 ] ]
+r: [ "/done", "/b_alloc", 5 ]
+r: [ "/done", "/b_read", 5 ]
+r: [ "/synced", 15 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1036, 0, 1018 ],
+  [ "/s_new", "audio-artifact_4", 1037, 0, 1, "buf", 5.0, "dur", 13.943583 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1037, "out", 24.0 ],
+  [ "/n_set", 1037, "out", 26.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1036, "$in_sig", 26, 1 ],
+  [ "/n_set", 1036, "$in_dur", 13.949252 ] ]
+r: [ "/n_go", 1036, 1018, -1, -1, 0 ]
+r: [ "/n_go", 1037, 1, -1, 1035, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 6, 65536, 1 ],
+  [ "/b_write", 6, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme8640592592990447703.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 16 ] ]
+r: [ "/done", "/b_alloc", 6 ]
+r: [ "/done", "/b_write", 6 ]
+r: [ "/synced", 16 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1038, 0, 1, "boost", 1.0, "dur", 13.790793, "buf", 6.0 ] ]
+r: [ "/n_go", 1038, 1, -1, 1037, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 7, 65536, 1 ],
+  [ "/b_read", 7, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme4770056404646039794.aif", 0, 65536, 0, true ],
+  [ "/sync", 17 ] ]
+r: [ "/done", "/b_alloc", 7 ]
+r: [ "/done", "/b_read", 7 ]
+r: [ "/synced", 17 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1039, 0, 1025 ],
+  [ "/s_new", "audio-artifact_4", 1040, 0, 1, "buf", 7.0, "dur", 17.124716 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1040, "out", 24.0 ],
+  [ "/n_set", 1040, "out", 27.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1039, "$in_sig", 27, 1 ],
+  [ "/n_set", 1039, "$in_dur", 17.129887 ] ]
+r: [ "/n_go", 1039, 1025, -1, -1, 0 ]
+r: [ "/n_go", 1040, 1, -1, 1038, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 8, 65536, 1 ],
+  [ "/b_write", 8, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme7774817913697667360.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 18 ] ]
+r: [ "/done", "/b_alloc", 8 ]
+r: [ "/done", "/b_write", 8 ]
+r: [ "/synced", 18 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1041, 0, 1, "boost", 1.0, "dur", 7.8964853, "buf", 8.0 ] ]
+r: [ "/n_go", 1041, 1, -1, 1040, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 9, 65536, 1 ],
+  [ "/b_read", 9, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme8499594072259320599.aif", 0, 65536, 0, true ],
+  [ "/sync", 19 ] ]
+r: [ "/done", "/b_alloc", 9 ]
+r: [ "/done", "/b_read", 9 ]
+r: [ "/synced", 19 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1042, 0, 1002 ],
+  [ "/s_new", "audio-artifact_4", 1043, 0, 1, "buf", 9.0, "dur", 21.292698 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1043, "out", 24.0 ],
+  [ "/n_set", 1043, "out", 28.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1042, "$in_sig", 28, 1 ],
+  [ "/n_set", 1042, "$in_dur", 21.298367 ] ]
+r: [ "/n_go", 1042, 1002, -1, -1, 0 ]
+r: [ "/n_go", 1043, 1, -1, 1041, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 10, 65536, 1 ],
+  [ "/b_write", 10, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme4843766758941210169.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 20 ] ]
+r: [ "/done", "/b_alloc", 10 ]
+r: [ "/done", "/b_write", 10 ]
+r: [ "/synced", 20 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1044, 0, 1, "boost", 1.0, "dur", 15.323628, "buf", 10.0 ] ]
+r: [ "/n_go", 1044, 1, -1, 1043, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 11, 65536, 1 ],
+  [ "/b_read", 11, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme2828773446424917687.aif", 0, 65536, 0, true ],
+  [ "/sync", 21 ] ]
+r: [ "/done", "/b_alloc", 11 ]
+r: [ "/done", "/b_read", 11 ]
+r: [ "/synced", 21 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1045, 0, 1020 ],
+  [ "/s_new", "audio-artifact_4", 1046, 0, 1, "buf", 11.0, "dur", 16.451338 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1046, "out", 24.0 ],
+  [ "/n_set", 1046, "out", 29.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1045, "$in_sig", 29, 1 ],
+  [ "/n_set", 1045, "$in_dur", 16.446735 ] ]
+r: [ "/n_go", 1045, 1020, -1, -1, 0 ]
+r: [ "/n_go", 1046, 1, -1, 1044, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 12, 65536, 1 ],
+  [ "/b_write", 12, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme7127404027977196741.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 22 ] ]
+r: [ "/done", "/b_alloc", 12 ]
+r: [ "/done", "/b_write", 12 ]
+r: [ "/synced", 22 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1047, 0, 1, "boost", 1.0, "dur", 7.0490475, "buf", 12.0 ] ]
+r: [ "/n_go", 1047, 1, -1, 1046, 0 ]
+r: [ "/n_end", 1009, 1, 1014, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 1 ],
+  [ "/b_free", 1 ],
+  [ "/sync", 23 ] ]
+r: [ "/done", "/b_close", 1 ]
+r: [ "/done", "/b_free", 1 ]
+r: [ "/synced", 23 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 1, 65536, 1 ],
+  [ "/b_read", 1, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme1310730729962535291.aif", 0, 65536, 0, true ],
+  [ "/sync", 24 ] ]
+r: [ "/done", "/b_alloc", 1 ]
+r: [ "/done", "/b_read", 1 ]
+r: [ "/synced", 24 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1048, 0, 1027 ],
+  [ "/s_new", "audio-artifact_4", 1049, 0, 1, "buf", 1.0, "dur", 9.613061 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1049, "out", 24.0 ],
+  [ "/n_set", 1049, "out", 30.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1048, "$in_sig", 30, 1 ],
+  [ "/n_set", 1048, "$in_dur", 9.611655 ] ]
+r: [ "/n_go", 1048, 1027, -1, -1, 0 ]
+r: [ "/n_go", 1049, 1, -1, 1047, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 13, 65536, 1 ],
+  [ "/b_write", 13, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme1221261057167491949.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 25 ] ]
+r: [ "/done", "/b_alloc", 13 ]
+r: [ "/done", "/b_write", 13 ]
+r: [ "/synced", 25 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1050, 0, 1, "boost", 1.0, "dur", 6.5779366, "buf", 13.0 ] ]
+r: [ "/n_go", 1050, 1, -1, 1049, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 14, 65536, 1 ],
+  [ "/b_read", 14, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme374484225243594310.aif", 0, 65536, 0, true ],
+  [ "/sync", 26 ] ]
+r: [ "/done", "/b_alloc", 14 ]
+r: [ "/done", "/b_read", 14 ]
+r: [ "/synced", 26 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1051, 0, 1030 ],
+  [ "/s_new", "audio-artifact_4", 1052, 0, 1, "buf", 14.0, "dur", 15.882449 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1052, "out", 24.0 ],
+  [ "/n_set", 1052, "out", 31.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1051, "$in_sig", 31, 1 ],
+  [ "/n_set", 1051, "$in_dur", 15.880522 ] ]
+r: [ "/n_go", 1051, 1030, -1, -1, 0 ]
+r: [ "/n_go", 1052, 1, -1, 1050, 0 ]
+r: [ "/n_end", 1024, 1, 1034, 1014, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 15, 65536, 1 ],
+  [ "/b_write", 15, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme3398131311020090569.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 27 ] ]
+r: [ "/done", "/b_alloc", 15 ]
+r: [ "/done", "/b_write", 15 ]
+r: [ "/synced", 27 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1053, 0, 1, "boost", 1.0, "dur", 5.67034, "buf", 15.0 ] ]
+r: [ "/n_go", 1053, 1, -1, 1052, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 4 ],
+  [ "/b_free", 4 ],
+  [ "/sync", 28 ] ]
+r: [ "/done", "/b_close", 4 ]
+r: [ "/done", "/b_free", 4 ]
+r: [ "/synced", 28 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 4, 65536, 1 ],
+  [ "/b_write", 4, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme7780620508993314782.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 29 ] ]
+r: [ "/done", "/b_alloc", 4 ]
+r: [ "/done", "/b_write", 4 ]
+r: [ "/synced", 29 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1054, 0, 1, "boost", 1.0, "dur", 4.615873, "buf", 4.0 ] ]
+r: [ "/n_go", 1054, 1, -1, 1053, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1048 ],
+  [ "/n_free", 1049 ] ]
+r: [ "/n_end", 1048, 1027, -1, -1, 0 ]
+r: [ "/n_end", 1049, 1, 1050, 1047, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 1 ],
+  [ "/b_free", 1 ] ]
+r: [ "/done", "/b_close", 1 ]
+r: [ "/done", "/b_free", 1 ]
+r: [ "/n_end", 1014, 1, 1034, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 2 ],
+  [ "/b_free", 2 ],
+  [ "/sync", 30 ] ]
+r: [ "/done", "/b_close", 2 ]
+r: [ "/done", "/b_free", 2 ]
+r: [ "/synced", 30 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1041, 1, 1043, 1040, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 8 ],
+  [ "/b_free", 8 ],
+  [ "/sync", 31 ] ]
+r: [ "/done", "/b_close", 8 ]
+r: [ "/done", "/b_free", 8 ]
+r: [ "/synced", 31 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1036 ],
+  [ "/n_free", 1037 ] ]
+r: [ "/n_end", 1036, 1018, -1, -1, 0 ]
+r: [ "/n_end", 1037, 1, 1038, 1035, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 5 ],
+  [ "/b_free", 5 ] ]
+r: [ "/n_end", 1047, 1, 1050, 1046, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 12 ],
+  [ "/b_free", 12 ],
+  [ "/sync", 32 ] ]
+r: [ "/done", "/b_close", 5 ]
+r: [ "/done", "/b_free", 5 ]
+r: [ "/done", "/b_close", 12 ]
+r: [ "/done", "/b_free", 12 ]
+r: [ "/synced", 32 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1054, 1, -1, 1053, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 4 ],
+  [ "/b_free", 4 ],
+  [ "/sync", 33 ] ]
+r: [ "/n_end", 1053, 1, -1, 1052, 0 ]
+r: [ "/done", "/b_close", 4 ]
+r: [ "/done", "/b_free", 4 ]
+r: [ "/synced", 33 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 15 ],
+  [ "/b_free", 15 ],
+  [ "/sync", 34 ] ]
+r: [ "/done", "/b_close", 15 ]
+r: [ "/done", "/b_free", 15 ]
+r: [ "/synced", 34 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1050, 1, 1052, 1046, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 13 ],
+  [ "/b_free", 13 ],
+  [ "/sync", 35 ] ]
+r: [ "/done", "/b_close", 13 ]
+r: [ "/done", "/b_free", 13 ]
+r: [ "/synced", 35 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1035, 1, 1038, 1034, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 0 ],
+  [ "/b_free", 0 ],
+  [ "/sync", 36 ] ]
+r: [ "/done", "/b_close", 0 ]
+r: [ "/done", "/b_free", 0 ]
+r: [ "/synced", 36 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1045 ],
+  [ "/n_free", 1046 ] ]
+r: [ "/n_end", 1045, 1020, -1, -1, 0 ]
+r: [ "/n_end", 1046, 1, 1052, 1044, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 11 ],
+  [ "/b_free", 11 ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1051 ],
+  [ "/n_free", 1052 ] ]
+r: [ "/n_end", 1051, 1030, -1, -1, 0 ]
+r: [ "/n_end", 1052, 1, -1, 1044, 0 ]
+r: [ "/done", "/b_close", 11 ]
+r: [ "/done", "/b_free", 11 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 14 ],
+  [ "/b_free", 14 ] ]
+r: [ "/done", "/b_close", 14 ]
+r: [ "/done", "/b_free", 14 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1039 ],
+  [ "/n_free", 1040 ] ]
+r: [ "/n_end", 1039, 1025, -1, -1, 0 ]
+r: [ "/n_end", 1040, 1, 1043, 1038, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 7 ],
+  [ "/b_free", 7 ] ]
+r: [ "/done", "/b_close", 7 ]
+r: [ "/done", "/b_free", 7 ]
+r: [ "/n_end", 1038, 1, 1043, 1034, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 6 ],
+  [ "/b_free", 6 ],
+  [ "/sync", 37 ] ]
+r: [ "/done", "/b_close", 6 ]
+r: [ "/done", "/b_free", 6 ]
+r: [ "/synced", 37 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1042 ],
+  [ "/n_free", 1043 ] ]
+r: [ "/n_end", 1042, 1002, -1, -1, 0 ]
+r: [ "/n_end", 1043, 1, 1044, 1034, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 9 ],
+  [ "/b_free", 9 ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1033 ],
+  [ "/n_free", 1034 ] ]
+r: [ "/done", "/b_close", 9 ]
+r: [ "/done", "/b_free", 9 ]
+r: [ "/n_end", 1033, 1010, -1, -1, 0 ]
+r: [ "/n_end", 1034, 1, 1044, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 3 ],
+  [ "/b_free", 3 ] ]
+r: [ "/done", "/b_close", 3 ]
+r: [ "/done", "/b_free", 3 ]
+r: [ "/n_end", 1044, 1, -1, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 10 ],
+  [ "/b_free", 10 ],
+  [ "/sync", 38 ] ]
+r: [ "/done", "/b_close", 10 ]
+r: [ "/done", "/b_free", 10 ]
+r: [ "/synced", 38 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 0, 65536, 1 ],
+  [ "/b_write", 0, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme1821536722368694596.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 39 ] ]
+r: [ "/done", "/b_alloc", 0 ]
+r: [ "/done", "/b_write", 0 ]
+r: [ "/synced", 39 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1055, 0, 1, "boost", 1.0, "dur", 13.962268, "buf", 0.0 ] ]
+r: [ "/n_go", 1055, 1, -1, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 1, 65536, 1 ],
+  [ "/b_write", 1, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme4071999536730562509.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 40 ] ]
+r: [ "/done", "/b_alloc", 1 ]
+r: [ "/done", "/b_write", 1 ]
+r: [ "/synced", 40 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1056, 0, 1, "boost", 1.0, "dur", 5.9262357, "buf", 1.0 ] ]
+r: [ "/n_go", 1056, 1, -1, 1055, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 2, 65536, 1 ],
+  [ "/b_write", 2, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme8390555293054759945.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 41 ] ]
+r: [ "/done", "/b_alloc", 2 ]
+r: [ "/done", "/b_write", 2 ]
+r: [ "/synced", 41 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1057, 0, 1, "boost", 1.0, "dur", 7.214127, "buf", 2.0 ] ]
+r: [ "/n_go", 1057, 1, -1, 1056, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 3, 65536, 1 ],
+  [ "/b_write", 3, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme362507945882437199.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 42 ] ]
+r: [ "/done", "/b_alloc", 3 ]
+r: [ "/done", "/b_write", 3 ]
+r: [ "/synced", 42 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1058, 0, 1, "boost", 1.0, "dur", 1.3863266, "buf", 3.0 ] ]
+r: [ "/n_go", 1058, 1, -1, 1057, 0 ]
+r: [ "/n_end", 1058, 1, -1, 1057, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 3 ],
+  [ "/b_free", 3 ],
+  [ "/sync", 43 ] ]
+r: [ "/done", "/b_close", 3 ]
+r: [ "/done", "/b_free", 3 ]
+r: [ "/synced", 43 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 3, 65536, 1 ],
+  [ "/b_write", 3, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme5508651649022959440.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 44 ] ]
+r: [ "/done", "/b_alloc", 3 ]
+r: [ "/done", "/b_write", 3 ]
+r: [ "/synced", 44 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1059, 0, 1, "boost", 1.0, "dur", 45.02, "buf", 3.0 ] ]
+r: [ "/n_go", 1059, 1, -1, 1057, 0 ]
+r: [ "/n_end", 1056, 1, 1057, 1055, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 1 ],
+  [ "/b_free", 1 ],
+  [ "/sync", 45 ] ]
+r: [ "/done", "/b_close", 1 ]
+r: [ "/done", "/b_free", 1 ]
+r: [ "/synced", 45 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 1, 65536, 1 ],
+  [ "/b_write", 1, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme3534455414865437596.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 46 ] ]
+r: [ "/done", "/b_alloc", 1 ]
+r: [ "/done", "/b_write", 1 ]
+r: [ "/synced", 46 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1060, 0, 1, "boost", 1.0, "dur", 7.00873, "buf", 1.0 ] ]
+r: [ "/n_go", 1060, 1, -1, 1059, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 4, 65536, 1 ],
+  [ "/b_read", 4, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme3589040692292731630.aif", 0, 65536, 0, true ],
+  [ "/sync", 47 ] ]
+r: [ "/done", "/b_alloc", 4 ]
+r: [ "/done", "/b_read", 4 ]
+r: [ "/synced", 47 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1061, 0, 1030 ],
+  [ "/s_new", "audio-artifact_4", 1062, 0, 1, "buf", 4.0, "dur", 13.850703 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1062, "out", 24.0 ],
+  [ "/n_set", 1062, "out", 25.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1061, "$in_sig", 25, 1 ],
+  [ "/n_set", 1061, "$in_dur", 13.855329 ] ]
+r: [ "/n_go", 1061, 1030, -1, -1, 0 ]
+r: [ "/n_go", 1062, 1, -1, 1060, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 5, 65536, 1 ],
+  [ "/b_write", 5, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme2959600230449620834.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 48 ] ]
+r: [ "/done", "/b_alloc", 5 ]
+r: [ "/done", "/b_write", 5 ]
+r: [ "/synced", 48 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1063, 0, 1, "boost", 1.0, "dur", 5.9031973, "buf", 5.0 ] ]
+r: [ "/n_go", 1063, 1, -1, 1062, 0 ]
+r: [ "/n_end", 1057, 1, 1059, 1055, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 2 ],
+  [ "/b_free", 2 ],
+  [ "/sync", 49 ] ]
+r: [ "/done", "/b_close", 2 ]
+r: [ "/done", "/b_free", 2 ]
+r: [ "/synced", 49 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1061 ],
+  [ "/n_free", 1062 ] ]
+r: [ "/n_end", 1061, 1030, -1, -1, 0 ]
+r: [ "/n_end", 1062, 1, 1063, 1060, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 4 ],
+  [ "/b_free", 4 ] ]
+r: [ "/done", "/b_close", 4 ]
+r: [ "/done", "/b_free", 4 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 2, 65536, 1 ],
+  [ "/b_write", 2, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme3116015313016994671.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 50 ] ]
+r: [ "/done", "/b_alloc", 2 ]
+r: [ "/done", "/b_write", 2 ]
+r: [ "/synced", 50 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1064, 0, 1, "boost", 1.0, "dur", 6.4684353, "buf", 2.0 ] ]
+r: [ "/n_go", 1064, 1, -1, 1063, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 4, 65536, 1 ],
+  [ "/b_read", 4, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme5423418323249184859.aif", 0, 65536, 0, true ],
+  [ "/sync", 51 ] ]
+r: [ "/done", "/b_alloc", 4 ]
+r: [ "/done", "/b_read", 4 ]
+r: [ "/synced", 51 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1065, 0, 1015 ],
+  [ "/s_new", "audio-artifact_4", 1066, 0, 1, "buf", 4.0, "dur", 18.448254 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1066, "out", 24.0 ],
+  [ "/n_set", 1066, "out", 25.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1065, "$in_sig", 25, 1 ],
+  [ "/n_set", 1065, "$in_dur", 18.452312 ] ]
+r: [ "/n_go", 1065, 1015, -1, -1, 0 ]
+r: [ "/n_go", 1066, 1, -1, 1064, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 6, 65536, 1 ],
+  [ "/b_write", 6, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme7139936044416790724.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 52 ] ]
+r: [ "/done", "/b_alloc", 6 ]
+r: [ "/done", "/b_write", 6 ]
+r: [ "/synced", 52 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1067, 0, 1, "boost", 1.0, "dur", 4.922517, "buf", 6.0 ] ]
+r: [ "/n_go", 1067, 1, -1, 1066, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 7, 65536, 1 ],
+  [ "/b_write", 7, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme2679899701118371019.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 53 ] ]
+r: [ "/done", "/b_alloc", 7 ]
+r: [ "/done", "/b_write", 7 ]
+r: [ "/synced", 53 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1068, 0, 1, "boost", 1.0, "dur", 9.111338, "buf", 7.0 ] ]
+r: [ "/n_go", 1068, 1, -1, 1067, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 8, 65536, 1 ],
+  [ "/b_read", 8, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme1073757556413608088.aif", 0, 65536, 0, true ],
+  [ "/sync", 54 ] ]
+r: [ "/done", "/b_alloc", 8 ]
+r: [ "/done", "/b_read", 8 ]
+r: [ "/synced", 54 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1069, 0, 1025 ],
+  [ "/s_new", "audio-artifact_4", 1070, 0, 1, "buf", 8.0, "dur", 23.545034 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1070, "out", 24.0 ],
+  [ "/n_set", 1070, "out", 26.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1069, "$in_sig", 26, 1 ],
+  [ "/n_set", 1069, "$in_dur", 23.542562 ] ]
+r: [ "/n_go", 1069, 1025, -1, -1, 0 ]
+r: [ "/n_go", 1070, 1, -1, 1068, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 9, 65536, 1 ],
+  [ "/b_write", 9, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme757746600788120143.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 55 ] ]
+r: [ "/done", "/b_alloc", 9 ]
+r: [ "/done", "/b_write", 9 ]
+r: [ "/synced", 55 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1071, 0, 1, "boost", 1.0, "dur", 22.701542, "buf", 9.0 ] ]
+r: [ "/n_go", 1071, 1, -1, 1070, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1065 ],
+  [ "/n_free", 1066 ] ]
+r: [ "/n_end", 1065, 1015, -1, -1, 0 ]
+r: [ "/n_end", 1066, 1, 1067, 1064, 0 ]
+r: [ "/n_end", 1063, 1, 1064, 1060, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 10, 65536, 1 ],
+  [ "/b_write", 10, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme4286478113603697910.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 56 ] ]
+r: [ "/done", "/b_alloc", 10 ]
+r: [ "/done", "/b_write", 10 ]
+r: [ "/synced", 56 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1072, 0, 1, "boost", 1.0, "dur", 8.952177, "buf", 10.0 ] ]
+r: [ "/n_go", 1072, 1, -1, 1071, 0 ]
+r: [ "/n_end", 1060, 1, 1064, 1059, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 4 ],
+  [ "/b_free", 4 ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 5 ],
+  [ "/b_free", 5 ],
+  [ "/sync", 57 ] ]
+r: [ "/done", "/b_close", 4 ]
+r: [ "/done", "/b_free", 4 ]
+r: [ "/done", "/b_close", 5 ]
+r: [ "/done", "/b_free", 5 ]
+r: [ "/synced", 57 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 1 ],
+  [ "/b_free", 1 ],
+  [ "/sync", 58 ] ]
+r: [ "/done", "/b_close", 1 ]
+r: [ "/done", "/b_free", 1 ]
+r: [ "/synced", 58 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1055, 1, 1059, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 1, 65536, 1 ],
+  [ "/b_read", 1, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme46689260007362824.aif", 0, 65536, 0, true ],
+  [ "/sync", 59 ] ]
+r: [ "/done", "/b_alloc", 1 ]
+r: [ "/done", "/b_read", 1 ]
+r: [ "/synced", 59 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1073, 0, 1012 ],
+  [ "/s_new", "audio-artifact_4", 1074, 0, 1, "buf", 1.0, "dur", 21.443628 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1074, "out", 24.0 ],
+  [ "/n_set", 1074, "out", 25.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1073, "$in_sig", 25, 1 ],
+  [ "/n_set", 1073, "$in_dur", 21.441633 ] ]
+r: [ "/n_go", 1073, 1012, -1, -1, 0 ]
+r: [ "/n_go", 1074, 1, -1, 1072, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 4, 65536, 1 ],
+  [ "/b_write", 4, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme5079222825454709964.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 60 ] ]
+r: [ "/done", "/b_alloc", 4 ]
+r: [ "/done", "/b_write", 4 ]
+r: [ "/synced", 60 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1075, 0, 1, "boost", 1.0, "dur", 17.895737, "buf", 4.0 ] ]
+r: [ "/n_go", 1075, 1, -1, 1074, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 0 ],
+  [ "/b_free", 0 ],
+  [ "/sync", 61 ] ]
+r: [ "/done", "/b_close", 0 ]
+r: [ "/done", "/b_free", 0 ]
+r: [ "/synced", 61 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1069 ],
+  [ "/n_free", 1070 ] ]
+r: [ "/n_end", 1069, 1025, -1, -1, 0 ]
+r: [ "/n_end", 1070, 1, 1071, 1068, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 8 ],
+  [ "/b_free", 8 ] ]
+r: [ "/done", "/b_close", 8 ]
+r: [ "/done", "/b_free", 8 ]
+r: [ "/n_end", 1067, 1, 1068, 1064, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 6 ],
+  [ "/b_free", 6 ],
+  [ "/sync", 62 ] ]
+r: [ "/done", "/b_close", 6 ]
+r: [ "/done", "/b_free", 6 ]
+r: [ "/synced", 62 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 5, 65536, 1 ],
+  [ "/b_read", 5, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme2357584924766947909.aif", 0, 65536, 0, true ],
+  [ "/sync", 63 ] ]
+r: [ "/done", "/b_alloc", 5 ]
+r: [ "/done", "/b_read", 5 ]
+r: [ "/synced", 63 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1076, 0, 1022 ],
+  [ "/s_new", "audio-artifact_4", 1077, 0, 1, "buf", 5.0, "dur", 10.19356 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1077, "out", 24.0 ],
+  [ "/n_set", 1077, "out", 26.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1076, "$in_sig", 26, 1 ],
+  [ "/n_set", 1076, "$in_dur", 10.188821 ] ]
+r: [ "/n_go", 1076, 1022, -1, -1, 0 ]
+r: [ "/n_go", 1077, 1, -1, 1075, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 0, 65536, 1 ],
+  [ "/b_write", 0, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme6847204225169454068.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 64 ] ]
+r: [ "/done", "/b_alloc", 0 ]
+r: [ "/done", "/b_write", 0 ]
+r: [ "/synced", 64 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1078, 0, 1, "boost", 1.0, "dur", 4.7943993, "buf", 0.0 ] ]
+r: [ "/n_go", 1078, 1, -1, 1077, 0 ]
+r: [ "/n_end", 1064, 1, 1068, 1059, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 2 ],
+  [ "/b_free", 2 ],
+  [ "/sync", 65 ] ]
+r: [ "/done", "/b_close", 2 ]
+r: [ "/done", "/b_free", 2 ]
+r: [ "/synced", 65 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1076 ],
+  [ "/n_free", 1077 ] ]
+r: [ "/n_end", 1076, 1022, -1, -1, 0 ]
+r: [ "/n_end", 1077, 1, 1078, 1075, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 5 ],
+  [ "/b_free", 5 ] ]
+r: [ "/done", "/b_close", 5 ]
+r: [ "/done", "/b_free", 5 ]
+r: [ "/n_end", 1068, 1, 1071, 1059, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 7 ],
+  [ "/b_free", 7 ],
+  [ "/sync", 66 ] ]
+r: [ "/done", "/b_close", 7 ]
+r: [ "/done", "/b_free", 7 ]
+r: [ "/synced", 66 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1072, 1, 1074, 1071, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 10 ],
+  [ "/b_free", 10 ],
+  [ "/sync", 67 ] ]
+r: [ "/done", "/b_close", 10 ]
+r: [ "/done", "/b_free", 10 ]
+r: [ "/synced", 67 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 2, 65536, 1 ],
+  [ "/b_read", 2, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme1348891710973987736.aif", 0, 65536, 0, true ],
+  [ "/sync", 68 ] ]
+r: [ "/done", "/b_alloc", 2 ]
+r: [ "/done", "/b_read", 2 ]
+r: [ "/synced", 68 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1079, 0, 1027 ],
+  [ "/s_new", "audio-artifact_4", 1080, 0, 1, "buf", 2.0, "dur", 9.044172 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1080, "out", 24.0 ],
+  [ "/n_set", 1080, "out", 26.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1079, "$in_sig", 26, 1 ],
+  [ "/n_set", 1079, "$in_dur", 9.04195 ] ]
+r: [ "/n_go", 1079, 1027, -1, -1, 0 ]
+r: [ "/n_go", 1080, 1, -1, 1078, 0 ]
+r: [ "/n_end", 1078, 1, 1080, 1075, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 5, 65536, 1 ],
+  [ "/b_write", 5, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme4360936060319426967.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 69 ] ]
+r: [ "/done", "/b_alloc", 5 ]
+r: [ "/done", "/b_write", 5 ]
+r: [ "/synced", 69 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1081, 0, 1, "boost", 1.0, "dur", 6.4430614, "buf", 5.0 ] ]
+r: [ "/n_go", 1081, 1, -1, 1080, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 0 ],
+  [ "/b_free", 0 ],
+  [ "/sync", 70 ] ]
+r: [ "/done", "/b_close", 0 ]
+r: [ "/done", "/b_free", 0 ]
+r: [ "/synced", 70 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 6, 65536, 1 ],
+  [ "/b_write", 6, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme5081423356649211236.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 71 ] ]
+r: [ "/done", "/b_alloc", 6 ]
+r: [ "/done", "/b_write", 6 ]
+r: [ "/synced", 71 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1082, 0, 1, "boost", 1.0, "dur", 5.36873, "buf", 6.0 ] ]
+r: [ "/n_go", 1082, 1, -1, 1081, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1079 ],
+  [ "/n_free", 1080 ] ]
+r: [ "/n_end", 1079, 1027, -1, -1, 0 ]
+r: [ "/n_end", 1080, 1, 1081, 1075, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 2 ],
+  [ "/b_free", 2 ] ]
+r: [ "/done", "/b_close", 2 ]
+r: [ "/done", "/b_free", 2 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 0, 65536, 1 ],
+  [ "/b_read", 0, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme6643365763937174556.aif", 0, 65536, 0, true ],
+  [ "/sync", 72 ] ]
+r: [ "/done", "/b_alloc", 0 ]
+r: [ "/done", "/b_read", 0 ]
+r: [ "/synced", 72 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1083, 0, 1030 ],
+  [ "/s_new", "audio-artifact_4", 1084, 0, 1, "buf", 0.0, "dur", 22.500135 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1084, "out", 24.0 ],
+  [ "/n_set", 1084, "out", 26.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1083, "$in_sig", 26, 1 ],
+  [ "/n_set", 1083, "$in_dur", 22.501656 ] ]
+r: [ "/n_go", 1083, 1030, -1, -1, 0 ]
+r: [ "/n_go", 1084, 1, -1, 1082, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 2, 65536, 1 ],
+  [ "/b_write", 2, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme5359756725219743684.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 73 ] ]
+r: [ "/done", "/b_alloc", 2 ]
+r: [ "/done", "/b_write", 2 ]
+r: [ "/synced", 73 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1085, 0, 1, "boost", 1.0, "dur", 7.9288664, "buf", 2.0 ] ]
+r: [ "/n_go", 1085, 1, -1, 1084, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 7, 65536, 1 ],
+  [ "/b_write", 7, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme8148775184603569705.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 74 ] ]
+r: [ "/done", "/b_alloc", 7 ]
+r: [ "/done", "/b_write", 7 ]
+r: [ "/synced", 74 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1086, 0, 1, "boost", 1.0, "dur", 8.468277, "buf", 7.0 ] ]
+r: [ "/n_go", 1086, 1, -1, 1085, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 8, 65536, 1 ],
+  [ "/b_read", 8, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme7329654544937616989.aif", 0, 65536, 0, true ],
+  [ "/sync", 75 ] ]
+r: [ "/done", "/b_alloc", 8 ]
+r: [ "/done", "/b_read", 8 ]
+r: [ "/synced", 75 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1087, 0, 1015 ],
+  [ "/s_new", "audio-artifact_4", 1088, 0, 1, "buf", 8.0, "dur", 15.940499 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1088, "out", 24.0 ],
+  [ "/n_set", 1088, "out", 27.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1087, "$in_sig", 27, 1 ],
+  [ "/n_set", 1087, "$in_dur", 15.938503 ] ]
+r: [ "/n_go", 1087, 1015, -1, -1, 0 ]
+r: [ "/n_go", 1088, 1, -1, 1086, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 10, 65536, 1 ],
+  [ "/b_write", 10, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme1786802797711570786.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 76 ] ]
+r: [ "/done", "/b_alloc", 10 ]
+r: [ "/done", "/b_write", 10 ]
+r: [ "/synced", 76 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1089, 0, 1, "boost", 1.0, "dur", 6.6128573, "buf", 10.0 ] ]
+r: [ "/n_go", 1089, 1, -1, 1088, 0 ]
+r: [ "/n_end", 1082, 1, 1084, 1081, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 6 ],
+  [ "/b_free", 6 ],
+  [ "/sync", 77 ] ]
+r: [ "/n_end", 1081, 1, 1084, 1075, 0 ]
+r: [ "/done", "/b_close", 6 ]
+r: [ "/done", "/b_free", 6 ]
+r: [ "/synced", 77 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 5 ],
+  [ "/b_free", 5 ],
+  [ "/sync", 78 ] ]
+r: [ "/done", "/b_close", 5 ]
+r: [ "/done", "/b_free", 5 ]
+r: [ "/synced", 78 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 5, 65536, 1 ],
+  [ "/b_read", 5, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme1798587384161360821.aif", 0, 65536, 0, true ],
+  [ "/sync", 79 ] ]
+r: [ "/done", "/b_alloc", 5 ]
+r: [ "/done", "/b_read", 5 ]
+r: [ "/synced", 79 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1090, 0, 1018 ],
+  [ "/s_new", "audio-artifact_4", 1091, 0, 1, "buf", 5.0, "dur", 16.056599 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1091, "out", 24.0 ],
+  [ "/n_set", 1091, "out", 28.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1090, "$in_sig", 28, 1 ],
+  [ "/n_set", 1090, "$in_dur", 16.055262 ] ]
+r: [ "/n_go", 1090, 1018, -1, -1, 0 ]
+r: [ "/n_go", 1091, 1, -1, 1089, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 6, 65536, 1 ],
+  [ "/b_write", 6, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme3563297137217335414.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 80 ] ]
+r: [ "/done", "/b_alloc", 6 ]
+r: [ "/done", "/b_write", 6 ]
+r: [ "/synced", 80 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1092, 0, 1, "boost", 1.0, "dur", 12.763356, "buf", 6.0 ] ]
+r: [ "/n_go", 1092, 1, -1, 1091, 0 ]
+r: [ "/n_end", 1075, 1, 1084, 1074, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 4 ],
+  [ "/b_free", 4 ],
+  [ "/sync", 81 ] ]
+r: [ "/done", "/b_close", 4 ]
+r: [ "/done", "/b_free", 4 ]
+r: [ "/synced", 81 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1073 ],
+  [ "/n_free", 1074 ] ]
+r: [ "/n_end", 1073, 1012, -1, -1, 0 ]
+r: [ "/n_end", 1074, 1, 1084, 1071, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 1 ],
+  [ "/b_free", 1 ] ]
+r: [ "/done", "/b_close", 1 ]
+r: [ "/done", "/b_free", 1 ]
+r: [ "/n_end", 1085, 1, 1086, 1084, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 2 ],
+  [ "/b_free", 2 ],
+  [ "/sync", 82 ] ]
+r: [ "/done", "/b_close", 2 ]
+r: [ "/done", "/b_free", 2 ]
+r: [ "/synced", 82 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 4, 65536, 1 ],
+  [ "/b_read", 4, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme393516781346124111.aif", 0, 65536, 0, true ],
+  [ "/sync", 83 ] ]
+r: [ "/done", "/b_alloc", 4 ]
+r: [ "/done", "/b_read", 4 ]
+r: [ "/synced", 83 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1093, 0, 1002 ],
+  [ "/s_new", "audio-artifact_4", 1094, 0, 1, "buf", 4.0, "dur", 14.338322 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1094, "out", 24.0 ],
+  [ "/n_set", 1094, "out", 25.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1093, "$in_sig", 25, 1 ],
+  [ "/n_set", 1093, "$in_dur", 14.334149 ] ]
+r: [ "/n_go", 1093, 1002, -1, -1, 0 ]
+r: [ "/n_go", 1094, 1, -1, 1092, 0 ]
+r: [ "/n_end", 1086, 1, 1088, 1084, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 1, 65536, 1 ],
+  [ "/b_write", 1, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme304075859875708135.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 84 ] ]
+r: [ "/done", "/b_alloc", 1 ]
+r: [ "/done", "/b_write", 1 ]
+r: [ "/synced", 84 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1095, 0, 1, "boost", 1.0, "dur", 8.893062, "buf", 1.0 ] ]
+r: [ "/n_go", 1095, 1, -1, 1094, 0 ]
+r: [ "/n_end", 1089, 1, 1091, 1088, 0 ]
+r: [ "/n_end", 1071, 1, 1084, 1059, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 7 ],
+  [ "/b_free", 7 ],
+  [ "/sync", 85 ] ]
+r: [ "/done", "/b_close", 7 ]
+r: [ "/done", "/b_free", 7 ]
+r: [ "/synced", 85 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 10 ],
+  [ "/b_free", 10 ],
+  [ "/sync", 86 ] ]
+r: [ "/done", "/b_close", 10 ]
+r: [ "/done", "/b_free", 10 ]
+r: [ "/synced", 86 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 9 ],
+  [ "/b_free", 9 ],
+  [ "/sync", 87 ] ]
+r: [ "/done", "/b_close", 9 ]
+r: [ "/done", "/b_free", 9 ]
+r: [ "/synced", 87 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1093 ],
+  [ "/n_free", 1094 ] ]
+r: [ "/n_end", 1093, 1002, -1, -1, 0 ]
+r: [ "/n_end", 1094, 1, 1095, 1092, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 4 ],
+  [ "/b_free", 4 ] ]
+r: [ "/done", "/b_close", 4 ]
+r: [ "/done", "/b_free", 4 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 2, 65536, 1 ],
+  [ "/b_read", 2, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme1995458204354479417.aif", 0, 65536, 0, true ],
+  [ "/sync", 88 ] ]
+r: [ "/done", "/b_alloc", 2 ]
+r: [ "/done", "/b_read", 2 ]
+r: [ "/synced", 88 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1096, 0, 1022 ],
+  [ "/s_new", "audio-artifact_4", 1097, 0, 1, "buf", 2.0, "dur", 19.655691 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1097, "out", 24.0 ],
+  [ "/n_set", 1097, "out", 25.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1096, "$in_sig", 25, 1 ],
+  [ "/n_set", 1096, "$in_dur", 19.661428 ] ]
+r: [ "/n_go", 1096, 1022, -1, -1, 0 ]
+r: [ "/n_go", 1097, 1, -1, 1095, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 7, 65536, 1 ],
+  [ "/b_write", 7, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme399906766020025592.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 89 ] ]
+r: [ "/done", "/b_alloc", 7 ]
+r: [ "/done", "/b_write", 7 ]
+r: [ "/synced", 89 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1098, 0, 1, "boost", 1.0, "dur", 17.9205, "buf", 7.0 ] ]
+r: [ "/n_go", 1098, 1, -1, 1097, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 4, 65536, 1 ],
+  [ "/b_write", 4, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme2235416282191186810.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 90 ] ]
+r: [ "/done", "/b_alloc", 4 ]
+r: [ "/done", "/b_write", 4 ]
+r: [ "/synced", 90 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1099, 0, 1, "boost", 1.0, "dur", 9.343583, "buf", 4.0 ] ]
+r: [ "/n_go", 1099, 1, -1, 1098, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1090 ],
+  [ "/n_free", 1091 ] ]
+r: [ "/n_end", 1090, 1018, -1, -1, 0 ]
+r: [ "/n_end", 1091, 1, 1092, 1088, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1087 ],
+  [ "/n_free", 1088 ] ]
+r: [ "/n_end", 1087, 1015, -1, -1, 0 ]
+r: [ "/n_end", 1088, 1, 1092, 1084, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 5 ],
+  [ "/b_free", 5 ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1083 ],
+  [ "/n_free", 1084 ] ]
+r: [ "/n_end", 1083, 1030, -1, -1, 0 ]
+r: [ "/n_end", 1084, 1, 1092, 1059, 0 ]
+r: [ "/done", "/b_close", 5 ]
+r: [ "/done", "/b_free", 5 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 8 ],
+  [ "/b_free", 8 ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 0 ],
+  [ "/b_free", 0 ] ]
+r: [ "/done", "/b_close", 8 ]
+r: [ "/done", "/b_free", 8 ]
+r: [ "/done", "/b_close", 0 ]
+r: [ "/done", "/b_free", 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 5, 65536, 1 ],
+  [ "/b_write", 5, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme5316814354009835978.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 91 ] ]
+r: [ "/done", "/b_alloc", 5 ]
+r: [ "/done", "/b_write", 5 ]
+r: [ "/synced", 91 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1100, 0, 1, "boost", 1.0, "dur", 6.399796, "buf", 5.0 ] ]
+r: [ "/n_go", 1100, 1, -1, 1099, 0 ]
+r: [ "/n_end", 1092, 1, 1095, 1059, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 6 ],
+  [ "/b_free", 6 ],
+  [ "/sync", 92 ] ]
+r: [ "/done", "/b_close", 6 ]
+r: [ "/done", "/b_free", 6 ]
+r: [ "/synced", 92 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1095, 1, 1097, 1059, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 1 ],
+  [ "/b_free", 1 ],
+  [ "/sync", 93 ] ]
+r: [ "/done", "/b_close", 1 ]
+r: [ "/done", "/b_free", 1 ]
+r: [ "/synced", 93 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 6, 65536, 1 ],
+  [ "/b_write", 6, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme7122298253158638161.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 94 ] ]
+r: [ "/done", "/b_alloc", 6 ]
+r: [ "/done", "/b_write", 6 ]
+r: [ "/synced", 94 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1101, 0, 1, "boost", 1.0, "dur", 8.012675, "buf", 6.0 ] ]
+r: [ "/n_go", 1101, 1, -1, 1100, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 0, 65536, 1 ],
+  [ "/b_read", 0, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme8601724934860849554.aif", 0, 65536, 0, true ],
+  [ "/sync", 95 ] ]
+r: [ "/done", "/b_alloc", 0 ]
+r: [ "/done", "/b_read", 0 ]
+r: [ "/synced", 95 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1102, 0, 1007 ],
+  [ "/s_new", "audio-artifact_4", 1103, 0, 1, "buf", 0.0, "dur", 15.069751 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1103, "out", 24.0 ],
+  [ "/n_set", 1103, "out", 26.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1102, "$in_sig", 26, 1 ],
+  [ "/n_set", 1102, "$in_dur", 15.067279 ] ]
+r: [ "/n_go", 1102, 1007, -1, -1, 0 ]
+r: [ "/n_go", 1103, 1, -1, 1101, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 1, 65536, 1 ],
+  [ "/b_write", 1, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme265508366109605585.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 96 ] ]
+r: [ "/done", "/b_alloc", 1 ]
+r: [ "/done", "/b_write", 1 ]
+r: [ "/synced", 96 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1104, 0, 1, "boost", 1.0, "dur", 5.5814285, "buf", 1.0 ] ]
+r: [ "/n_go", 1104, 1, -1, 1103, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1096 ],
+  [ "/n_free", 1097 ] ]
+r: [ "/n_end", 1096, 1022, -1, -1, 0 ]
+r: [ "/n_end", 1097, 1, 1098, 1059, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 2 ],
+  [ "/b_free", 2 ] ]
+r: [ "/done", "/b_close", 2 ]
+r: [ "/done", "/b_free", 2 ]
+r: [ "/n_end", 1099, 1, 1100, 1098, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 4 ],
+  [ "/b_free", 4 ],
+  [ "/sync", 97 ] ]
+r: [ "/done", "/b_close", 4 ]
+r: [ "/done", "/b_free", 4 ]
+r: [ "/synced", 97 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 2, 65536, 1 ],
+  [ "/b_read", 2, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme5271903455062349027.aif", 0, 65536, 0, true ],
+  [ "/sync", 98 ] ]
+r: [ "/done", "/b_alloc", 2 ]
+r: [ "/done", "/b_read", 2 ]
+r: [ "/synced", 98 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1105, 0, 1030 ],
+  [ "/s_new", "audio-artifact_4", 1106, 0, 1, "buf", 2.0, "dur", 13.641724 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1106, "out", 24.0 ],
+  [ "/n_set", 1106, "out", 25.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1105, "$in_sig", 25, 1 ],
+  [ "/n_set", 1105, "$in_dur", 13.645419 ] ]
+r: [ "/n_go", 1105, 1030, -1, -1, 0 ]
+r: [ "/n_go", 1106, 1, -1, 1104, 0 ]
+r: [ "/n_end", 1059, 1, 1098, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 4, 65536, 1 ],
+  [ "/b_write", 4, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme6554257842380505862.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 99 ] ]
+r: [ "/done", "/b_alloc", 4 ]
+r: [ "/done", "/b_write", 4 ]
+r: [ "/synced", 99 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1107, 0, 1, "boost", 1.0, "dur", 3.003424, "buf", 4.0 ] ]
+r: [ "/n_go", 1107, 1, -1, 1106, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1102 ],
+  [ "/n_free", 1103 ] ]
+r: [ "/n_end", 1102, 1007, -1, -1, 0 ]
+r: [ "/n_end", 1103, 1, 1104, 1101, 0 ]
+r: [ "/n_end", 1100, 1, 1101, 1098, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 3 ],
+  [ "/b_free", 3 ],
+  [ "/sync", 100 ] ]
+r: [ "/done", "/b_close", 3 ]
+r: [ "/done", "/b_free", 3 ]
+r: [ "/synced", 100 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 0 ],
+  [ "/b_free", 0 ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 5 ],
+  [ "/b_free", 5 ],
+  [ "/sync", 101 ] ]
+r: [ "/done", "/b_close", 0 ]
+r: [ "/done", "/b_free", 0 ]
+r: [ "/done", "/b_close", 5 ]
+r: [ "/done", "/b_free", 5 ]
+r: [ "/synced", 101 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1105 ],
+  [ "/n_free", 1106 ] ]
+r: [ "/n_end", 1105, 1030, -1, -1, 0 ]
+r: [ "/n_end", 1106, 1, 1107, 1104, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 2 ],
+  [ "/b_free", 2 ] ]
+r: [ "/done", "/b_close", 2 ]
+r: [ "/done", "/b_free", 2 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 0, 65536, 1 ],
+  [ "/b_write", 0, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme7123062027637821600.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 102 ] ]
+r: [ "/done", "/b_alloc", 0 ]
+r: [ "/done", "/b_write", 0 ]
+r: [ "/synced", 102 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1108, 0, 1, "boost", 1.0, "dur", 12.343697, "buf", 0.0 ] ]
+r: [ "/n_go", 1108, 1, -1, 1107, 0 ]
+r: [ "/n_end", 1104, 1, 1107, 1101, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 1 ],
+  [ "/b_free", 1 ],
+  [ "/sync", 103 ] ]
+r: [ "/done", "/b_close", 1 ]
+r: [ "/done", "/b_free", 1 ]
+r: [ "/synced", 103 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1107, 1, 1108, 1101, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 4 ],
+  [ "/b_free", 4 ],
+  [ "/sync", 104 ] ]
+r: [ "/done", "/b_close", 4 ]
+r: [ "/done", "/b_free", 4 ]
+r: [ "/synced", 104 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 1, 65536, 1 ],
+  [ "/b_read", 1, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme9215380236519087746.aif", 0, 65536, 0, true ],
+  [ "/sync", 105 ] ]
+r: [ "/done", "/b_alloc", 1 ]
+r: [ "/done", "/b_read", 1 ]
+r: [ "/synced", 105 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1109, 0, 1015 ],
+  [ "/s_new", "audio-artifact_4", 1110, 0, 1, "buf", 1.0, "dur", 22.465305 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1110, "out", 24.0 ],
+  [ "/n_set", 1110, "out", 25.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1109, "$in_sig", 25, 1 ],
+  [ "/n_set", 1109, "$in_dur", 22.460815 ] ]
+r: [ "/n_go", 1109, 1015, -1, -1, 0 ]
+r: [ "/n_go", 1110, 1, -1, 1108, 0 ]
+r: [ "/n_end", 1101, 1, 1108, 1098, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 2, 65536, 1 ],
+  [ "/b_write", 2, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme5832545437302850767.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 106 ] ]
+r: [ "/done", "/b_alloc", 2 ]
+r: [ "/done", "/b_write", 2 ]
+r: [ "/synced", 106 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1109 ],
+  [ "/n_free", 1110 ],
+  [ "/s_new", "proc_2", 1111, 0, 1, "boost", 1.0, "dur", 19.367868, "buf", 2.0 ] ]
+r: [ "/n_end", 1109, 1015, -1, -1, 0 ]
+r: [ "/n_end", 1110, 1, -1, 1108, 0 ]
+r: [ "/n_go", 1111, 1, -1, 1108, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 6 ],
+  [ "/b_free", 6 ],
+  [ "/sync", 107 ] ]
+r: [ "/done", "/b_close", 6 ]
+r: [ "/done", "/b_free", 6 ]
+r: [ "/synced", 107 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 1 ],
+  [ "/b_free", 1 ] ]
+r: [ "/done", "/b_close", 1 ]
+r: [ "/done", "/b_free", 1 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 1, 65536, 1 ],
+  [ "/b_write", 1, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme8272666782679330480.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 108 ] ]
+r: [ "/done", "/b_alloc", 1 ]
+r: [ "/done", "/b_write", 1 ]
+r: [ "/synced", 108 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1112, 0, 1, "boost", 1.0, "dur", 3.8780725, "buf", 1.0 ] ]
+r: [ "/n_go", 1112, 1, -1, 1111, 0 ]
+r: [ "/n_end", 1098, 1, 1108, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 7 ],
+  [ "/b_free", 7 ],
+  [ "/sync", 109 ] ]
+r: [ "/done", "/b_close", 7 ]
+r: [ "/done", "/b_free", 7 ]
+r: [ "/synced", 109 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 3, 65536, 1 ],
+  [ "/b_write", 3, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme5718923183405255378.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 110 ] ]
+r: [ "/done", "/b_alloc", 3 ]
+r: [ "/done", "/b_write", 3 ]
+r: [ "/synced", 110 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1113, 0, 1, "boost", 1.0, "dur", 11.14347, "buf", 3.0 ] ]
+r: [ "/n_go", 1113, 1, -1, 1112, 0 ]
+r: [ "/n_end", 1112, 1, 1113, 1111, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 1 ],
+  [ "/b_free", 1 ],
+  [ "/sync", 111 ] ]
+r: [ "/done", "/b_close", 1 ]
+r: [ "/done", "/b_free", 1 ]
+r: [ "/synced", 111 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 1, 65536, 1 ],
+  [ "/b_write", 1, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme4693377756813861058.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 112 ] ]
+r: [ "/done", "/b_alloc", 1 ]
+r: [ "/done", "/b_write", 1 ]
+r: [ "/synced", 112 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1114, 0, 1, "boost", 1.0, "dur", 3.9427664, "buf", 1.0 ] ]
+r: [ "/n_go", 1114, 1, -1, 1113, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 4, 65536, 1 ],
+  [ "/b_read", 4, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme4770056404646039794.aif", 0, 65536, 0, true ],
+  [ "/sync", 113 ] ]
+r: [ "/done", "/b_alloc", 4 ]
+r: [ "/done", "/b_read", 4 ]
+r: [ "/synced", 113 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1115, 0, 1025 ],
+  [ "/s_new", "audio-artifact_4", 1116, 0, 1, "buf", 4.0, "dur", 17.124716 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1116, "out", 24.0 ],
+  [ "/n_set", 1116, "out", 25.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1115, "$in_sig", 25, 1 ],
+  [ "/n_set", 1115, "$in_dur", 17.129887 ] ]
+r: [ "/n_go", 1115, 1025, -1, -1, 0 ]
+r: [ "/n_go", 1116, 1, -1, 1114, 0 ]
+r: [ "/n_end", 1108, 1, 1111, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 0 ],
+  [ "/b_free", 0 ],
+  [ "/sync", 114 ] ]
+r: [ "/done", "/b_close", 0 ]
+r: [ "/done", "/b_free", 0 ]
+r: [ "/synced", 114 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 0, 65536, 1 ],
+  [ "/b_read", 0, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme5449999415596476323.aif", 0, 65536, 0, true ],
+  [ "/sync", 115 ] ]
+r: [ "/done", "/b_alloc", 0 ]
+r: [ "/done", "/b_read", 0 ]
+r: [ "/synced", 115 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1117, 0, 1015 ],
+  [ "/s_new", "audio-artifact_4", 1118, 0, 1, "buf", 0.0, "dur", 9.322812 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1118, "out", 24.0 ],
+  [ "/n_set", 1118, "out", 26.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1117, "$in_sig", 26, 1 ],
+  [ "/n_set", 1117, "$in_dur", 9.318775 ] ]
+r: [ "/n_go", 1117, 1015, -1, -1, 0 ]
+r: [ "/n_go", 1118, 1, -1, 1116, 0 ]
+r: [ "/n_end", 1114, 1, 1116, 1113, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 1 ],
+  [ "/b_free", 1 ],
+  [ "/sync", 116 ] ]
+r: [ "/done", "/b_close", 1 ]
+r: [ "/done", "/b_free", 1 ]
+r: [ "/synced", 116 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 1, 65536, 1 ],
+  [ "/b_write", 1, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme3885958082834572277.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 117 ] ]
+r: [ "/done", "/b_alloc", 1 ]
+r: [ "/done", "/b_write", 1 ]
+r: [ "/synced", 117 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1119, 0, 1, "boost", 1.0, "dur", 25.789274, "buf", 1.0 ] ]
+r: [ "/n_go", 1119, 1, -1, 1118, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 5, 65536, 1 ],
+  [ "/b_write", 5, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme5656006275175308932.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 118 ] ]
+r: [ "/done", "/b_alloc", 5 ]
+r: [ "/done", "/b_write", 5 ]
+r: [ "/synced", 118 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1120, 0, 1, "boost", 1.0, "dur", 13.53898, "buf", 5.0 ] ]
+r: [ "/n_go", 1120, 1, -1, 1119, 0 ]
+r: [ "/n_end", 1113, 1, 1116, 1111, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 3 ],
+  [ "/b_free", 3 ],
+  [ "/sync", 119 ] ]
+r: [ "/done", "/b_close", 3 ]
+r: [ "/done", "/b_free", 3 ]
+r: [ "/synced", 119 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 3, 65536, 1 ],
+  [ "/b_read", 3, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme7311109310087440804.aif", 0, 65536, 0, true ],
+  [ "/sync", 120 ] ]
+r: [ "/done", "/b_alloc", 3 ]
+r: [ "/done", "/b_read", 3 ]
+r: [ "/synced", 120 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1121, 0, 1027 ],
+  [ "/s_new", "audio-artifact_4", 1122, 0, 1, "buf", 3.0, "dur", 14.315102 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1122, "out", 24.0 ],
+  [ "/n_set", 1122, "out", 27.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1121, "$in_sig", 27, 1 ],
+  [ "/n_set", 1121, "$in_dur", 14.314081 ] ]
+r: [ "/n_go", 1121, 1027, -1, -1, 0 ]
+r: [ "/n_go", 1122, 1, -1, 1120, 0 ]
+WARNING: could not find view for TimedElem(<1171 @ 61,121>, Span(993693,1712173), Proc<1127 @ 61,121>)
+s: [ #bundle, <now>,
+  [ "/b_alloc", 6, 65536, 1 ],
+  [ "/b_write", 6, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme7097664474408884139.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 121 ] ]
+r: [ "/done", "/b_alloc", 6 ]
+r: [ "/done", "/b_write", 6 ]
+r: [ "/synced", 121 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1123, 0, 1, "boost", 1.0, "dur", 7.066009, "buf", 6.0 ] ]
+r: [ "/n_go", 1123, 1, -1, 1122, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1117 ],
+  [ "/n_free", 1118 ] ]
+r: [ "/n_end", 1117, 1015, -1, -1, 0 ]
+r: [ "/n_end", 1118, 1, 1119, 1116, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 0 ],
+  [ "/b_free", 0 ] ]
+r: [ "/done", "/b_close", 0 ]
+r: [ "/done", "/b_free", 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 0, 65536, 1 ],
+  [ "/b_write", 0, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme5523766205689881507.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 122 ] ]
+r: [ "/done", "/b_alloc", 0 ]
+r: [ "/done", "/b_write", 0 ]
+r: [ "/synced", 122 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1124, 0, 1, "boost", 1.0, "dur", 5.6876645, "buf", 0.0 ] ]
+r: [ "/n_go", 1124, 1, -1, 1123, 0 ]
+r: [ "/n_end", 1111, 1, 1116, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 7, 65536, 1 ],
+  [ "/b_write", 7, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme4779992391801143962.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 123 ] ]
+r: [ "/done", "/b_alloc", 7 ]
+r: [ "/done", "/b_write", 7 ]
+r: [ "/synced", 123 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1125, 0, 1, "boost", 1.0, "dur", 24.86424, "buf", 7.0 ] ]
+r: [ "/n_go", 1125, 1, -1, 1124, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 2 ],
+  [ "/b_free", 2 ],
+  [ "/sync", 124 ] ]
+r: [ "/done", "/b_close", 2 ]
+r: [ "/done", "/b_free", 2 ]
+r: [ "/synced", 124 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+WARNING: could not find view for TimedElem(<1968 @ 95,128>, Span(2620992,3077626), Proc<1924 @ 95,128>)
+s: [ #bundle, <now>,
+  [ "/b_alloc", 2, 65536, 1 ],
+  [ "/b_write", 2, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme6367399363718960584.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 125 ] ]
+r: [ "/done", "/b_alloc", 2 ]
+r: [ "/done", "/b_write", 2 ]
+r: [ "/synced", 125 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1126, 0, 1, "boost", 1.0, "dur", 9.590068, "buf", 2.0 ] ]
+r: [ "/n_go", 1126, 1, -1, 1125, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 8, 65536, 1 ],
+  [ "/b_write", 8, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme515679190518472376.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 126 ] ]
+r: [ "/done", "/b_alloc", 8 ]
+r: [ "/done", "/b_write", 8 ]
+r: [ "/synced", 126 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1127, 0, 1, "boost", 1.0, "dur", 13.679252, "buf", 8.0 ] ]
+r: [ "/n_go", 1127, 1, -1, 1126, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 9, 65536, 1 ],
+  [ "/b_write", 9, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme2660887863366314391.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 127 ] ]
+r: [ "/done", "/b_alloc", 9 ]
+r: [ "/done", "/b_write", 9 ]
+r: [ "/synced", 127 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1128, 0, 1, "boost", 1.0, "dur", 9.707709, "buf", 9.0 ] ]
+r: [ "/n_go", 1128, 1, -1, 1127, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 10, 65536, 1 ],
+  [ "/b_read", 10, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme1073757556413608088.aif", 0, 65536, 0, true ],
+  [ "/sync", 128 ] ]
+r: [ "/done", "/b_alloc", 10 ]
+r: [ "/done", "/b_read", 10 ]
+r: [ "/synced", 128 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1129, 0, 1025 ],
+  [ "/s_new", "audio-artifact_4", 1130, 0, 1, "buf", 10.0, "dur", 23.545034 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1130, "out", 26.0 ],
+  [ "/n_set", 1130, "out", 24.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1129, "$in_sig", 24, 1 ],
+  [ "/n_set", 1129, "$in_dur", 23.542562 ] ]
+r: [ "/n_go", 1129, 1025, -1, 1115, 0 ]
+r: [ "/n_go", 1130, 1, -1, 1128, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 11, 65536, 1 ],
+  [ "/b_read", 11, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme2828773446424917687.aif", 0, 65536, 0, true ],
+  [ "/sync", 129 ] ]
+r: [ "/done", "/b_alloc", 11 ]
+r: [ "/done", "/b_read", 11 ]
+r: [ "/synced", 129 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1131, 0, 1020 ],
+  [ "/s_new", "audio-artifact_4", 1132, 0, 1, "buf", 11.0, "dur", 16.451338 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1132, "out", 26.0 ],
+  [ "/n_set", 1132, "out", 28.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1131, "$in_sig", 28, 1 ],
+  [ "/n_set", 1131, "$in_dur", 16.446735 ] ]
+r: [ "/n_go", 1131, 1020, -1, -1, 0 ]
+r: [ "/n_go", 1132, 1, -1, 1130, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 12, 65536, 1 ],
+  [ "/b_read", 12, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme6914979751276302321.aif", 0, 65536, 0, true ],
+  [ "/sync", 130 ] ]
+r: [ "/done", "/b_alloc", 12 ]
+r: [ "/done", "/b_read", 12 ]
+r: [ "/synced", 130 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1133, 0, 1007 ],
+  [ "/s_new", "audio-artifact_4", 1134, 0, 1, "buf", 12.0, "dur", 16.439728 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1134, "out", 26.0 ],
+  [ "/n_set", 1134, "out", 29.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1133, "$in_sig", 29, 1 ],
+  [ "/n_set", 1133, "$in_dur", 16.44297 ] ]
+r: [ "/n_go", 1133, 1007, -1, -1, 0 ]
+r: [ "/n_go", 1134, 1, -1, 1132, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1115 ],
+  [ "/n_free", 1116 ] ]
+r: [ "/n_end", 1115, 1025, 1129, -1, 0 ]
+r: [ "/n_end", 1116, 1, 1119, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 13, 65536, 1 ],
+  [ "/b_write", 13, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme5315744253622753525.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 131 ] ]
+r: [ "/done", "/b_alloc", 13 ]
+r: [ "/done", "/b_write", 13 ]
+r: [ "/synced", 131 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1135, 0, 1, "boost", 1.0, "dur", 10.957823, "buf", 13.0 ] ]
+r: [ "/n_go", 1135, 1, -1, 1134, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 4 ],
+  [ "/b_free", 4 ] ]
+r: [ "/done", "/b_close", 4 ]
+r: [ "/done", "/b_free", 4 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 4, 65536, 1 ],
+  [ "/b_write", 4, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme7741002476139801598.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 132 ] ]
+r: [ "/done", "/b_alloc", 4 ]
+r: [ "/done", "/b_write", 4 ]
+r: [ "/synced", 132 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1136, 0, 1, "boost", 1.0, "dur", 5.8019953, "buf", 4.0 ] ]
+r: [ "/n_go", 1136, 1, -1, 1135, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 14, 65536, 1 ],
+  [ "/b_read", 14, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme5484404773004676659.aif", 0, 65536, 0, true ],
+  [ "/sync", 133 ] ]
+r: [ "/n_end", 1124, 1, 1125, 1123, 0 ]
+r: [ "/done", "/b_alloc", 14 ]
+r: [ "/done", "/b_read", 14 ]
+r: [ "/synced", 133 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1137, 0, 1012 ],
+  [ "/s_new", "audio-artifact_4", 1138, 0, 1, "buf", 14.0, "dur", 23.684353 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1138, "out", 25.0 ],
+  [ "/n_set", 1138, "out", 26.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1137, "$in_sig", 26, 1 ],
+  [ "/n_set", 1137, "$in_dur", 23.689955 ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 0 ],
+  [ "/b_free", 0 ],
+  [ "/sync", 134 ] ]
+r: [ "/n_go", 1137, 1012, -1, -1, 0 ]
+r: [ "/n_go", 1138, 1, -1, 1136, 0 ]
+r: [ "/done", "/b_close", 0 ]
+r: [ "/done", "/b_free", 0 ]
+r: [ "/synced", 134 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1123, 1, 1125, 1122, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 6 ],
+  [ "/b_free", 6 ],
+  [ "/sync", 135 ] ]
+r: [ "/done", "/b_close", 6 ]
+r: [ "/done", "/b_free", 6 ]
+r: [ "/synced", 135 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1120, 1, 1122, 1119, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 5 ],
+  [ "/b_free", 5 ],
+  [ "/sync", 136 ] ]
+r: [ "/done", "/b_close", 5 ]
+r: [ "/done", "/b_free", 5 ]
+r: [ "/synced", 136 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 0, 65536, 1 ],
+  [ "/b_write", 0, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme2575830775508138734.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 137 ] ]
+r: [ "/done", "/b_alloc", 0 ]
+r: [ "/done", "/b_write", 0 ]
+r: [ "/synced", 137 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1139, 0, 1, "boost", 1.0, "dur", 6.2085714, "buf", 0.0 ] ]
+r: [ "/n_go", 1139, 1, -1, 1138, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 5, 65536, 1 ],
+  [ "/b_read", 5, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme8947451955898666064.aif", 0, 65536, 0, true ],
+  [ "/sync", 138 ] ]
+r: [ "/done", "/b_alloc", 5 ]
+r: [ "/done", "/b_read", 5 ]
+r: [ "/synced", 138 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1140, 0, 1010 ],
+  [ "/s_new", "audio-artifact_4", 1141, 0, 1, "buf", 5.0, "dur", 20.25941 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1141, "out", 25.0 ],
+  [ "/n_set", 1141, "out", 30.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1140, "$in_sig", 30, 1 ],
+  [ "/n_set", 1140, "$in_dur", 20.26365 ] ]
+r: [ "/n_go", 1140, 1010, -1, -1, 0 ]
+r: [ "/n_go", 1141, 1, -1, 1139, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 6, 65536, 1 ],
+  [ "/b_read", 6, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme7577431327059534943.aif", 0, 65536, 0, true ],
+  [ "/sync", 139 ] ]
+r: [ "/done", "/b_alloc", 6 ]
+r: [ "/done", "/b_read", 6 ]
+r: [ "/synced", 139 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1142, 0, 1030 ],
+  [ "/s_new", "audio-artifact_4", 1143, 0, 1, "buf", 6.0, "dur", 20.72381 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1143, "out", 25.0 ],
+  [ "/n_set", 1143, "out", 31.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1142, "$in_sig", 31, 1 ],
+  [ "/n_set", 1142, "$in_dur", 20.723606 ] ]
+r: [ "/n_go", 1142, 1030, -1, -1, 0 ]
+r: [ "/n_go", 1143, 1, -1, 1141, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 15, 65536, 1 ],
+  [ "/b_write", 15, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme6480542512617265989.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 140 ] ]
+r: [ "/done", "/b_alloc", 15 ]
+r: [ "/done", "/b_write", 15 ]
+r: [ "/synced", 140 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1144, 0, 1, "boost", 1.0, "dur", 2.3496826, "buf", 15.0 ] ]
+r: [ "/n_go", 1144, 1, -1, 1143, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 16, 65536, 1 ],
+  [ "/b_read", 16, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme5423418323249184859.aif", 0, 65536, 0, true ],
+  [ "/sync", 141 ] ]
+r: [ "/done", "/b_alloc", 16 ]
+r: [ "/done", "/b_read", 16 ]
+r: [ "/synced", 141 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1145, 0, 1015 ],
+  [ "/s_new", "audio-artifact_4", 1146, 0, 1, "buf", 16.0, "dur", 18.448254 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1146, "out", 25.0 ],
+  [ "/n_set", 1146, "out", 32.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1145, "$in_sig", 32, 1 ],
+  [ "/n_set", 1145, "$in_dur", 18.452312 ] ]
+r: [ "/n_go", 1145, 1015, -1, -1, 0 ]
+r: [ "/n_go", 1146, 1, -1, 1144, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 17, 65536, 1 ],
+  [ "/b_read", 17, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme9168936315301811782.aif", 0, 65536, 0, true ],
+  [ "/sync", 142 ] ]
+r: [ "/done", "/b_alloc", 17 ]
+r: [ "/done", "/b_read", 17 ]
+r: [ "/synced", 142 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1147, 0, 1022 ],
+  [ "/s_new", "audio-artifact_4", 1148, 0, 1, "buf", 17.0, "dur", 8.405623 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1148, "out", 25.0 ],
+  [ "/n_set", 1148, "out", 33.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1147, "$in_sig", 33, 1 ],
+  [ "/n_set", 1147, "$in_dur", 8.404241 ] ]
+r: [ "/n_go", 1147, 1022, -1, -1, 0 ]
+r: [ "/n_go", 1148, 1, -1, 1146, 0 ]
+r: [ "/n_end", 1136, 1, 1138, 1135, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 4 ],
+  [ "/b_free", 4 ],
+  [ "/sync", 143 ] ]
+r: [ "/done", "/b_close", 4 ]
+r: [ "/done", "/b_free", 4 ]
+r: [ "/synced", 143 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1126, 1, 1127, 1125, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 2 ],
+  [ "/b_free", 2 ],
+  [ "/sync", 144 ] ]
+r: [ "/done", "/b_close", 2 ]
+r: [ "/done", "/b_free", 2 ]
+r: [ "/synced", 144 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1128, 1, 1130, 1127, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 9 ],
+  [ "/b_free", 9 ],
+  [ "/sync", 145 ] ]
+r: [ "/done", "/b_close", 9 ]
+r: [ "/done", "/b_free", 9 ]
+r: [ "/synced", 145 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1122, 1, 1125, 1119, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 3 ],
+  [ "/b_free", 3 ],
+  [ "/sync", 146 ] ]
+r: [ "/done", "/b_close", 3 ]
+r: [ "/done", "/b_free", 3 ]
+r: [ "/synced", 146 ]
+s: [ #bundle, <now>,
+  [ "/n_mapan", 1121, "$in_sig", 25, 1 ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1121 ],
+  [ "/n_free", 1122 ] ]
+FAILURE IN SERVER /n_free Node 1122 not found
+r: [ "/n_end", 1121, 1027, -1, -1, 0 ]
+r: [ "/fail", "/n_free", "Node 1122 not found" ]
+r: [ "/n_end", 1144, 1, 1146, 1143, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 15 ],
+  [ "/b_free", 15 ],
+  [ "/sync", 147 ] ]
+r: [ "/done", "/b_close", 15 ]
+r: [ "/done", "/b_free", 15 ]
+r: [ "/synced", 147 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 9, 65536, 1 ],
+  [ "/b_read", 9, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme3366059110796566155.aif", 0, 65536, 0, true ],
+  [ "/sync", 148 ] ]
+r: [ "/done", "/b_alloc", 9 ]
+r: [ "/done", "/b_read", 9 ]
+r: [ "/synced", 148 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1149, 0, 1018 ],
+  [ "/s_new", "audio-artifact_4", 1150, 0, 1, "buf", 9.0, "dur", 17.589115 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1150, "out", 27.0 ],
+  [ "/n_set", 1150, "out", 25.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1149, "$in_sig", 25, 1 ],
+  [ "/n_set", 1149, "$in_dur", 17.592087 ] ]
+r: [ "/n_go", 1149, 1018, -1, -1, 0 ]
+r: [ "/n_go", 1150, 1, -1, 1148, 0 ]
+r: [ "/n_end", 1139, 1, 1141, 1138, 0 ]
+r: [ "/n_end", 1127, 1, 1130, 1125, 0 ]
+r: [ "/n_end", 1135, 1, 1138, 1134, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 0 ],
+  [ "/b_free", 0 ],
+  [ "/sync", 149 ] ]
+r: [ "/done", "/b_close", 0 ]
+r: [ "/done", "/b_free", 0 ]
+r: [ "/synced", 149 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 8 ],
+  [ "/b_free", 8 ],
+  [ "/sync", 150 ] ]
+r: [ "/done", "/b_close", 8 ]
+r: [ "/done", "/b_free", 8 ]
+r: [ "/synced", 150 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 13 ],
+  [ "/b_free", 13 ],
+  [ "/sync", 151 ] ]
+r: [ "/done", "/b_close", 13 ]
+r: [ "/done", "/b_free", 13 ]
+r: [ "/synced", 151 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 15, 65536, 1 ],
+  [ "/b_read", 15, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme4664975273031752715.aif", 0, 65536, 0, true ],
+  [ "/sync", 152 ] ]
+r: [ "/done", "/b_alloc", 15 ]
+r: [ "/done", "/b_read", 15 ]
+r: [ "/synced", 152 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1151, 0, 1022 ],
+  [ "/s_new", "audio-artifact_4", 1152, 0, 1, "buf", 15.0, "dur", 19.388662 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1152, "out", 27.0 ],
+  [ "/n_set", 1152, "out", 34.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1151, "$in_sig", 34, 1 ],
+  [ "/n_set", 1151, "$in_dur", 19.390612 ] ]
+r: [ "/n_go", 1151, 1022, -1, 1147, 0 ]
+r: [ "/n_go", 1152, 1, -1, 1150, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 0, 65536, 1 ],
+  [ "/b_write", 0, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme4010535055150080593.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 153 ] ]
+r: [ "/done", "/b_alloc", 0 ]
+r: [ "/done", "/b_write", 0 ]
+r: [ "/synced", 153 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1153, 0, 1, "boost", 1.0, "dur", 10.161496, "buf", 0.0 ] ]
+r: [ "/n_go", 1153, 1, -1, 1152, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 8, 65536, 1 ],
+  [ "/b_read", 8, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme3947674052003067381.aif", 0, 65536, 0, true ],
+  [ "/sync", 154 ] ]
+r: [ "/done", "/b_alloc", 8 ]
+r: [ "/done", "/b_read", 8 ]
+r: [ "/synced", 154 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1154, 0, 1002 ],
+  [ "/s_new", "audio-artifact_4", 1155, 0, 1, "buf", 8.0, "dur", 9.137053 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1155, "out", 27.0 ],
+  [ "/n_set", 1155, "out", 35.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1154, "$in_sig", 35, 1 ],
+  [ "/n_set", 1154, "$in_dur", 10.743991 ] ]
+r: [ "/n_go", 1154, 1002, -1, -1, 0 ]
+r: [ "/n_go", 1155, 1, -1, 1153, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1147 ],
+  [ "/n_free", 1148 ] ]
+r: [ "/n_end", 1147, 1022, 1151, -1, 0 ]
+r: [ "/n_end", 1148, 1, 1150, 1146, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 17 ],
+  [ "/b_free", 17 ] ]
+r: [ "/done", "/b_close", 17 ]
+r: [ "/done", "/b_free", 17 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 13, 65536, 1 ],
+  [ "/b_read", 13, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme4868856211852684555.aif", 0, 65536, 0, true ],
+  [ "/sync", 155 ] ]
+r: [ "/done", "/b_alloc", 13 ]
+r: [ "/done", "/b_read", 13 ]
+r: [ "/synced", 155 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1140 ],
+  [ "/n_free", 1141 ],
+  [ "/s_new", "Artifact(graphem_3", 1156, 0, 1010 ],
+  [ "/s_new", "audio-artifact_4", 1157, 0, 1, "buf", 13.0, "dur", 16.137869 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1157, "out", 33.0 ],
+  [ "/n_set", 1157, "out", 27.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1156, "$in_sig", 27, 1 ],
+  [ "/n_set", 1156, "$in_dur", 16.143333 ] ]
+r: [ "/n_end", 1140, 1010, -1, -1, 0 ]
+r: [ "/n_end", 1141, 1, 1143, 1138, 0 ]
+r: [ "/n_go", 1156, 1010, -1, -1, 0 ]
+r: [ "/n_go", 1157, 1, -1, 1155, 0 ]
+r: [ "/n_end", 1119, 1, 1125, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 2, 65536, 1 ],
+  [ "/b_write", 2, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme4268996348929317496.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 156 ] ]
+r: [ "/done", "/b_alloc", 2 ]
+r: [ "/done", "/b_write", 2 ]
+r: [ "/synced", 156 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1158, 0, 1, "boost", 1.0, "dur", 13.2579365, "buf", 2.0 ] ]
+r: [ "/n_go", 1158, 1, -1, 1157, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 5 ],
+  [ "/b_free", 5 ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 1 ],
+  [ "/b_free", 1 ],
+  [ "/sync", 157 ] ]
+r: [ "/done", "/b_close", 5 ]
+r: [ "/done", "/b_free", 5 ]
+r: [ "/done", "/b_close", 1 ]
+r: [ "/done", "/b_free", 1 ]
+r: [ "/synced", 157 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1132, 1, 1134, 1130, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 1, 65536, 1 ],
+  [ "/b_write", 1, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme8440973921998609891.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 158 ] ]
+r: [ "/done", "/b_alloc", 1 ]
+r: [ "/done", "/b_write", 1 ]
+r: [ "/synced", 158 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1159, 0, 1, "boost", 1.0, "dur", 5.1224265, "buf", 1.0 ] ]
+r: [ "/n_go", 1159, 1, -1, 1158, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1131 ],
+  [ "/n_free", 1132 ] ]
+FAILURE IN SERVER /n_free Node 1132 not found
+r: [ "/n_end", 1131, 1020, -1, -1, 0 ]
+r: [ "/fail", "/n_free", "Node 1132 not found" ]
+r: [ "/n_end", 1134, 1, 1138, 1130, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 11 ],
+  [ "/b_free", 11 ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1133 ],
+  [ "/n_free", 1134 ] ]
+FAILURE IN SERVER /n_free Node 1134 not found
+r: [ "/n_end", 1133, 1007, -1, -1, 0 ]
+r: [ "/done", "/b_close", 11 ]
+r: [ "/done", "/b_free", 11 ]
+r: [ "/fail", "/n_free", "Node 1134 not found" ]
+s: [ #bundle, <now>,
+  [ "/b_close", 12 ],
+  [ "/b_free", 12 ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 11, 65536, 1 ],
+  [ "/b_read", 11, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme1898904753744415062.aif", 0, 65536, 0, true ],
+  [ "/sync", 159 ] ]
+r: [ "/done", "/b_close", 12 ]
+r: [ "/done", "/b_free", 12 ]
+r: [ "/done", "/b_alloc", 11 ]
+r: [ "/done", "/b_read", 11 ]
+r: [ "/synced", 159 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1160, 0, 1010 ],
+  [ "/s_new", "audio-artifact_4", 1161, 0, 1, "buf", 11.0, "dur", 16.288797 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1161, "out", 33.0 ],
+  [ "/n_set", 1161, "out", 28.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1160, "$in_sig", 28, 1 ],
+  [ "/n_set", 1160, "$in_dur", 16.292063 ] ]
+r: [ "/n_go", 1160, 1010, -1, 1156, 0 ]
+r: [ "/n_go", 1161, 1, -1, 1159, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 12, 65536, 1 ],
+  [ "/b_read", 12, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme6336107017287187930.aif", 0, 65536, 0, true ],
+  [ "/sync", 160 ] ]
+r: [ "/done", "/b_alloc", 12 ]
+r: [ "/done", "/b_read", 12 ]
+r: [ "/synced", 160 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1162, 0, 1020 ],
+  [ "/s_new", "audio-artifact_4", 1163, 0, 1, "buf", 12.0, "dur", 10.936599 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1163, "out", 33.0 ],
+  [ "/n_set", 1163, "out", 29.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1162, "$in_sig", 29, 1 ],
+  [ "/n_set", 1162, "$in_dur", 10.933809 ] ]
+r: [ "/n_go", 1162, 1020, -1, -1, 0 ]
+r: [ "/n_go", 1163, 1, -1, 1161, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 3, 65536, 1 ],
+  [ "/b_read", 3, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme9141694899962785905.aif", 0, 65536, 0, true ],
+  [ "/sync", 161 ] ]
+r: [ "/done", "/b_alloc", 3 ]
+r: [ "/done", "/b_read", 3 ]
+r: [ "/synced", 161 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1164, 0, 1027 ],
+  [ "/s_new", "audio-artifact_4", 1165, 0, 1, "buf", 3.0, "dur", 10.04263 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1165, "out", 30.0 ],
+  [ "/n_set", 1165, "out", 33.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1164, "$in_sig", 33, 1 ],
+  [ "/n_set", 1164, "$in_dur", 10.0461 ] ]
+r: [ "/n_go", 1164, 1027, -1, -1, 0 ]
+r: [ "/n_go", 1165, 1, -1, 1163, 0 ]
+r: [ "/n_end", 1125, 1, 1130, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 7 ],
+  [ "/b_free", 7 ],
+  [ "/sync", 162 ] ]
+r: [ "/n_end", 1159, 1, 1161, 1158, 0 ]
+r: [ "/done", "/b_close", 7 ]
+r: [ "/done", "/b_free", 7 ]
+r: [ "/synced", 162 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1156 ],
+  [ "/n_free", 1157 ] ]
+r: [ "/n_end", 1156, 1010, 1160, -1, 0 ]
+r: [ "/n_end", 1157, 1, 1158, 1155, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 1 ],
+  [ "/b_free", 1 ],
+  [ "/sync", 163 ] ]
+r: [ "/done", "/b_close", 1 ]
+r: [ "/done", "/b_free", 1 ]
+r: [ "/synced", 163 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 13 ],
+  [ "/b_free", 13 ] ]
+r: [ "/done", "/b_close", 13 ]
+r: [ "/done", "/b_free", 13 ]
+r: [ "/n_end", 1155, 1, 1158, 1153, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1129 ],
+  [ "/n_free", 1130 ] ]
+r: [ "/n_end", 1129, 1025, -1, -1, 0 ]
+r: [ "/n_end", 1130, 1, 1138, 1002, 0 ]
+r: [ "/n_end", 1153, 1, 1158, 1152, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 8 ],
+  [ "/b_free", 8 ],
+  [ "/sync", 164 ] ]
+r: [ "/done", "/b_close", 8 ]
+r: [ "/done", "/b_free", 8 ]
+r: [ "/synced", 164 ]
+s: [ #bundle, <now>,
+  [ "/n_mapan", 1154, "$in_sig", 30, 1 ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 10 ],
+  [ "/b_free", 10 ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 0 ],
+  [ "/b_free", 0 ],
+  [ "/sync", 165 ] ]
+r: [ "/done", "/b_close", 10 ]
+r: [ "/done", "/b_free", 10 ]
+r: [ "/done", "/b_close", 0 ]
+r: [ "/done", "/b_free", 0 ]
+r: [ "/synced", 165 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 13, 65536, 1 ],
+  [ "/b_read", 13, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme7787374282011806595.aif", 0, 65536, 0, true ],
+  [ "/sync", 166 ] ]
+r: [ "/done", "/b_alloc", 13 ]
+r: [ "/done", "/b_read", 13 ]
+r: [ "/synced", 166 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1149 ],
+  [ "/n_free", 1150 ],
+  [ "/s_new", "Artifact(graphem_3", 1166, 0, 1018 ],
+  [ "/s_new", "audio-artifact_4", 1167, 0, 1, "buf", 13.0, "dur", 20.65415 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1167, "out", 24.0 ],
+  [ "/n_set", 1167, "out", 27.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1166, "$in_sig", 27, 1 ],
+  [ "/n_set", 1166, "$in_dur", 20.6561 ] ]
+r: [ "/n_end", 1149, 1018, -1, -1, 0 ]
+r: [ "/n_end", 1150, 1, 1152, 1146, 0 ]
+r: [ "/n_go", 1166, 1018, -1, -1, 0 ]
+r: [ "/n_go", 1167, 1, -1, 1165, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 7, 65536, 1 ],
+  [ "/b_write", 7, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme6660406455803016890.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 167 ] ]
+r: [ "/done", "/b_alloc", 7 ]
+r: [ "/done", "/b_write", 7 ]
+r: [ "/synced", 167 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1168, 0, 1, "boost", 1.0, "dur", 8.132676, "buf", 7.0 ] ]
+r: [ "/n_go", 1168, 1, -1, 1167, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1154 ],
+  [ "/n_free", 1155 ] ]
+FAILURE IN SERVER /n_free Node 1155 not found
+r: [ "/n_end", 1154, 1002, -1, -1, 0 ]
+r: [ "/fail", "/n_free", "Node 1155 not found" ]
+r: [ "/n_end", 1146, 1, 1152, 1143, 0 ]
+r: [ "/n_end", 1138, 1, 1143, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 9 ],
+  [ "/b_free", 9 ] ]
+r: [ "/done", "/b_close", 9 ]
+r: [ "/done", "/b_free", 9 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1145 ],
+  [ "/n_free", 1146 ] ]
+r: [ "/n_end", 1145, 1015, -1, -1, 0 ]
+r: [ "/fail", "/n_free", "Node 1146 not found" ]
+FAILURE IN SERVER /n_free Node 1146 not found
+s: [ #bundle, <now>,
+  [ "/b_close", 16 ],
+  [ "/b_free", 16 ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1137 ],
+  [ "/n_free", 1138 ] ]
+FAILURE IN SERVER /n_free Node 1138 not foundr: 
+[ "/n_end", 1137, 1012, -1, -1, 0 ]
+r: [ "/done", "/b_close", 16 ]
+r: [ "/done", "/b_free", 16 ]
+r: [ "/fail", "/n_free", "Node 1138 not found" ]
+s: [ #bundle, <now>,
+  [ "/b_close", 14 ],
+  [ "/b_free", 14 ] ]
+r: [ "/done", "/b_close", 14 ]
+r: [ "/done", "/b_free", 14 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1151 ],
+  [ "/n_free", 1152 ] ]
+r: [ "/n_end", 1151, 1022, -1, -1, 0 ]
+r: [ "/n_end", 1152, 1, 1158, 1143, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 15 ],
+  [ "/b_free", 15 ] ]
+r: [ "/done", "/b_close", 15 ]
+r: [ "/done", "/b_free", 15 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 14, 65536, 1 ],
+  [ "/b_read", 14, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme3589040692292731630.aif", 0, 65536, 0, true ],
+  [ "/sync", 168 ] ]
+r: [ "/done", "/b_alloc", 14 ]
+r: [ "/done", "/b_read", 14 ]
+r: [ "/synced", 168 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1169, 0, 1030 ],
+  [ "/s_new", "audio-artifact_4", 1170, 0, 1, "buf", 14.0, "dur", 13.850703 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1170, "out", 32.0 ],
+  [ "/n_set", 1170, "out", 30.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1169, "$in_sig", 30, 1 ],
+  [ "/n_set", 1169, "$in_dur", 13.855329 ] ]
+r: [ "/n_go", 1169, 1030, -1, 1142, 0 ]
+r: [ "/n_go", 1170, 1, -1, 1168, 0 ]
+r: [ "/n_end", 1143, 1, 1158, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 6 ],
+  [ "/b_free", 6 ],
+  [ "/sync", 169 ] ]
+r: [ "/done", "/b_close", 6 ]
+r: [ "/done", "/b_free", 6 ]
+r: [ "/synced", 169 ]
+s: [ #bundle, <now>,
+  [ "/n_mapan", 1142, "$in_sig", 32, 1 ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 6, 65536, 1 ],
+  [ "/b_read", 6, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme2461425645501953536.aif", 0, 65536, 0, true ],
+  [ "/sync", 170 ] ]
+r: [ "/done", "/b_alloc", 6 ]
+r: [ "/done", "/b_read", 6 ]
+r: [ "/synced", 170 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1171, 0, 1018 ],
+  [ "/s_new", "audio-artifact_4", 1172, 0, 1, "buf", 6.0, "dur", 8.022494 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1172, "out", 31.0 ],
+  [ "/n_set", 1172, "out", 24.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1171, "$in_sig", 24, 1 ],
+  [ "/n_set", 1171, "$in_dur", 8.023991 ] ]
+r: [ "/n_go", 1171, 1018, -1, 1166, 0 ]
+r: [ "/n_go", 1172, 1, -1, 1170, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1142 ],
+  [ "/n_free", 1143 ] ]
+FAILURE IN SERVER /n_free Node 1143 not found
+r: [ "/n_end", 1142, 1030, 1169, -1, 0 ]
+r: [ "/fail", "/n_free", "Node 1143 not found" ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1162 ],
+  [ "/n_free", 1163 ] ]
+r: [ "/n_end", 1162, 1020, -1, -1, 0 ]
+r: [ "/n_end", 1163, 1, 1165, 1161, 0 ]
+r: [ "/n_end", 1158, 1, 1161, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 8, 65536, 1 ],
+  [ "/b_write", 8, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme7360524922300975124.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 171 ] ]
+r: [ "/done", "/b_alloc", 8 ]
+r: [ "/n_end", 1165, 1, 1167, 1161, 0 ]
+r: [ "/done", "/b_write", 8 ]
+r: [ "/synced", 171 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1173, 0, 1, "boost", 1.0, "dur", 5.8869843, "buf", 8.0 ] ]
+r: [ "/n_go", 1173, 1, -1, 1172, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1164 ],
+  [ "/n_free", 1165 ] ]
+FAILURE IN SERVER /n_free Node 1165 not found
+r: [ "/n_end", 1164, 1027, -1, -1, 0 ]
+r: [ "/fail", "/n_free", "Node 1165 not found" ]
+s: [ #bundle, <now>,
+  [ "/b_close", 12 ],
+  [ "/b_free", 12 ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 2 ],
+  [ "/b_free", 2 ],
+  [ "/sync", 172 ] ]
+r: [ "/done", "/b_close", 12 ]
+r: [ "/done", "/b_free", 12 ]
+r: [ "/done", "/b_close", 2 ]
+r: [ "/done", "/b_free", 2 ]
+r: [ "/synced", 172 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 3 ],
+  [ "/b_free", 3 ] ]
+r: [ "/done", "/b_close", 3 ]
+r: [ "/done", "/b_free", 3 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 12, 65536, 1 ],
+  [ "/b_write", 12, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme2739263373434305622.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 173 ] ]
+r: [ "/done", "/b_alloc", 12 ]
+r: [ "/done", "/b_write", 12 ]
+r: [ "/synced", 173 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1174, 0, 1, "boost", 1.0, "dur", 14.006213, "buf", 12.0 ] ]
+r: [ "/n_go", 1174, 1, -1, 1173, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 9, 65536, 1 ],
+  [ "/b_write", 9, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme4346662777439484707.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 174 ] ]
+r: [ "/done", "/b_alloc", 9 ]
+r: [ "/done", "/b_write", 9 ]
+r: [ "/synced", 174 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1175, 0, 1, "boost", 1.0, "dur", 14.589615, "buf", 9.0 ] ]
+r: [ "/n_go", 1175, 1, -1, 1174, 0 ]
+r: [ "/n_end", 1168, 1, 1170, 1167, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1166 ],
+  [ "/n_free", 1167 ] ]
+r: [ "/n_end", 1166, 1018, 1171, -1, 0 ]
+r: [ "/n_end", 1167, 1, 1170, 1161, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 10, 65536, 1 ],
+  [ "/b_read", 10, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme2625514103120202021.aif", 0, 65536, 0, true ],
+  [ "/sync", 175 ] ]
+r: [ "/done", "/b_alloc", 10 ]
+r: [ "/done", "/b_read", 10 ]
+r: [ "/synced", 175 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1176, 0, 1025 ],
+  [ "/s_new", "audio-artifact_4", 1177, 0, 1, "buf", 10.0, "dur", 12.921905 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1177, "out", 29.0 ],
+  [ "/n_set", 1177, "out", 25.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1176, "$in_sig", 25, 1 ],
+  [ "/n_set", 1176, "$in_dur", 12.916644 ] ]
+r: [ "/n_go", 1176, 1025, -1, -1, 0 ]
+r: [ "/n_go", 1177, 1, -1, 1175, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 7 ],
+  [ "/b_free", 7 ],
+  [ "/sync", 176 ] ]
+r: [ "/done", "/b_close", 7 ]
+r: [ "/done", "/b_free", 7 ]
+r: [ "/synced", 176 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 13 ],
+  [ "/b_free", 13 ] ]
+r: [ "/done", "/b_close", 13 ]
+r: [ "/done", "/b_free", 13 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 7, 65536, 1 ],
+  [ "/b_write", 7, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme5762895214029443910.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 177 ] ]
+r: [ "/done", "/b_alloc", 7 ]
+r: [ "/done", "/b_write", 7 ]
+r: [ "/synced", 177 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1178, 0, 1, "boost", 1.0, "dur", 10.038685, "buf", 7.0 ] ]
+r: [ "/n_go", 1178, 1, -1, 1177, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 13, 65536, 1 ],
+  [ "/b_read", 13, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme279176591835683398.aif", 0, 65536, 0, true ],
+  [ "/sync", 178 ] ]
+r: [ "/done", "/b_alloc", 13 ]
+r: [ "/done", "/b_read", 13 ]
+r: [ "/synced", 178 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1179, 0, 1015 ],
+  [ "/s_new", "audio-artifact_4", 1180, 0, 1, "buf", 13.0, "dur", 23.649525 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1180, "out", 29.0 ],
+  [ "/n_set", 1180, "out", 26.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1179, "$in_sig", 26, 1 ],
+  [ "/n_set", 1179, "$in_dur", 23.648209 ] ]
+r: [ "/n_go", 1179, 1015, -1, -1, 0 ]
+r: [ "/n_go", 1180, 1, -1, 1178, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 0, 65536, 1 ],
+  [ "/b_write", 0, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme3360924479653021105.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 179 ] ]
+r: [ "/done", "/b_alloc", 0 ]
+r: [ "/done", "/b_write", 0 ]
+r: [ "/synced", 179 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1181, 0, 1, "boost", 1.0, "dur", 14.1591835, "buf", 0.0 ] ]
+r: [ "/n_go", 1181, 1, -1, 1180, 0 ]
+r: [ "/n_end", 1172, 1, 1173, 1170, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1160 ],
+  [ "/n_free", 1161 ] ]
+r: [ "/n_end", 1160, 1010, -1, -1, 0 ]
+r: [ "/n_end", 1161, 1, 1170, 1002, 0 ]
+r: [ "/n_end", 1173, 1, 1174, 1170, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 1, 65536, 1 ],
+  [ "/b_read", 1, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme2278093318394913989.aif", 0, 65536, 0, true ],
+  [ "/sync", 180 ] ]
+r: [ "/done", "/b_alloc", 1 ]
+r: [ "/done", "/b_read", 1 ]
+r: [ "/synced", 180 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1182, 0, 1002 ],
+  [ "/s_new", "audio-artifact_4", 1183, 0, 1, "buf", 1.0, "dur", 10.472199 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1183, "out", 27.0 ],
+  [ "/n_set", 1183, "out", 28.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1182, "$in_sig", 28, 1 ],
+  [ "/n_set", 1182, "$in_dur", 12.320113 ] ]
+r: [ "/n_go", 1182, 1002, -1, -1, 0 ]
+r: [ "/n_go", 1183, 1, -1, 1181, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 2, 65536, 1 ],
+  [ "/b_read", 2, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme7329654544937616989.aif", 0, 65536, 0, true ],
+  [ "/sync", 181 ] ]
+r: [ "/done", "/b_alloc", 2 ]
+r: [ "/done", "/b_read", 2 ]
+r: [ "/synced", 181 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1184, 0, 1015 ],
+  [ "/s_new", "audio-artifact_4", 1185, 0, 1, "buf", 2.0, "dur", 15.940499 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1185, "out", 27.0 ],
+  [ "/n_set", 1185, "out", 29.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1184, "$in_sig", 29, 1 ],
+  [ "/n_set", 1184, "$in_dur", 15.938503 ] ]
+r: [ "/n_go", 1184, 1015, -1, 1179, 0 ]
+r: [ "/n_go", 1185, 1, -1, 1183, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1171 ],
+  [ "/n_free", 1172 ] ]
+r: FAILURE IN SERVER /n_free Node 1172 not found
+[ "/n_end", 1171, 1018, -1, -1, 0 ]
+r: [ "/fail", "/n_free", "Node 1172 not found" ]
+s: [ #bundle, <now>,
+  [ "/b_close", 6 ],
+  [ "/b_free", 6 ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 11 ],
+  [ "/b_free", 11 ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 8 ],
+  [ "/b_free", 8 ],
+  [ "/sync", 182 ] ]
+r: [ "/done", "/b_close", 6 ]
+r: [ "/done", "/b_free", 6 ]
+r: [ "/done", "/b_close", 11 ]
+r: [ "/done", "/b_free", 11 ]
+r: [ "/done", "/b_close", 8 ]
+r: [ "/done", "/b_free", 8 ]
+r: [ "/synced", 182 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 11, 65536, 1 ],
+  [ "/b_write", 11, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme5332565192202508869.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 183 ] ]
+r: [ "/done", "/b_alloc", 11 ]
+r: [ "/done", "/b_write", 11 ]
+r: [ "/synced", 183 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1186, 0, 1, "boost", 1.0, "dur", 17.632608, "buf", 11.0 ] ]
+r: [ "/n_go", 1186, 1, -1, 1185, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 8, 65536, 1 ],
+  [ "/b_write", 8, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme8248273012121947858.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 184 ] ]
+r: [ "/done", "/b_alloc", 8 ]
+r: [ "/done", "/b_write", 8 ]
+r: [ "/synced", 184 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1187, 0, 1, "boost", 1.0, "dur", 6.4122677, "buf", 8.0 ] ]
+r: [ "/n_go", 1187, 1, -1, 1186, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1179 ],
+  [ "/n_free", 1180 ] ]
+r: [ "/n_end", 1179, 1015, 1184, -1, 0 ]
+r: [ "/n_end", 1180, 1, 1181, 1178, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 13 ],
+  [ "/b_free", 13 ] ]
+r: [ "/done", "/b_close", 13 ]
+r: [ "/done", "/b_free", 13 ]
+r: [ "/n_end", 1170, 1, 1174, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 14 ],
+  [ "/b_free", 14 ],
+  [ "/sync", 185 ] ]
+r: [ "/done", "/b_close", 14 ]
+r: [ "/done", "/b_free", 14 ]
+r: [ "/synced", 185 ]
+s: [ #bundle, <now>,
+  [ "/n_mapan", 1169, "$in_sig", 24, 1 ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1169 ],
+  [ "/n_free", 1170 ] ]
+r: FAILURE IN SERVER /n_free Node 1170 not found
+[ "/n_end", 1169, 1030, -1, -1, 0 ]
+r: [ "/fail", "/n_free", "Node 1170 not found" ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 13, 65536, 1 ],
+  [ "/b_write", 13, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme8952879067502989695.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 186 ] ]
+r: [ "/done", "/b_alloc", 13 ]
+r: [ "/done", "/b_write", 13 ]
+r: [ "/synced", 186 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1188, 0, 1, "boost", 1.0, "dur", 4.6310205, "buf", 13.0 ] ]
+r: [ "/n_go", 1188, 1, -1, 1187, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 3, 65536, 1 ],
+  [ "/b_read", 3, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme391440345001542514.aif", 0, 65536, 0, true ],
+  [ "/sync", 187 ] ]
+r: [ "/done", "/b_alloc", 3 ]
+r: [ "/done", "/b_read", 3 ]
+r: [ "/synced", 187 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1189, 0, 1020 ],
+  [ "/s_new", "audio-artifact_4", 1190, 0, 1, "buf", 3.0, "dur", 16.323627 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1190, "out", 24.0 ],
+  [ "/n_set", 1190, "out", 26.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1189, "$in_sig", 26, 1 ],
+  [ "/n_set", 1189, "$in_dur", 16.32077 ] ]
+r: [ "/n_go", 1189, 1020, -1, -1, 0 ]
+r: [ "/n_go", 1190, 1, -1, 1188, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 4, 65536, 1 ],
+  [ "/b_write", 4, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme3167510322599464563.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 188 ] ]
+r: [ "/done", "/b_alloc", 4 ]
+r: [ "/done", "/b_write", 4 ]
+r: [ "/synced", 188 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1191, 0, 1, "boost", 1.0, "dur", 7.6878457, "buf", 4.0 ] ]
+r: [ "/n_go", 1191, 1, -1, 1190, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 5, 65536, 1 ],
+  [ "/b_read", 5, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme2357584924766947909.aif", 0, 65536, 0, true ],
+  [ "/sync", 189 ] ]
+r: [ "/done", "/b_alloc", 5 ]
+r: [ "/done", "/b_read", 5 ]
+r: [ "/synced", 189 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1192, 0, 1022 ],
+  [ "/s_new", "audio-artifact_4", 1193, 0, 1, "buf", 5.0, "dur", 10.19356 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1193, "out", 27.0 ],
+  [ "/n_set", 1193, "out", 24.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1192, "$in_sig", 24, 1 ],
+  [ "/n_set", 1192, "$in_dur", 10.188821 ] ]
+r: [ "/n_go", 1192, 1022, -1, -1, 0 ]
+r: [ "/n_go", 1193, 1, -1, 1191, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 6, 65536, 1 ],
+  [ "/b_read", 6, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme665931439175892510.aif", 0, 65536, 0, true ],
+  [ "/sync", 190 ] ]
+r: [ "/done", "/b_alloc", 6 ]
+r: [ "/done", "/b_read", 6 ]
+r: [ "/synced", 190 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1194, 0, 1027 ],
+  [ "/s_new", "audio-artifact_4", 1195, 0, 1, "buf", 6.0, "dur", 15.882449 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1195, "out", 27.0 ],
+  [ "/n_set", 1195, "out", 30.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1194, "$in_sig", 30, 1 ],
+  [ "/n_set", 1194, "$in_dur", 15.883447 ] ]
+r: [ "/n_go", 1194, 1027, -1, -1, 0 ]
+r: [ "/n_go", 1195, 1, -1, 1193, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 14, 65536, 1 ],
+  [ "/b_write", 14, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme1341946593818015145.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 191 ] ]
+r: [ "/done", "/b_alloc", 14 ]
+r: [ "/done", "/b_write", 14 ]
+r: [ "/synced", 191 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1196, 0, 1, "boost", 1.0, "dur", 14.363515, "buf", 14.0 ] ]
+r: [ "/n_go", 1196, 1, -1, 1195, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 15, 65536, 1 ],
+  [ "/b_read", 15, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme1348891710973987736.aif", 0, 65536, 0, true ],
+  [ "/sync", 192 ] ]
+r: [ "/done", "/b_alloc", 15 ]
+r: [ "/done", "/b_read", 15 ]
+r: [ "/synced", 192 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1197, 0, 1027 ],
+  [ "/s_new", "audio-artifact_4", 1198, 0, 1, "buf", 15.0, "dur", 9.044172 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1198, "out", 27.0 ],
+  [ "/n_set", 1198, "out", 31.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1197, "$in_sig", 31, 1 ],
+  [ "/n_set", 1197, "$in_dur", 9.04195 ] ]
+r: [ "/n_go", 1197, 1027, -1, 1194, 0 ]
+r: [ "/n_go", 1198, 1, -1, 1196, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 16, 65536, 1 ],
+  [ "/b_read", 16, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme4713027248268900385.aif", 0, 65536, 0, true ],
+  [ "/sync", 193 ] ]
+r: [ "/done", "/b_alloc", 16 ]
+r: [ "/done", "/b_read", 16 ]
+r: [ "/synced", 193 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1199, 0, 1018 ],
+  [ "/s_new", "audio-artifact_4", 1200, 0, 1, "buf", 16.0, "dur", 12.051156 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1200, "out", 27.0 ],
+  [ "/n_set", 1200, "out", 32.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1199, "$in_sig", 32, 1 ],
+  [ "/n_set", 1199, "$in_dur", 12.055284 ] ]
+r: [ "/n_go", 1199, 1018, -1, -1, 0 ]
+r: [ "/n_go", 1200, 1, -1, 1198, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 17, 65536, 1 ],
+  [ "/b_write", 17, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme7292142510268002182.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 194 ] ]
+r: [ "/done", "/b_alloc", 17 ]
+r: [ "/done", "/b_write", 17 ]
+r: [ "/synced", 194 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1201, 0, 1, "boost", 1.0, "dur", 12.176485, "buf", 17.0 ] ]
+r: [ "/n_go", 1201, 1, -1, 1200, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1194 ],
+  [ "/n_free", 1195 ] ]
+r: [ "/n_end", 1194, 1027, 1197, -1, 0 ]
+r: [ "/n_end", 1195, 1, 1196, 1193, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 6 ],
+  [ "/b_free", 6 ] ]
+r: [ "/done", "/b_close", 6 ]
+r: [ "/done", "/b_free", 6 ]
+r: [ "/n_end", 1187, 1, 1188, 1186, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 8 ],
+  [ "/b_free", 8 ],
+  [ "/sync", 195 ] ]
+r: [ "/done", "/b_close", 8 ]
+r: [ "/done", "/b_free", 8 ]
+r: [ "/synced", 195 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 6, 65536, 1 ],
+  [ "/b_read", 6, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme4842798375645331228.aif", 0, 65536, 0, true ],
+  [ "/sync", 196 ] ]
+r: [ "/done", "/b_alloc", 6 ]
+r: [ "/done", "/b_read", 6 ]
+r: [ "/synced", 196 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1202, 0, 1007 ],
+  [ "/s_new", "audio-artifact_4", 1203, 0, 1, "buf", 6.0, "dur", 13.061225 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1203, "out", 30.0 ],
+  [ "/n_set", 1203, "out", 27.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1202, "$in_sig", 27, 1 ],
+  [ "/n_set", 1202, "$in_dur", 13.061973 ] ]
+r: [ "/n_go", 1202, 1007, -1, -1, 0 ]
+r: [ "/n_go", 1203, 1, -1, 1201, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 8, 65536, 1 ],
+  [ "/b_read", 8, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme4956984636426095150.aif", 0, 65536, 0, true ],
+  [ "/sync", 197 ] ]
+r: [ "/done", "/b_alloc", 8 ]
+r: [ "/done", "/b_read", 8 ]
+r: [ "/synced", 197 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1204, 0, 1010 ],
+  [ "/s_new", "audio-artifact_4", 1205, 0, 1, "buf", 8.0, "dur", 19.342222 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1205, "out", 30.0 ],
+  [ "/n_set", 1205, "out", 33.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1204, "$in_sig", 33, 1 ],
+  [ "/n_set", 1204, "$in_dur", 19.336666 ] ]
+r: [ "/n_go", 1204, 1010, -1, -1, 0 ]
+r: [ "/n_go", 1205, 1, -1, 1203, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 18, 65536, 1 ],
+  [ "/b_write", 18, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme4663572914177887389.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 198 ] ]
+r: [ "/done", "/b_alloc", 18 ]
+r: [ "/done", "/b_write", 18 ]
+r: [ "/synced", 198 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1206, 0, 1, "boost", 1.0, "dur", 16.714603, "buf", 18.0 ] ]
+r: [ "/n_go", 1206, 1, -1, 1205, 0 ]
+r: [ "/n_end", 1178, 1, 1181, 1177, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 7 ],
+  [ "/b_free", 7 ],
+  [ "/sync", 199 ] ]
+r: [ "/done", "/b_close", 7 ]
+r: [ "/done", "/b_free", 7 ]
+r: [ "/synced", 199 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1174, 1, 1175, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 12 ],
+  [ "/b_free", 12 ],
+  [ "/sync", 200 ] ]
+r: [ "/done", "/b_close", 12 ]
+r: [ "/done", "/b_free", 12 ]
+r: [ "/synced", 200 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+WARNING: could not find view for TimedElem(<1549 @ 76,178>, Span(1961385,2554249), Proc<1505 @ 76,178>)
+s: [ #bundle, <now>,
+  [ "/b_alloc", 7, 65536, 1 ],
+  [ "/b_write", 7, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme863929071716160067.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 201 ] ]
+r: [ "/done", "/b_alloc", 7 ]
+r: [ "/done", "/b_write", 7 ]
+r: [ "/synced", 201 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1207, 0, 1, "boost", 1.0, "dur", 8.376893, "buf", 7.0 ] ]
+r: [ "/n_go", 1207, 1, -1, 1206, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1204 ],
+  [ "/n_free", 1205 ] ]
+r: [ "/n_end", 1204, 1010, -1, -1, 0 ]
+r: [ "/n_end", 1205, 1, 1206, 1203, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1176 ],
+  [ "/n_free", 1177 ] ]
+r: [ "/n_end", 1176, 1025, -1, -1, 0 ]
+r: [ "/n_end", 1177, 1, 1181, 1175, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 8 ],
+  [ "/b_free", 8 ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 10 ],
+  [ "/b_free", 10 ] ]
+r: [ "/done", "/b_close", 8 ]
+r: [ "/done", "/b_free", 8 ]
+r: [ "/done", "/b_close", 10 ]
+r: [ "/done", "/b_free", 10 ]
+r: [ "/n_end", 1188, 1, 1190, 1186, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 13 ],
+  [ "/b_free", 13 ],
+  [ "/sync", 202 ] ]
+r: [ "/done", "/b_close", 13 ]
+r: [ "/done", "/b_free", 13 ]
+r: [ "/synced", 202 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1182 ],
+  [ "/n_free", 1183 ] ]
+r: [ "/n_end", 1182, 1002, -1, -1, 0 ]
+r: [ "/n_end", 1183, 1, 1185, 1181, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 1 ],
+  [ "/b_free", 1 ] ]
+r: [ "/done", "/b_close", 1 ]
+r: [ "/done", "/b_free", 1 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1199 ],
+  [ "/n_free", 1200 ] ]
+r: [ "/n_end", 1199, 1018, -1, -1, 0 ]
+r: [ "/n_end", 1200, 1, 1201, 1198, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 16 ],
+  [ "/b_free", 16 ] ]
+r: [ "/done", "/b_close", 16 ]
+r: [ "/done", "/b_free", 16 ]
+r: [ "/n_end", 1175, 1, 1181, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 9 ],
+  [ "/b_free", 9 ],
+  [ "/sync", 203 ] ]
+r: [ "/done", "/b_close", 9 ]
+r: [ "/done", "/b_free", 9 ]
+r: [ "/synced", 203 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1181, 1, 1185, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 0 ],
+  [ "/b_free", 0 ],
+  [ "/sync", 204 ] ]
+r: [ "/n_end", 1191, 1, 1193, 1190, 0 ]
+r: [ "/done", "/b_close", 0 ]
+r: [ "/done", "/b_free", 0 ]
+r: [ "/synced", 204 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 4 ],
+  [ "/b_free", 4 ],
+  [ "/sync", 205 ] ]
+r: [ "/done", "/b_close", 4 ]
+r: [ "/done", "/b_free", 4 ]
+r: [ "/synced", 205 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 13, 65536, 1 ],
+  [ "/b_read", 13, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme6643365763937174556.aif", 0, 65536, 0, true ],
+  [ "/sync", 206 ] ]
+r: [ "/done", "/b_alloc", 13 ]
+r: [ "/done", "/b_read", 13 ]
+r: [ "/synced", 206 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1208, 0, 1030 ],
+  [ "/s_new", "audio-artifact_4", 1209, 0, 1, "buf", 13.0, "dur", 22.500135 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1209, "out", 28.0 ],
+  [ "/n_set", 1209, "out", 25.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1208, "$in_sig", 25, 1 ],
+  [ "/n_set", 1208, "$in_dur", 22.501656 ] ]
+r: [ "/n_go", 1208, 1030, -1, -1, 0 ]
+r: [ "/n_go", 1209, 1, -1, 1207, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1184 ],
+  [ "/n_free", 1185 ] ]
+r: [ "/n_end", 1184, 1015, -1, -1, 0 ]
+r: [ "/n_end", 1185, 1, 1186, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 2 ],
+  [ "/b_free", 2 ] ]
+r: [ "/done", "/b_close", 2 ]
+r: [ "/done", "/b_free", 2 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 16, 65536, 1 ],
+  [ "/b_read", 16, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme9215380236519087746.aif", 0, 65536, 0, true ],
+  [ "/sync", 207 ] ]
+r: [ "/done", "/b_alloc", 16 ]
+r: [ "/done", "/b_read", 16 ]
+r: [ "/synced", 207 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1210, 0, 1015 ],
+  [ "/s_new", "audio-artifact_4", 1211, 0, 1, "buf", 16.0, "dur", 22.465305 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1211, "out", 28.0 ],
+  [ "/n_set", 1211, "out", 29.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1210, "$in_sig", 29, 1 ],
+  [ "/n_set", 1210, "$in_dur", 22.460815 ] ]
+r: [ "/n_go", 1210, 1015, -1, -1, 0 ]
+r: [ "/n_go", 1211, 1, -1, 1209, 0 ]
+r: [ "/n_end", 1198, 1, 1201, 1196, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1197 ],
+  [ "/n_free", 1198 ] ]
+FAILURE IN SERVER /n_free Node 1198 not found
+r: [ "/n_end", 1197, 1027, -1, -1, 0 ]
+r: [ "/fail", "/n_free", "Node 1198 not found" ]
+s: [ #bundle, <now>,
+  [ "/b_close", 15 ],
+  [ "/b_free", 15 ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1192 ],
+  [ "/n_free", 1193 ] ]
+r: [ "/n_end", 1192, 1022, -1, -1, 0 ]
+r: [ "/n_end", 1193, 1, 1196, 1190, 0 ]
+r: [ "/done", "/b_close", 15 ]
+r: [ "/done", "/b_free", 15 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 5 ],
+  [ "/b_free", 5 ] ]
+WARNING: could not find view for TimedElem(<4079 @ 215,216>, Span(1793731,2334583), Proc<4035 @ 215,216>)
+r: [ "/done", "/b_close", 5 ]
+r: [ "/done", "/b_free", 5 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 5, 65536, 1 ],
+  [ "/b_read", 5, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme4203077130646776307.aif", 0, 65536, 0, true ],
+  [ "/sync", 208 ] ]
+r: [ "/done", "/b_alloc", 5 ]
+r: [ "/done", "/b_read", 5 ]
+r: [ "/synced", 208 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1212, 0, 1002 ],
+  [ "/s_new", "audio-artifact_4", 1213, 0, 1, "buf", 5.0, "dur", 9.218322 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1213, "out", 24.0 ],
+  [ "/n_set", 1213, "out", 28.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1212, "$in_sig", 28, 1 ],
+  [ "/n_set", 1212, "$in_dur", 9.221474 ] ]
+r: [ "/n_go", 1212, 1002, -1, -1, 0 ]
+r: [ "/n_go", 1213, 1, -1, 1211, 0 ]
+r: [ "/n_end", 1207, 1, 1209, 1206, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 12, 65536, 1 ],
+  [ "/b_write", 12, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme8797360458154638048.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 209 ] ]
+r: [ "/done", "/b_alloc", 12 ]
+r: [ "/done", "/b_write", 12 ]
+r: [ "/synced", 209 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1214, 0, 1, "boost", 1.0, "dur", 7.9224715, "buf", 12.0 ] ]
+r: [ "/n_go", 1214, 1, -1, 1213, 0 ]
+r: [ "/n_end", 1186, 1, 1190, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 7 ],
+  [ "/b_free", 7 ],
+  [ "/sync", 210 ] ]
+r: [ "/done", "/b_close", 7 ]
+r: [ "/done", "/b_free", 7 ]
+r: [ "/synced", 210 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 11 ],
+  [ "/b_free", 11 ],
+  [ "/sync", 211 ] ]
+r: [ "/done", "/b_close", 11 ]
+r: [ "/done", "/b_free", 11 ]
+r: [ "/synced", 211 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 11, 65536, 1 ],
+  [ "/b_read", 11, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme2318756893587203931.aif", 0, 65536, 0, true ],
+  [ "/sync", 212 ] ]
+r: [ "/done", "/b_alloc", 11 ]
+r: [ "/done", "/b_read", 11 ]
+r: [ "/synced", 212 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1215, 0, 1010 ],
+  [ "/s_new", "audio-artifact_4", 1216, 0, 1, "buf", 11.0, "dur", 12.260136 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1216, "out", 24.0 ],
+  [ "/n_set", 1216, "out", 30.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1215, "$in_sig", 30, 1 ],
+  [ "/n_set", 1215, "$in_dur", 12.254717 ] ]
+r: [ "/n_go", 1215, 1010, -1, -1, 0 ]
+r: [ "/n_go", 1216, 1, -1, 1214, 0 ]
+r: [ "/n_end", 1201, 1, 1203, 1196, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 17 ],
+  [ "/b_free", 17 ],
+  [ "/sync", 213 ] ]
+r: [ "/done", "/b_close", 17 ]
+r: [ "/done", "/b_free", 17 ]
+r: [ "/synced", 213 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1212 ],
+  [ "/n_free", 1213 ] ]
+r: [ "/n_end", 1212, 1002, -1, -1, 0 ]
+r: [ "/n_end", 1213, 1, 1214, 1211, 0 ]
+r: [ "/n_end", 1196, 1, 1203, 1190, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 5 ],
+  [ "/b_free", 5 ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 14 ],
+  [ "/b_free", 14 ],
+  [ "/sync", 214 ] ]
+r: [ "/done", "/b_close", 5 ]
+r: [ "/done", "/b_free", 5 ]
+r: [ "/done", "/b_close", 14 ]
+r: [ "/done", "/b_free", 14 ]
+r: [ "/synced", 214 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1202 ],
+  [ "/n_free", 1203 ] ]
+r: [ "/n_end", 1202, 1007, -1, -1, 0 ]
+r: [ "/n_end", 1203, 1, 1206, 1190, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1189 ],
+  [ "/n_free", 1190 ] ]
+r: [ "/n_end", 1189, 1020, -1, -1, 0 ]
+r: [ "/n_end", 1190, 1, 1206, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 6 ],
+  [ "/b_free", 6 ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 3 ],
+  [ "/b_free", 3 ] ]
+r: [ "/done", "/b_close", 6 ]
+r: [ "/done", "/b_free", 6 ]
+r: [ "/done", "/b_close", 3 ]
+r: [ "/done", "/b_free", 3 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 17, 65536, 1 ],
+  [ "/b_read", 17, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme8843607198731876331.aif", 0, 65536, 0, true ],
+  [ "/sync", 215 ] ]
+r: [ "/done", "/b_alloc", 17 ]
+r: [ "/done", "/b_read", 17 ]
+r: [ "/synced", 215 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1217, 0, 1012 ],
+  [ "/s_new", "audio-artifact_4", 1218, 0, 1, "buf", 17.0, "dur", 8.800363 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1218, "out", 24.0 ],
+  [ "/n_set", 1218, "out", 28.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1217, "$in_sig", 28, 1 ],
+  [ "/n_set", 1217, "$in_dur", 10.354512 ] ]
+r: [ "/n_go", 1217, 1012, -1, -1, 0 ]
+r: [ "/n_go", 1218, 1, -1, 1216, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 14, 65536, 1 ],
+  [ "/b_read", 14, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme1999618355915923229.aif", 0, 65536, 0, true ],
+  [ "/sync", 216 ] ]
+r: [ "/done", "/b_alloc", 14 ]
+r: [ "/done", "/b_read", 14 ]
+r: [ "/synced", 216 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1219, 0, 1027 ],
+  [ "/s_new", "audio-artifact_4", 1220, 0, 1, "buf", 14.0, "dur", 8.916463 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1220, "out", 24.0 ],
+  [ "/n_set", 1220, "out", 26.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1219, "$in_sig", 26, 1 ],
+  [ "/n_set", 1219, "$in_dur", 8.918549 ] ]
+r: [ "/n_go", 1219, 1027, -1, -1, 0 ]
+r: [ "/n_go", 1220, 1, -1, 1218, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 15, 65536, 1 ],
+  [ "/b_read", 15, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme1798587384161360821.aif", 0, 65536, 0, true ],
+  [ "/sync", 217 ] ]
+r: [ "/done", "/b_alloc", 15 ]
+r: [ "/done", "/b_read", 15 ]
+r: [ "/synced", 217 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1221, 0, 1018 ],
+  [ "/s_new", "audio-artifact_4", 1222, 0, 1, "buf", 15.0, "dur", 16.056599 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1222, "out", 27.0 ],
+  [ "/n_set", 1222, "out", 24.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1221, "$in_sig", 24, 1 ],
+  [ "/n_set", 1221, "$in_dur", 16.055262 ] ]
+r: [ "/n_go", 1221, 1018, -1, -1, 0 ]
+r: [ "/n_go", 1222, 1, -1, 1220, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 0, 65536, 1 ],
+  [ "/b_write", 0, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme6763856419110077627.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 218 ] ]
+r: [ "/done", "/b_alloc", 0 ]
+r: [ "/done", "/b_write", 0 ]
+r: [ "/synced", 218 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1223, 0, 1, "boost", 1.0, "dur", 5.350023, "buf", 0.0 ] ]
+r: [ "/n_go", 1223, 1, -1, 1222, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 1, 65536, 1 ],
+  [ "/b_read", 1, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme1995458204354479417.aif", 0, 65536, 0, true ],
+  [ "/sync", 219 ] ]
+r: [ "/done", "/b_alloc", 1 ]
+r: [ "/done", "/b_read", 1 ]
+r: [ "/synced", 219 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1224, 0, 1022 ],
+  [ "/s_new", "audio-artifact_4", 1225, 0, 1, "buf", 1.0, "dur", 19.655691 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1225, "out", 27.0 ],
+  [ "/n_set", 1225, "out", 31.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1224, "$in_sig", 31, 1 ],
+  [ "/n_set", 1224, "$in_dur", 19.661428 ] ]
+r: [ "/n_go", 1224, 1022, -1, -1, 0 ]
+r: [ "/n_go", 1225, 1, -1, 1223, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 2, 65536, 1 ],
+  [ "/b_read", 2, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme922829783290537703.aif", 0, 65536, 0, true ],
+  [ "/sync", 220 ] ]
+r: [ "/done", "/b_alloc", 2 ]
+r: [ "/done", "/b_read", 2 ]
+r: [ "/synced", 220 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1226, 0, 1025 ],
+  [ "/s_new", "audio-artifact_4", 1227, 0, 1, "buf", 2.0, "dur", 17.577505 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1227, "out", 27.0 ],
+  [ "/n_set", 1227, "out", 32.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1226, "$in_sig", 32, 1 ],
+  [ "/n_set", 1226, "$in_dur", 17.576485 ] ]
+r: [ "/n_go", 1226, 1025, -1, -1, 0 ]
+r: [ "/n_go", 1227, 1, -1, 1225, 0 ]
+r: [ "/n_end", 1206, 1, 1209, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 3, 65536, 1 ],
+  [ "/b_write", 3, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme2654274314526157064.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 221 ] ]
+r: [ "/done", "/b_alloc", 3 ]
+r: [ "/done", "/b_write", 3 ]
+r: [ "/synced", 221 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1228, 0, 1, "boost", 1.0, "dur", 14.502426, "buf", 3.0 ] ]
+r: [ "/n_go", 1228, 1, -1, 1227, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 18 ],
+  [ "/b_free", 18 ],
+  [ "/sync", 222 ] ]
+r: [ "/done", "/b_close", 18 ]
+r: [ "/done", "/b_free", 18 ]
+r: [ "/synced", 222 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 4, 65536, 1 ],
+  [ "/b_read", 4, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme6111876565737225663.aif", 0, 65536, 0, true ],
+  [ "/sync", 223 ] ]
+r: [ "/done", "/b_alloc", 4 ]
+r: [ "/done", "/b_read", 4 ]
+r: [ "/synced", 223 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1229, 0, 1007 ],
+  [ "/s_new", "audio-artifact_4", 1230, 0, 1, "buf", 4.0, "dur", 14.407982 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1230, "out", 27.0 ],
+  [ "/n_set", 1230, "out", 33.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1229, "$in_sig", 33, 1 ],
+  [ "/n_set", 1229, "$in_dur", 14.409002 ] ]
+r: [ "/n_go", 1229, 1007, -1, -1, 0 ]
+r: [ "/n_go", 1230, 1, -1, 1228, 0 ]
+r: [ "/n_end", 1214, 1, 1216, 1211, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 5, 65536, 1 ],
+  [ "/b_write", 5, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme4914583498697271319.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 224 ] ]
+r: [ "/done", "/b_alloc", 5 ]
+r: [ "/done", "/b_write", 5 ]
+r: [ "/synced", 224 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1231, 0, 1, "boost", 1.0, "dur", 14.259115, "buf", 5.0 ] ]
+r: [ "/n_go", 1231, 1, -1, 1230, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 12 ],
+  [ "/b_free", 12 ],
+  [ "/sync", 225 ] ]
+r: [ "/done", "/b_close", 12 ]
+r: [ "/done", "/b_free", 12 ]
+r: [ "/synced", 225 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1226 ],
+  [ "/n_free", 1227 ] ]
+r: [ "/n_end", 1226, 1025, -1, -1, 0 ]
+r: [ "/n_end", 1227, 1, 1228, 1225, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 2 ],
+  [ "/b_free", 2 ] ]
+r: [ "/done", "/b_close", 2 ]
+r: [ "/done", "/b_free", 2 ]
+r: [ "/n_end", 1223, 1, 1225, 1222, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 0 ],
+  [ "/b_free", 0 ],
+  [ "/sync", 226 ] ]
+r: [ "/done", "/b_close", 0 ]
+r: [ "/done", "/b_free", 0 ]
+r: [ "/synced", 226 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 12, 65536, 1 ],
+  [ "/b_read", 12, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme393516781346124111.aif", 0, 65536, 0, true ],
+  [ "/sync", 227 ] ]
+r: [ "/done", "/b_alloc", 12 ]
+r: [ "/done", "/b_read", 12 ]
+r: [ "/synced", 227 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1232, 0, 1002 ],
+  [ "/s_new", "audio-artifact_4", 1233, 0, 1, "buf", 12.0, "dur", 14.338322 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1233, "out", 32.0 ],
+  [ "/n_set", 1233, "out", 27.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1232, "$in_sig", 27, 1 ],
+  [ "/n_set", 1232, "$in_dur", 14.334149 ] ]
+r: [ "/n_go", 1232, 1002, -1, -1, 0 ]
+r: [ "/n_go", 1233, 1, -1, 1231, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1215 ],
+  [ "/n_free", 1216 ] ]
+r: [ "/n_end", 1215, 1010, -1, -1, 0 ]
+r: [ "/n_end", 1216, 1, 1218, 1211, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 11 ],
+  [ "/b_free", 11 ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1229 ],
+  [ "/n_free", 1230 ] ]
+r: [ "/n_end", 1229, 1007, -1, -1, 0 ]
+r: [ "/n_end", 1230, 1, 1231, 1228, 0 ]
+r: [ "/done", "/b_close", 11 ]
+r: [ "/done", "/b_free", 11 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 4 ],
+  [ "/b_free", 4 ] ]
+r: [ "/done", "/b_close", 4 ]
+r: [ "/done", "/b_free", 4 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 2, 65536, 1 ],
+  [ "/b_read", 2, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme8601724934860849554.aif", 0, 65536, 0, true ],
+  [ "/sync", 228 ] ]
+r: [ "/n_end", 1218, 1, 1220, 1211, 0 ]
+r: [ "/done", "/b_alloc", 2 ]
+r: [ "/done", "/b_read", 2 ]
+r: [ "/synced", 228 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1234, 0, 1007 ],
+  [ "/s_new", "audio-artifact_4", 1235, 0, 1, "buf", 2.0, "dur", 15.069751 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1235, "out", 30.0 ],
+  [ "/n_set", 1235, "out", 32.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1234, "$in_sig", 32, 1 ],
+  [ "/n_set", 1234, "$in_dur", 15.067279 ] ]
+r: [ "/n_go", 1234, 1007, -1, -1, 0 ]
+r: [ "/n_go", 1235, 1, -1, 1233, 0 ]
+r: [ "/n_end", 1220, 1, 1222, 1211, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 0, 65536, 1 ],
+  [ "/b_write", 0, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme5878388789037839257.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 229 ] ]
+r: [ "/done", "/b_alloc", 0 ]
+r: [ "/done", "/b_write", 0 ]
+r: [ "/synced", 229 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1236, 0, 1, "boost", 1.0, "dur", 7.3613834, "buf", 0.0 ] ]
+r: [ "/n_go", 1236, 1, -1, 1235, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 17 ],
+  [ "/b_free", 17 ],
+  [ "/sync", 230 ] ]
+r: [ "/done", "/b_close", 17 ]
+r: [ "/done", "/b_free", 17 ]
+r: [ "/synced", 230 ]
+s: [ #bundle, <now>,
+  [ "/n_mapan", 1217, "$in_sig", 30, 1 ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1219 ],
+  [ "/n_free", 1220 ] ]
+r: [ "FAILURE IN SERVER /n_free Node 1220 not found/n
+_end", 1219, 1027, -1, -1, 0 ]
+r: [ "/fail", "/n_free", "Node 1220 not found" ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1217 ],
+  [ "/n_free", 1218 ] ]
+FAILURE IN SERVER /n_free Node 1218 not found
+r: [ "/n_end", 1217, 1012, -1, -1, 0 ]
+r: [ "/fail", "/n_free", "Node 1218 not found" ]
+s: [ #bundle, <now>,
+  [ "/b_close", 14 ],
+  [ "/b_free", 14 ] ]
+r: [ "/done", "/b_close", 14 ]
+r: [ "/done", "/b_free", 14 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 11, 65536, 1 ],
+  [ "/b_read", 11, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme5271903455062349027.aif", 0, 65536, 0, true ],
+  [ "/sync", 231 ] ]
+r: [ "/done", "/b_alloc", 11 ]
+r: [ "/done", "/b_read", 11 ]
+r: [ "/synced", 231 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1237, 0, 1030 ],
+  [ "/s_new", "audio-artifact_4", 1238, 0, 1, "buf", 11.0, "dur", 13.641724 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1238, "out", 26.0 ],
+  [ "/n_set", 1238, "out", 30.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1237, "$in_sig", 30, 1 ],
+  [ "/n_set", 1237, "$in_dur", 13.645419 ] ]
+r: [ "/n_go", 1237, 1030, -1, 1208, 0 ]
+r: [ "/n_go", 1238, 1, -1, 1236, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 4, 65536, 1 ],
+  [ "/b_read", 4, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme7751789604461559069.aif", 0, 65536, 0, true ],
+  [ "/sync", 232 ] ]
+r: [ "/done", "/b_alloc", 4 ]
+r: [ "/done", "/b_read", 4 ]
+r: [ "/synced", 232 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1224 ],
+  [ "/n_free", 1225 ],
+  [ "/s_new", "Artifact(graphem_3", 1239, 0, 1022 ],
+  [ "/s_new", "audio-artifact_4", 1240, 0, 1, "buf", 4.0, "dur", 21.687437 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1240, "out", 28.0 ],
+  [ "/n_set", 1240, "out", 26.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1239, "$in_sig", 26, 1 ],
+  [ "/n_set", 1239, "$in_dur", 21.691542 ] ]
+r: [ "/n_end", 1224, 1022, -1, -1, 0 ]
+r: [ "/n_end", 1225, 1, 1228, 1222, 0 ]
+r: [ "/n_go", 1239, 1022, -1, -1, 0 ]
+r: [ "/n_go", 1240, 1, -1, 1238, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 14, 65536, 1 ],
+  [ "/b_write", 14, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme5674615548153036335.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 233 ] ]
+r: [ "/done", "/b_alloc", 14 ]
+r: [ "/done", "/b_write", 14 ]
+r: [ "/synced", 233 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1241, 0, 1, "boost", 1.0, "dur", 16.894693, "buf", 14.0 ] ]
+r: [ "/n_go", 1241, 1, -1, 1240, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1208 ],
+  [ "/n_free", 1209 ] ]
+r: [ "/n_end", 1208, 1030, 1237, -1, 0 ]
+r: [ "/n_end", 1209, 1, 1211, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 6, 65536, 1 ],
+  [ "/b_write", 6, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme3885941359279041190.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 234 ] ]
+r: [ "/done", "/b_alloc", 6 ]
+r: [ "/done", "/b_write", 6 ]
+r: [ "/synced", 234 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1242, 0, 1, "boost", 1.0, "dur", 11.583515, "buf", 6.0 ] ]
+r: [ "/n_go", 1242, 1, -1, 1241, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 1 ],
+  [ "/b_free", 1 ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 13 ],
+  [ "/b_free", 13 ] ]
+r: [ "/done", "/b_close", 1 ]
+r: [ "/done", "/b_free", 1 ]
+r: [ "/done", "/b_close", 13 ]
+r: [ "/done", "/b_free", 13 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 1, 65536, 1 ],
+  [ "/b_read", 1, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme6286650604957204698.aif", 0, 65536, 0, true ],
+  [ "/sync", 235 ] ]
+r: [ "/done", "/b_alloc", 1 ]
+r: [ "/done", "/b_read", 1 ]
+r: [ "/synced", 235 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1243, 0, 1004 ],
+  [ "/s_new", "audio-artifact_4", 1244, 0, 1, "buf", 1.0, "dur", 14.524081 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1244, "out", 31.0 ],
+  [ "/n_set", 1244, "out", 25.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1243, "$in_sig", 25, 1 ],
+  [ "/n_set", 1243, "$in_dur", 14.5289345 ] ]
+r: [ "/n_go", 1243, 1004, -1, -1, 0 ]
+r: [ "/n_go", 1244, 1, -1, 1242, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1239 ],
+  [ "/n_free", 1240 ] ]
+r: [ "/n_end", 1239, 1022, -1, -1, 0 ]
+r: [ "/n_end", 1240, 1, 1241, 1238, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 4 ],
+  [ "/b_free", 4 ] ]
+r: [ "/done", "/b_close", 4 ]
+r: [ "/done", "/b_free", 4 ]
+r: [ "/n_end", 1211, 1, 1222, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 16 ],
+  [ "/b_free", 16 ],
+  [ "/sync", 236 ] ]
+r: [ "/done", "/b_close", 16 ]
+r: [ "/done", "/b_free", 16 ]
+r: [ "/synced", 236 ]
+s: [ #bundle, <now>,
+  [ "/n_mapan", 1210, "$in_sig", 31, 1 ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1210 ],
+  [ "/n_free", 1211 ] ]
+FAILURE IN SERVER /n_free Node 1211 not found
+r: [ "/n_end", 1210, 1015, -1, -1, 0 ]
+r: [ "/fail", "/n_free", "Node 1211 not found" ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 13, 65536, 1 ],
+  [ "/b_write", 13, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme2668350903256314525.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 237 ] ]
+r: [ "/done", "/b_alloc", 13 ]
+r: [ "/done", "/b_write", 13 ]
+r: [ "/synced", 237 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1245, 0, 1, "boost", 1.0, "dur", 5.430998, "buf", 13.0 ] ]
+r: [ "/n_go", 1245, 1, -1, 1244, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1221 ],
+  [ "/n_free", 1222 ] ]
+r: [ "/n_end", 1221, 1018, -1, -1, 0 ]
+r: [ "/n_end", 1222, 1, 1228, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 15 ],
+  [ "/b_free", 15 ] ]
+r: [ "/done", "/b_close", 15 ]
+r: [ "/done", "/b_free", 15 ]
+r: [ "/n_end", 1228, 1, 1231, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 3 ],
+  [ "/b_free", 3 ],
+  [ "/sync", 238 ] ]
+r: [ "/done", "/b_close", 3 ]
+r: [ "/done", "/b_free", 3 ]
+r: [ "/synced", 238 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1236, 1, 1238, 1235, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 3, 65536, 1 ],
+  [ "/b_write", 3, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme1414842841615126598.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 239 ] ]
+r: [ "/done", "/b_alloc", 3 ]
+r: [ "/done", "/b_write", 3 ]
+r: [ "/synced", 239 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1246, 0, 1, "boost", 1.0, "dur", 40.81959, "buf", 3.0 ] ]
+r: [ "/n_go", 1246, 1, -1, 1245, 0 ]
+r: [ "/n_end", 1231, 1, 1233, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 0 ],
+  [ "/b_free", 0 ],
+  [ "/sync", 240 ] ]
+r: [ "/done", "/b_close", 0 ]
+r: [ "/done", "/b_free", 0 ]
+r: [ "/synced", 240 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 5 ],
+  [ "/b_free", 5 ],
+  [ "/sync", 241 ] ]
+r: [ "/done", "/b_close", 5 ]
+r: [ "/done", "/b_free", 5 ]
+r: [ "/synced", 241 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 4, 65536, 1 ],
+  [ "/b_write", 4, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme5515260372839097679.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 242 ] ]
+r: [ "/done", "/b_alloc", 4 ]
+r: [ "/done", "/b_write", 4 ]
+r: [ "/synced", 242 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1247, 0, 1, "boost", 1.0, "dur", 4.8940363, "buf", 4.0 ] ]
+r: [ "/n_go", 1247, 1, -1, 1246, 0 ]
+WARNING: could not find view for TimedElem(<4717 @ 267,267>, Span(2487994,3207277), Proc<4673 @ 267,267>)
+s: [ #bundle, <now>,
+  [ "/b_alloc", 0, 65536, 1 ],
+  [ "/b_write", 0, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme4720537890418039688.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 243 ] ]
+r: [ "/done", "/b_alloc", 0 ]
+r: [ "/done", "/b_write", 0 ]
+r: [ "/synced", 243 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1248, 0, 1, "boost", 1.0, "dur", 2.3919501, "buf", 0.0 ] ]
+r: [ "/n_go", 1248, 1, -1, 1247, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 5, 65536, 1 ],
+  [ "/b_read", 5, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme5454034397311743268.aif", 0, 65536, 0, true ],
+  [ "/sync", 244 ] ]
+r: [ "/done", "/b_alloc", 5 ]
+r: [ "/done", "/b_read", 5 ]
+r: [ "/synced", 244 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1249, 0, 1018 ],
+  [ "/s_new", "audio-artifact_4", 1250, 0, 1, "buf", 5.0, "dur", 8.893243 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1250, "out", 28.0 ],
+  [ "/n_set", 1250, "out", 31.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1249, "$in_sig", 31, 1 ],
+  [ "/n_set", 1249, "$in_dur", 8.888889 ] ]
+r: [ "/n_go", 1249, 1018, -1, -1, 0 ]
+r: [ "/n_go", 1250, 1, -1, 1248, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 7, 65536, 1 ],
+  [ "/b_write", 7, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme3234206747843808134.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 245 ] ]
+r: [ "/done", "/b_alloc", 7 ]
+r: [ "/done", "/b_write", 7 ]
+r: [ "/synced", 245 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1251, 0, 1, "boost", 1.0, "dur", 5.560839, "buf", 7.0 ] ]
+r: [ "/n_go", 1251, 1, -1, 1250, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 8, 65536, 1 ],
+  [ "/b_read", 8, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme9130004183735687549.aif", 0, 65536, 0, true ],
+  [ "/sync", 246 ] ]
+r: [ "/done", "/b_alloc", 8 ]
+r: [ "/done", "/b_read", 8 ]
+r: [ "/synced", 246 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1252, 0, 1022 ],
+  [ "/s_new", "audio-artifact_4", 1253, 0, 1, "buf", 8.0, "dur", 14.95365 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1253, "out", 26.0 ],
+  [ "/n_set", 1253, "out", 24.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1252, "$in_sig", 24, 1 ],
+  [ "/n_set", 1252, "$in_dur", 14.953038 ] ]
+r: [ "/n_go", 1252, 1022, -1, -1, 0 ]
+r: [ "/n_go", 1253, 1, -1, 1251, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1232 ],
+  [ "/n_free", 1233 ] ]
+r: [ "/n_end", 1232, 1002, -1, -1, 0 ]
+r: [ "/n_end", 1233, 1, 1235, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 12 ],
+  [ "/b_free", 12 ] ]
+r: [ "/done", "/b_close", 12 ]
+r: [ "/done", "/b_free", 12 ]
+r: [ "/n_end", 1245, 1, 1246, 1244, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 12, 65536, 1 ],
+  [ "/b_write", 12, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme7634788831398230841.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 247 ] ]
+r: [ "/done", "/b_alloc", 12 ]
+r: [ "/done", "/b_write", 12 ]
+r: [ "/synced", 247 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1254, 0, 1, "boost", 1.0, "dur", 5.369478, "buf", 12.0 ] ]
+r: [ "/n_go", 1254, 1, -1, 1253, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 13 ],
+  [ "/b_free", 13 ],
+  [ "/sync", 248 ] ]
+r: [ "/done", "/b_close", 13 ]
+r: [ "/done", "/b_free", 13 ]
+r: [ "/synced", 248 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 13, 65536, 1 ],
+  [ "/b_read", 13, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme3152592794719925393.aif", 0, 65536, 0, true ],
+  [ "/sync", 249 ] ]
+r: [ "/done", "/b_alloc", 13 ]
+r: [ "/done", "/b_read", 13 ]
+r: [ "/synced", 249 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1255, 0, 1012 ],
+  [ "/s_new", "audio-artifact_4", 1256, 0, 1, "buf", 13.0, "dur", 19.96916 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1256, "out", 26.0 ],
+  [ "/n_set", 1256, "out", 27.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1255, "$in_sig", 27, 1 ],
+  [ "/n_set", 1255, "$in_dur", 19.963991 ] ]
+r: [ "/n_go", 1255, 1012, -1, -1, 0 ]
+r: [ "/n_go", 1256, 1, -1, 1254, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 9, 65536, 1 ],
+  [ "/b_write", 9, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme6421452340288101846.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 250 ] ]
+r: [ "/n_end", 1248, 1, 1250, 1247, 0 ]
+r: [ "/done", "/b_alloc", 9 ]
+r: [ "/done", "/b_write", 9 ]
+r: [ "/synced", 250 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1257, 0, 1, "boost", 1.0, "dur", 11.641655, "buf", 9.0 ] ]
+r: [ "/n_go", 1257, 1, -1, 1256, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 0 ],
+  [ "/b_free", 0 ],
+  [ "/sync", 251 ] ]
+r: [ "/done", "/b_close", 0 ]
+r: [ "/done", "/b_free", 0 ]
+r: [ "/synced", 251 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1242, 1, 1244, 1241, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 6 ],
+  [ "/b_free", 6 ],
+  [ "/sync", 252 ] ]
+r: [ "/done", "/b_close", 6 ]
+r: [ "/done", "/b_free", 6 ]
+r: [ "/synced", 252 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1235, 1, 1238, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 2 ],
+  [ "/b_free", 2 ],
+  [ "/sync", 253 ] ]
+r: [ "/done", "/b_close", 2 ]
+r: [ "/done", "/b_free", 2 ]
+r: [ "/synced", 253 ]
+s: [ #bundle, <now>,
+  [ "/n_mapan", 1234, "$in_sig", 26, 1 ] ]
+r: [ "/n_end", 1247, 1, 1250, 1246, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 4 ],
+  [ "/b_free", 4 ],
+  [ "/sync", 254 ] ]
+r: [ "/done", "/b_close", 4 ]
+r: [ "/done", "/b_free", 4 ]
+r: [ "/synced", 254 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1237 ],
+  [ "/n_free", 1238 ] ]
+r: [ "/n_end", 1237, 1030, -1, -1, 0 ]
+r: [ "/n_end", 1238, 1, 1241, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 11 ],
+  [ "/b_free", 11 ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1234 ],
+  [ "/n_free", 1235 ] ]
+FAILURE IN SERVER /n_free Node 1235 not found
+r: [ "/n_end", 1234, 1007, -1, -1, 0 ]
+r: [ "/done", "/b_close", 11 ]
+r: [ "/done", "/b_free", 11 ]
+r: [ "/fail", "/n_free", "Node 1235 not found" ]
+r: [ "/n_end", 1251, 1, 1253, 1250, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 7 ],
+  [ "/b_free", 7 ],
+  [ "/sync", 255 ] ]
+r: [ "/done", "/b_close", 7 ]
+r: [ "/done", "/b_free", 7 ]
+r: [ "/synced", 255 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1243 ],
+  [ "/n_free", 1244 ] ]
+r: [ "/n_end", 1254, 1, 1256, 1253, 0 ]
+r: [ "/n_end", 1243, 1004, -1, -1, 0 ]
+r: [ "/n_end", 1244, 1, 1246, 1241, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 12 ],
+  [ "/b_free", 12 ],
+  [ "/sync", 256 ] ]
+r: [ "/done", "/b_close", 12 ]
+r: [ "/done", "/b_free", 12 ]
+r: [ "/synced", 256 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 1 ],
+  [ "/b_free", 1 ] ]
+r: [ "/done", "/b_close", 1 ]
+r: [ "/done", "/b_free", 1 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1249 ],
+  [ "/n_free", 1250 ] ]
+r: [ "/n_end", 1249, 1018, -1, -1, 0 ]
+r: [ "/n_end", 1250, 1, 1253, 1246, 0 ]
+r: [ "/n_end", 1241, 1, 1246, 1002, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 5 ],
+  [ "/b_free", 5 ] ]
+s: [ #bundle, <now>,
+  [ "/b_close", 14 ],
+  [ "/b_free", 14 ],
+  [ "/sync", 257 ] ]
+r: [ "/done", "/b_close", 5 ]
+r: [ "/done", "/b_free", 5 ]
+r: [ "/done", "/b_close", 14 ]
+r: [ "/done", "/b_free", 14 ]
+r: [ "/synced", 257 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 11, 65536, 1 ],
+  [ "/b_read", 11, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme1502338446508727567.aif", 0, 65536, 0, true ],
+  [ "/sync", 258 ] ]
+r: [ "/done", "/b_alloc", 11 ]
+r: [ "/done", "/b_read", 11 ]
+r: [ "/synced", 258 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1258, 0, 1020 ],
+  [ "/s_new", "audio-artifact_4", 1259, 0, 1, "buf", 11.0, "dur", 23.962994 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1259, "out", 25.0 ],
+  [ "/n_set", 1259, "out", 26.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1258, "$in_sig", 26, 1 ],
+  [ "/n_set", 1258, "$in_dur", 23.958912 ] ]
+r: [ "/n_go", 1258, 1020, -1, -1, 0 ]
+r: [ "/n_go", 1259, 1, -1, 1257, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 12, 65536, 1 ],
+  [ "/b_read", 12, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme4868856211852684555.aif", 0, 65536, 0, true ],
+  [ "/sync", 259 ] ]
+r: [ "/done", "/b_alloc", 12 ]
+r: [ "/done", "/b_read", 12 ]
+r: [ "/synced", 259 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1260, 0, 1010 ],
+  [ "/s_new", "audio-artifact_4", 1261, 0, 1, "buf", 12.0, "dur", 16.137869 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1261, "out", 25.0 ],
+  [ "/n_set", 1261, "out", 28.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1260, "$in_sig", 28, 1 ],
+  [ "/n_set", 1260, "$in_dur", 16.143333 ] ]
+r: [ "/n_go", 1260, 1010, -1, -1, 0 ]
+r: [ "/n_go", 1261, 1, -1, 1259, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1255 ],
+  [ "/n_free", 1256 ] ]
+r: [ "/n_end", 1255, 1012, -1, -1, 0 ]
+r: [ "/n_end", 1256, 1, 1257, 1253, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 13 ],
+  [ "/b_free", 13 ] ]
+r: [ "/done", "/b_close", 13 ]
+r: [ "/done", "/b_free", 13 ]
+r: [ "/n_end", 1257, 1, 1259, 1253, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 9 ],
+  [ "/b_free", 9 ],
+  [ "/sync", 260 ] ]
+r: [ "/done", "/b_close", 9 ]
+r: [ "/done", "/b_free", 9 ]
+r: [ "/synced", 260 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+r: [ "/n_end", 1253, 1, 1259, 1246, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 8 ],
+  [ "/b_free", 8 ],
+  [ "/sync", 261 ] ]
+r: [ "/done", "/b_close", 8 ]
+r: [ "/done", "/b_free", 8 ]
+r: [ "/synced", 261 ]
+s: [ #bundle, <now>,
+  [ "/n_mapan", 1252, "$in_sig", 27, 1 ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 4, 65536, 1 ],
+  [ "/b_write", 4, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme5577511792931692572.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 262 ] ]
+r: [ "/done", "/b_alloc", 4 ]
+r: [ "/done", "/b_write", 4 ]
+r: [ "/synced", 262 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1262, 0, 1, "boost", 1.0, "dur", 16.931067, "buf", 4.0 ] ]
+r: [ "/n_go", 1262, 1, -1, 1261, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1252 ],
+  [ "/n_free", 1253 ] ]
+FAILURE IN SERVER /n_free Node 1253 not found
+r: [ "/n_end", 1252, 1022, -1, -1, 0 ]
+r: [ "/fail", "/n_free", "Node 1253 not found" ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 0, 65536, 1 ],
+  [ "/b_write", 0, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme6789507715079329221.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 263 ] ]
+r: [ "/done", "/b_alloc", 0 ]
+r: [ "/done", "/b_write", 0 ]
+r: [ "/synced", 263 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1263, 0, 1, "boost", 1.0, "dur", 20.629705, "buf", 0.0 ] ]
+r: [ "/n_go", 1263, 1, -1, 1262, 0 ]
+WARNING: could not find view for TimedElem(<5051 @ 290,290>, Span(3354339,4400771), Proc<5007 @ 290,290>)
+s: [ #bundle, <now>,
+  [ "/b_alloc", 1, 65536, 1 ],
+  [ "/b_write", 1, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme4812737492216265075.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 264 ] ]
+r: [ "/done", "/b_alloc", 1 ]
+r: [ "/done", "/b_write", 1 ]
+r: [ "/synced", 264 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1264, 0, 1, "boost", 1.0, "dur", 22.514353, "buf", 1.0 ] ]
+r: [ "/n_go", 1264, 1, -1, 1263, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 2, 65536, 1 ],
+  [ "/b_read", 2, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme937615164922551915.aif", 0, 65536, 0, true ],
+  [ "/sync", 265 ] ]
+r: [ "/done", "/b_alloc", 2 ]
+r: [ "/done", "/b_read", 2 ]
+r: [ "/synced", 265 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1265, 0, 1004 ],
+  [ "/s_new", "audio-artifact_4", 1266, 0, 1, "buf", 2.0, "dur", 15.33678 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1266, "out", 27.0 ],
+  [ "/n_set", 1266, "out", 29.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1265, "$in_sig", 29, 1 ],
+  [ "/n_set", 1265, "$in_dur", 15.333084 ] ]
+r: [ "/n_go", 1265, 1004, -1, -1, 0 ]
+r: [ "/n_go", 1266, 1, -1, 1264, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 5, 65536, 1 ],
+  [ "/b_write", 5, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme2411069702073747193.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 266 ] ]
+r: [ "/done", "/b_alloc", 5 ]
+r: [ "/done", "/b_write", 5 ]
+r: [ "/synced", 266 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1265 ],
+  [ "/n_free", 1266 ],
+  [ "/s_new", "proc_2", 1267, 0, 1, "boost", 1.0, "dur", 2.5970974, "buf", 5.0 ] ]
+r: [ "/n_end", 1265, 1004, -1, -1, 0 ]
+r: [ "/n_end", 1266, 1, -1, 1264, 0 ]
+r: [ "/n_go", 1267, 1, -1, 1264, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 2 ],
+  [ "/b_free", 2 ] ]
+r: [ "/done", "/b_close", 2 ]
+r: [ "/done", "/b_free", 2 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1258 ],
+  [ "/n_free", 1259 ] ]
+r: [ "/n_end", 1258, 1020, -1, -1, 0 ]
+r: [ "/n_end", 1259, 1, 1261, 1246, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 2, 65536, 1 ],
+  [ "/b_write", 2, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme2376707228247294204.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 267 ] ]
+r: [ "/done", "/b_alloc", 2 ]
+r: [ "/done", "/b_write", 2 ]
+r: [ "/synced", 267 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1268, 0, 1, "boost", 1.0, "dur", 5.1252832, "buf", 2.0 ] ]
+r: [ "/n_go", 1268, 1, -1, 1267, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 11 ],
+  [ "/b_free", 11 ] ]
+r: [ "/done", "/b_close", 11 ]
+r: [ "/done", "/b_free", 11 ]
+WARNING: could not find view for TimedElem(<5240 @ 296,296>, Span(3652806,4117238), Proc<5196 @ 296,296>)
+s: [ #bundle, <now>,
+  [ "/b_alloc", 11, 65536, 1 ],
+  [ "/b_write", 11, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme6398949277934677068.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 268 ] ]
+r: [ "/done", "/b_alloc", 11 ]
+r: [ "/done", "/b_write", 11 ]
+r: [ "/synced", 268 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1269, 0, 1, "boost", 1.0, "dur", 3.5750568, "buf", 11.0 ] ]
+r: [ "/n_go", 1269, 1, -1, 1268, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 6, 65536, 1 ],
+  [ "/b_read", 6, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme1898904753744415062.aif", 0, 65536, 0, true ],
+  [ "/sync", 269 ] ]
+r: [ "/done", "/b_alloc", 6 ]
+r: [ "/done", "/b_read", 6 ]
+r: [ "/synced", 269 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1270, 0, 1010 ],
+  [ "/s_new", "audio-artifact_4", 1271, 0, 1, "buf", 6.0, "dur", 16.288797 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1271, "out", 29.0 ],
+  [ "/n_set", 1271, "out", 24.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1270, "$in_sig", 24, 1 ],
+  [ "/n_set", 1270, "$in_dur", 16.292063 ] ]
+r: [ "/n_go", 1270, 1010, -1, 1260, 0 ]
+r: [ "/n_go", 1271, 1, -1, 1269, 0 ]
+r: [ "/n_end", 1267, 1, 1268, 1264, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 7, 65536, 1 ],
+  [ "/b_write", 7, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme6916579376109631895.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 270 ] ]
+r: [ "/done", "/b_alloc", 7 ]
+r: [ "/done", "/b_write", 7 ]
+r: [ "/synced", 270 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1272, 0, 1, "boost", 1.0, "dur", 12.529978, "buf", 7.0 ] ]
+r: [ "/n_go", 1272, 1, -1, 1271, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 5 ],
+  [ "/b_free", 5 ],
+  [ "/sync", 271 ] ]
+r: [ "/done", "/b_close", 5 ]
+r: [ "/done", "/b_free", 5 ]
+r: [ "/synced", 271 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 5, 65536, 1 ],
+  [ "/b_read", 5, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme1176671318121158468.aif", 0, 65536, 0, true ],
+  [ "/sync", 272 ] ]
+r: [ "/done", "/b_alloc", 5 ]
+r: [ "/done", "/b_read", 5 ]
+r: [ "/synced", 272 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1260 ],
+  [ "/n_free", 1261 ],
+  [ "/s_new", "Artifact(graphem_3", 1273, 0, 1010 ],
+  [ "/s_new", "audio-artifact_4", 1274, 0, 1, "buf", 5.0, "dur", 22.848434 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1274, "out", 25.0 ],
+  [ "/n_set", 1274, "out", 26.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1273, "$in_sig", 26, 1 ],
+  [ "/n_set", 1273, "$in_dur", 22.849274 ] ]
+r: [ "/n_end", 1260, 1010, 1270, -1, 0 ]
+r: [ "/n_end", 1261, 1, 1262, 1246, 0 ]
+r: [ "/n_go", 1273, 1010, -1, 1270, 0 ]
+r: [ "/n_go", 1274, 1, -1, 1272, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 8, 65536, 1 ],
+  [ "/b_write", 8, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme2544689693189165389.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 273 ] ]
+r: [ "/done", "/b_alloc", 8 ]
+r: [ "/done", "/b_write", 8 ]
+r: [ "/synced", 273 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1275, 0, 1, "boost", 1.0, "dur", 12.591383, "buf", 8.0 ] ]
+r: [ "/n_go", 1275, 1, -1, 1274, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 12 ],
+  [ "/b_free", 12 ] ]
+r: [ "/done", "/b_close", 12 ]
+r: [ "/done", "/b_free", 12 ]
+WARNING: could not find view for TimedElem(<4832 @ 274,303>, Span(2559134,3287267), Proc<4788 @ 274,303>)
+s: [ #bundle, <now>,
+  [ "/b_alloc", 9, 65536, 1 ],
+  [ "/b_write", 9, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme7258547044001294866.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 274 ] ]
+r: [ "/done", "/b_alloc", 9 ]
+r: [ "/done", "/b_write", 9 ]
+r: [ "/synced", 274 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1276, 0, 1, "boost", 1.0, "dur", 5.309229, "buf", 9.0 ] ]
+r: [ "/n_go", 1276, 1, -1, 1275, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 10, 65536, 1 ],
+  [ "/b_read", 10, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme6833791326697887630.aif", 0, 65536, 0, true ],
+  [ "/sync", 275 ] ]
+r: [ "/done", "/b_alloc", 10 ]
+r: [ "/done", "/b_read", 10 ]
+r: [ "/synced", 275 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1277, 0, 1025 ],
+  [ "/s_new", "audio-artifact_4", 1278, 0, 1, "buf", 10.0, "dur", 21.687437 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1278, "out", 25.0 ],
+  [ "/n_set", 1278, "out", 27.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1277, "$in_sig", 27, 1 ],
+  [ "/n_set", 1277, "$in_dur", 21.693016 ] ]
+r: [ "/n_go", 1277, 1025, -1, -1, 0 ]
+r: [ "/n_go", 1278, 1, -1, 1276, 0 ]
+r: [ "/n_end", 1269, 1, 1271, 1268, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 11 ],
+  [ "/b_free", 11 ],
+  [ "/sync", 276 ] ]
+r: [ "/done", "/b_close", 11 ]
+r: [ "/done", "/b_free", 11 ]
+r: [ "/synced", 276 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 11, 65536, 1 ],
+  [ "/b_read", 11, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme6336107017287187930.aif", 0, 65536, 0, true ],
+  [ "/sync", 277 ] ]
+r: [ "/done", "/b_alloc", 11 ]
+r: [ "/done", "/b_read", 11 ]
+r: [ "/synced", 277 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1279, 0, 1020 ],
+  [ "/s_new", "audio-artifact_4", 1280, 0, 1, "buf", 11.0, "dur", 10.936599 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1280, "out", 25.0 ],
+  [ "/n_set", 1280, "out", 28.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1279, "$in_sig", 28, 1 ],
+  [ "/n_set", 1279, "$in_dur", 10.933809 ] ]
+r: [ "/n_go", 1279, 1020, -1, -1, 0 ]
+r: [ "/n_go", 1280, 1, -1, 1278, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 12, 65536, 1 ],
+  [ "/b_read", 12, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme7346036512314648923.aif", 0, 65536, 0, true ],
+  [ "/sync", 278 ] ]
+r: [ "/done", "/b_alloc", 12 ]
+r: [ "/done", "/b_read", 12 ]
+r: [ "/synced", 278 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1281, 0, 1015 ],
+  [ "/s_new", "audio-artifact_4", 1282, 0, 1, "buf", 12.0, "dur", 17.414967 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1282, "out", 25.0 ],
+  [ "/n_set", 1282, "out", 29.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1281, "$in_sig", 29, 1 ],
+  [ "/n_set", 1281, "$in_dur", 17.418934 ] ]
+r: [ "/n_go", 1281, 1015, -1, -1, 0 ]
+r: [ "/n_go", 1282, 1, -1, 1280, 0 ]
+r: [ "/n_end", 1268, 1, 1271, 1264, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 2 ],
+  [ "/b_free", 2 ],
+  [ "/sync", 279 ] ]
+r: [ "/done", "/b_close", 2 ]
+r: [ "/done", "/b_free", 2 ]
+r: [ "/synced", 279 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+WARNING: could not find view for TimedElem(<5500 @ 308,308>, Span(3730184,4691527), Proc<5456 @ 308,308>)
+s: [ #bundle, <now>,
+  [ "/b_alloc", 2, 65536, 1 ],
+  [ "/b_write", 2, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme5426014490170200631.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 280 ] ]
+r: [ "/done", "/b_alloc", 2 ]
+r: [ "/done", "/b_write", 2 ]
+r: [ "/synced", 280 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1283, 0, 1, "boost", 1.0, "dur", 6.61449, "buf", 2.0 ] ]
+r: [ "/n_go", 1283, 1, -1, 1282, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 13, 65536, 1 ],
+  [ "/b_write", 13, "/Users/hhrutz/Desktop/VoiceTrap/tmp/grapheme4242569114610809768.aif", "aiff", "int24", 0, 0, true ],
+  [ "/sync", 281 ] ]
+r: [ "/done", "/b_alloc", 13 ]
+r: [ "/done", "/b_write", 13 ]
+r: [ "/synced", 281 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "proc_2", 1284, 0, 1, "boost", 1.0, "dur", 4.5623355, "buf", 13.0 ] ]
+r: [ "/n_go", 1284, 1, -1, 1283, 0 ]
+r: [ "/n_end", 1276, 1, 1278, 1275, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 9 ],
+  [ "/b_free", 9 ],
+  [ "/sync", 282 ] ]
+r: [ "/done", "/b_close", 9 ]
+r: [ "/done", "/b_free", 9 ]
+r: [ "/synced", 282 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 9, 65536, 1 ],
+  [ "/b_read", 9, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme1103404867725379205.aif", 0, 65536, 0, true ],
+  [ "/sync", 283 ] ]
+r: [ "/done", "/b_alloc", 9 ]
+r: [ "/done", "/b_read", 9 ]
+r: [ "/synced", 283 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1285, 0, 1007 ],
+  [ "/s_new", "audio-artifact_4", 1286, 0, 1, "buf", 9.0, "dur", 8.928073 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1286, "out", 25.0 ],
+  [ "/n_set", 1286, "out", 30.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1285, "$in_sig", 30, 1 ],
+  [ "/n_set", 1285, "$in_dur", 10.502925 ] ]
+r: [ "/n_go", 1285, 1007, -1, -1, 0 ]
+r: [ "/n_go", 1286, 1, -1, 1284, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 14, 65536, 1 ],
+  [ "/b_read", 14, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme4956984636426095150.aif", 0, 65536, 0, true ],
+  [ "/sync", 284 ] ]
+r: [ "/done", "/b_alloc", 14 ]
+r: [ "/done", "/b_read", 14 ]
+r: [ "/synced", 284 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1287, 0, 1010 ],
+  [ "/s_new", "audio-artifact_4", 1288, 0, 1, "buf", 14.0, "dur", 19.342222 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1288, "out", 25.0 ],
+  [ "/n_set", 1288, "out", 31.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1287, "$in_sig", 31, 1 ],
+  [ "/n_set", 1287, "$in_dur", 19.336666 ] ]
+r: [ "/n_go", 1287, 1010, -1, 1273, 0 ]
+r: [ "/n_go", 1288, 1, -1, 1286, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 15, 65536, 1 ],
+  [ "/b_read", 15, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme5137945478292367994.aif", 0, 65536, 0, true ],
+  [ "/sync", 285 ] ]
+r: [ "/done", "/b_alloc", 15 ]
+r: [ "/done", "/b_read", 15 ]
+r: [ "/synced", 285 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1289, 0, 1004 ],
+  [ "/s_new", "audio-artifact_4", 1290, 0, 1, "buf", 15.0, "dur", 8.185034 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1290, "out", 25.0 ],
+  [ "/n_set", 1290, "out", 32.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1289, "$in_sig", 32, 1 ],
+  [ "/n_set", 1289, "$in_dur", 9.630635 ] ]
+r: [ "/n_go", 1289, 1004, -1, -1, 0 ]
+r: [ "/n_go", 1290, 1, -1, 1288, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 16, 65536, 1 ],
+  [ "/b_read", 16, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme3947674052003067381.aif", 0, 65536, 0, true ],
+  [ "/sync", 286 ] ]
+r: [ "/done", "/b_alloc", 16 ]
+r: [ "/done", "/b_read", 16 ]
+r: [ "/synced", 286 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1291, 0, 1002 ],
+  [ "/s_new", "audio-artifact_4", 1292, 0, 1, "buf", 16.0, "dur", 9.137053 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1292, "out", 25.0 ],
+  [ "/n_set", 1292, "out", 33.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1291, "$in_sig", 33, 1 ],
+  [ "/n_set", 1291, "$in_dur", 10.743991 ] ]
+r: [ "/n_go", 1291, 1002, -1, -1, 0 ]
+r: [ "/n_go", 1292, 1, -1, 1290, 0 ]
+r: [ "/n_end", 1262, 1, 1263, 1246, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 4 ],
+  [ "/b_free", 4 ],
+  [ "/sync", 287 ] ]
+r: [ "/done", "/b_close", 4 ]
+r: [ "/done", "/b_free", 4 ]
+r: [ "/synced", 287 ]
+s: [ #bundle, <now>,
+  [ "/status" ] ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 4, 65536, 1 ],
+  [ "/b_read", 4, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme1214832819158076269.aif", 0, 65536, 0, true ],
+  [ "/sync", 288 ] ]
+r: [ "/done", "/b_alloc", 4 ]
+r: [ "/done", "/b_read", 4 ]
+r: [ "/synced", 288 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1293, 0, 1030 ],
+  [ "/s_new", "audio-artifact_4", 1294, 0, 1, "buf", 4.0, "dur", 14.257052 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1294, "out", 25.0 ],
+  [ "/n_set", 1294, "out", 34.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1293, "$in_sig", 34, 1 ],
+  [ "/n_set", 1293, "$in_dur", 14.258073 ] ]
+r: [ "/n_go", 1293, 1030, -1, -1, 0 ]
+r: [ "/n_go", 1294, 1, -1, 1292, 0 ]
+s: [ #bundle, <now>,
+  [ "/n_free", 1273 ],
+  [ "/n_free", 1274 ] ]
+r: [ "/n_end", 1273, 1010, 1287, 1270, 0 ]
+r: [ "/n_end", 1274, 1, 1275, 1272, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_close", 5 ],
+  [ "/b_free", 5 ] ]
+r: [ "/done", "/b_close", 5 ]
+r: [ "/done", "/b_free", 5 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 5, 65536, 1 ],
+  [ "/b_read", 5, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme6329822068420841041.aif", 0, 65536, 0, true ],
+  [ "/sync", 289 ] ]
+r: [ "/done", "/b_alloc", 5 ]
+r: [ "/done", "/b_read", 5 ]
+r: [ "/synced", 289 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1295, 0, 1012 ],
+  [ "/s_new", "audio-artifact_4", 1296, 0, 1, "buf", 5.0, "dur", 17.391747 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1296, "out", 25.0 ],
+  [ "/n_set", 1296, "out", 26.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1295, "$in_sig", 26, 1 ],
+  [ "/n_set", 1295, "$in_dur", 17.391224 ] ]
+r: [ "/n_go", 1295, 1012, -1, -1, 0 ]
+r: [ "/n_go", 1296, 1, -1, 1294, 0 ]
+s: [ #bundle, <now>,
+  [ "/b_alloc", 17, 65536, 1 ],
+  [ "/b_read", 17, "/Users/hhrutz/Desktop/VoiceTrap/artifacts/grapheme3464035463841743120.aif", 0, 65536, 0, true ],
+  [ "/sync", 290 ] ]
+r: [ "/done", "/b_alloc", 17 ]
+r: [ "/done", "/b_read", 17 ]
+r: [ "/synced", 290 ]
+s: [ #bundle, <now>,
+  [ "/s_new", "Artifact(graphem_3", 1297, 0, 1027 ],
+  [ "/s_new", "audio-artifact_4", 1298, 0, 1, "buf", 17.0, "dur", 8.846803 ],
+  [ "/error", -1 ],
+  [ "/n_set", 1298, "out", 25.0 ],
+  [ "/n_set", 1298, "out", 35.0 ],
+  [ "/error", -2 ],
+  [ "/n_mapan", 1297, "$in_sig", 35, 1 ],
+  [ "/n_set", 1297, "$in_dur", 10.4073925 ] ]
+r: [ "/n_go", 1297, 1027, -1, -1, 0 ]
+r: [ "/n_go", 1298, 1, -1, 1296, 0 ]
