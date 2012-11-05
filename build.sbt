@@ -1,3 +1,5 @@
+import AssemblyKeys._
+
 name := "VoiceTrap"
 
 version := "0.0.1-SNAPSHOT"
@@ -35,3 +37,8 @@ testOptions in Test += Tests.Argument("-oF")
 
 fork in run := true  // required for shutdown hook, and also the scheduled thread pool, it seems
 
+// ---- packaging ----
+
+seq( assemblySettings: _* )
+
+test in assembly := {}

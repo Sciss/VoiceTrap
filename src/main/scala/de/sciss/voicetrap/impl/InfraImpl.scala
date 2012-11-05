@@ -72,8 +72,16 @@ object InfraImpl {
                      import synth._
                      import ugen._
                      val sig0 = In.ar( internalBus.index, numChannels = internalBus.numChannels )
-                     val sig  = if( VoiceTrap.stereoOutput ) SplayAz.ar( 2, sig0 ) else sig0
-                     Out.ar( 0, sig )
+                     if( VoiceTrap.stereoOutput ) {
+                        Out.ar( 0, SplayAz.ar( 2, sig0 ))
+                     } else {
+                        assert( VoiceTrap.outChannels.size == internalBus.numChannels )
+                        Vector.tabulate( internalBus.numChannels ) { ch =>
+                           val chSig = sig0.\( ch )
+                           val outCh = VoiceTrap.outChannels( ch )
+                           Out.ar( outCh, Limiter.ar( chSig, level = VoiceTrap.limiterLevel ))
+                        }
+                     }
                   }
                   implicit val ptx = ProcTxn()
                   val rd = RichSynthDef( server, routeGraph, nameHint = Some( "internal-bus" ))

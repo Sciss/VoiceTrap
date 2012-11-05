@@ -39,7 +39,9 @@ object VoiceTrap {
 
    val minimal                = false
    val liveInput              = true
-   val stereoOutput           = true
+   val stereoOutput           = false
+   val limiterLevel           = 0.9
+   val hpfFreq                = 50.0
 
    lazy val numRows           = if( minimal ) /* 2 */ 1 else 4
    lazy val numColumns        = if( minimal ) 1 else 3
@@ -51,6 +53,7 @@ object VoiceTrap {
    val highestOutputChannel   = 22
    val microphoneChannel      = 0
    var microphoneGain         = 1.0 // amp linear
+   val outChannels            = (3 to 10) ++ (15 to 18)
 
    val forkIterations         = if( minimal ) 1 else 6
 
