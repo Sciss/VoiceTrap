@@ -76,7 +76,7 @@ object InfraImpl {
                   val routeGraph = SynthGraph {
                      import synth._
                      import ugen._
-                     val sig0 = In.ar( internalBus.index, numChannels = internalBus.numChannels )
+                     val sig0 = In.ar( internalBus.index, numChannels = internalBus.numChannels ) * VoiceTrap.masterGain
                      if( VoiceTrap.stereoOutput ) {
                         Out.ar( 0, SplayAz.ar( 2, sig0 ))
                      } else {

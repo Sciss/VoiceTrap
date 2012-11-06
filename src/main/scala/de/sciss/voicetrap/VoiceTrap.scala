@@ -32,12 +32,12 @@ import de.sciss.synth.proc.RichGroup
 import de.sciss.osc
 
 object VoiceTrap {
-   val useMnemo               = false  // true
+   val useMnemo               = true   // false
    val bootServer             = true   // false
    val minimal                = false  // true
    val liveInput              = true
-   val stereoOutput           = true   // false
-   val gui                    = true
+   val stereoOutput           = false  // true
+//   val gui                    = true
 
    lazy val baseDirectory     : File   = {
       if( useMnemo ) {
@@ -72,6 +72,7 @@ object VoiceTrap {
    val microphoneChannel      = 0
    var microphoneGain         = 1.0 // amp linear
    val outChannels            = (3 to 10) ++ (15 to 18)
+   val masterGain             = 1.25
 
    val forkIterations         = /* if( minimal ) 1 else */ 6
 
