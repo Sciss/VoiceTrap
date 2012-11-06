@@ -159,25 +159,31 @@ object SearchStepAlgorithm {
       val afSpec  = AudioFileSpec( fileType = AudioFileType.AIFF, sampleFormat = SampleFormat.Float,
                                    numChannels = 1, sampleRate = VoiceTrap.sampleRate, numFrames = spanLen )
       val afOut   = AudioFile.openWrite( outF, afSpec )
-      val frame   = m.database.reader.open()
-      val fadeLen = math.min( 22050L, spanLen / 2 )
-      val fadeIn  = SignalFader( off = 0L, len = fadeLen, start = 0f, stop = 1f, pow = 1f )
-      val fadeOut = SignalFader( off = spanLen - fadeLen, len = fadeLen, start = 1f, stop = 0f, pow = 1f )
-      val boost   = SignalFader( off = 0L, len = spanLen, start = m.boostIn, stop = m.boostOut, pow = 1f )
-      val buf     = afOut.buffer( 8192 )
-      val bufCh   = buf( 0 )
-      var off     = 0L
-      while( off < spanLen ) {
-         val chunkLen   = math.min( 8192, spanLen - off ).toInt
-         frame.read( buf, off, chunkLen )
-         fadeIn.process(  bufCh, 0, bufCh, 0, chunkLen )
-         fadeOut.process( bufCh, 0, bufCh, 0, chunkLen )
-         boost.process(   bufCh, 0, bufCh, 0, chunkLen )
-         afOut.write( buf, 0, chunkLen )
-         off += chunkLen
+      try {
+         val frame   = m.database.reader.open()
+         try {
+            val fadeLen = math.min( 22050L, spanLen / 2 )
+            val fadeIn  = SignalFader( off = 0L, len = fadeLen, start = 0f, stop = 1f, pow = 1f )
+            val fadeOut = SignalFader( off = spanLen - fadeLen, len = fadeLen, start = 1f, stop = 0f, pow = 1f )
+            val boost   = SignalFader( off = 0L, len = spanLen, start = m.boostIn, stop = m.boostOut, pow = 1f )
+            val buf     = afOut.buffer( 8192 )
+            val bufCh   = buf( 0 )
+            var off     = 0L
+            while( off < spanLen ) {
+               val chunkLen   = math.min( 8192, spanLen - off ).toInt
+               frame.read( buf, off, chunkLen )
+               fadeIn.process(  bufCh, 0, bufCh, 0, chunkLen )
+               fadeOut.process( bufCh, 0, bufCh, 0, chunkLen )
+               boost.process(   bufCh, 0, bufCh, 0, chunkLen )
+               afOut.write( buf, 0, chunkLen )
+               off += chunkLen
+            }
+         } finally {
+            frame.close()
+         }
+      } finally {
+         afOut.close()
       }
-      frame.close()
-      afOut.close()
       val name       = outF.getName
       val artifact   = Artifact( name )
       Grapheme.Value.Audio( artifact, afSpec, offset = 0L, gain = 1.0 )
@@ -192,41 +198,48 @@ object SearchStepAlgorithm {
       val afSpec  = AudioFileSpec( fileType = AudioFileType.AIFF, sampleFormat = SampleFormat.Float,
                                    numChannels = 1, sampleRate = VoiceTrap.sampleRate )
       val afOut   = AudioFile.openWrite( outF, afSpec )
-      val bufIn   = afOut.buffer( 8192 )
-      val bufInCh = bufIn( 0 )
-      val bufOut  = afOut.buffer( 8192 )
-      val bufOutCh = bufOut( 0 )
-      var current = sorted.head.segm.span.start
-      var remain  = sorted
-      var active  = IIdxSeq.empty[ Open ]
-      var keepGoing  = true
+      try {
+         val bufIn   = afOut.buffer( 8192 )
+         val bufInCh = bufIn( 0 )
+         val bufOut  = afOut.buffer( 8192 )
+         val bufOutCh = bufOut( 0 )
+         var current = sorted.head.segm.span.start
+         var remain  = sorted
+         var keepGoing  = true
 
-      while( keepGoing ) {
-         val (add, defer) = remain.span( _.segm.span.start == current )
-         remain   = defer
-         active ++= add.map( _.open() )
-         val next0   = remain.foldLeft( Long.MaxValue ) { case (res, chunk) => math.min( res, chunk.stop )}
-         val next    = active.foldLeft( next0 ) { case (res, open) => math.min( res, open.stop )}
-         keepGoing   = next < Long.MaxValue
-         if( keepGoing ) {
-            while( current < next ) {
-               val chunkLen = math.min( next - current, 8192 ).toInt
-               DSP.clear( bufOutCh, 0, chunkLen )
-               active.foreach { open =>
-                  open.af.read( bufIn, 0, chunkLen )
-                  open.fadeIn.process(  bufInCh, 0, bufInCh, 0, chunkLen )
-                  open.fadeOut.process( bufInCh, 0, bufInCh, 0, chunkLen )
-                  DSP.add( bufInCh, 0, bufOutCh, 0, chunkLen )
+         var active  = IIdxSeq.empty[ Open ]
+         try {
+            while( keepGoing ) {
+               val (add, defer) = remain.span( _.segm.span.start == current )
+               remain   = defer
+               active ++= add.map( _.open() )
+               val next0   = remain.foldLeft( Long.MaxValue ) { case (res, chunk) => math.min( res, chunk.stop )}
+               val next    = active.foldLeft( next0 ) { case (res, open) => math.min( res, open.stop )}
+               keepGoing   = next < Long.MaxValue
+               if( keepGoing ) {
+                  while( current < next ) {
+                     val chunkLen = math.min( next - current, 8192 ).toInt
+                     DSP.clear( bufOutCh, 0, chunkLen )
+                     active.foreach { open =>
+                        open.af.read( bufIn, 0, chunkLen )
+                        open.fadeIn.process(  bufInCh, 0, bufInCh, 0, chunkLen )
+                        open.fadeOut.process( bufInCh, 0, bufInCh, 0, chunkLen )
+                        DSP.add( bufInCh, 0, bufOutCh, 0, chunkLen )
+                     }
+                     afOut.write( bufOut, 0, chunkLen )
+                     current += chunkLen
+                  }
+                  val (remove, keep) = active.span( _.stop == current )
+                  remove.foreach( _.af.close() )
+                  active = keep
                }
-               afOut.write( bufOut, 0, chunkLen )
-               current += chunkLen
             }
-            val (remove, keep) = active.span( _.stop == current )
-            remove.foreach( _.af.close() )
-            active = keep
+         } finally {
+            active.foreach( _.af.close() )
          }
+      } finally {
+         afOut.close()
       }
-      afOut.close()
       Phrase.fromFile( outF )
    }
 

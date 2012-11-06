@@ -214,56 +214,61 @@ extends Database /* AbstractDatabase */ with ExtractionImpl {
       import DSP._
 
       updateLoop { afNew =>
-         val afOld   = AudioFile.openRead( fOld )
          var shrink  = 0L
          var pos     = 0L
-         val lim     = SignalLimiter( secondsToFrames( 0.1 ).toInt )
-         val inBuf   = afOld.buffer( 8192 )
-         val fInBuf  = inBuf( 0 )
-         val outBuf  = afOld.buffer( 8192 )
-         val fOutBuf = outBuf( 0 )
          var written = 0L
-         entries.foreach { entry =>
-            val start   = entry.span.start - shrink
-            // copy
-            while( pos < start ) {
-               val chunkLen   = min( start - pos, 8192 ).toInt
-               afOld.read( inBuf, 0, chunkLen )
-               val chunkLen2 = lim.process( fInBuf, 0, fOutBuf, 0, chunkLen )
-               afNew.write( outBuf, 0, chunkLen2 )
-               written += chunkLen2
-               pos += chunkLen
-            }
-            // fade
-            val fdLen   = entry.fade
-            if( fdLen > 0 ) {
-               var done    = 0L
-               val fo      = SignalFader( 0L, fdLen, 1f, 0f, 0.6666f )
-               val fi      = SignalFader( 0L, fdLen, 0f, 1f, 0.6666f )
-               while( done < fdLen ) {
-                  val chunkLen = min( fdLen - done, 8192 ).toInt
-                  afOld.seek( entry.span.start + done )
+         val lim     = SignalLimiter( secondsToFrames( 0.1 ).toInt )
+
+         val afOld   = AudioFile.openRead( fOld )
+         try {
+            val inBuf   = afOld.buffer( 8192 )
+            val fInBuf  = inBuf( 0 )
+            val outBuf  = afOld.buffer( 8192 )
+            val fOutBuf = outBuf( 0 )
+            entries.foreach { entry =>
+               val start   = entry.span.start - shrink
+               // copy
+               while( pos < start ) {
+                  val chunkLen   = min( start - pos, 8192 ).toInt
                   afOld.read( inBuf, 0, chunkLen )
-                  afOld.seek( entry.span.stop - fdLen + done )
-                  afOld.read( outBuf, 0, chunkLen )
-                  fo.process( fInBuf, 0, fInBuf, 0, chunkLen )
-                  fi.process( fOutBuf, 0, fOutBuf, 0, chunkLen )
-                  add( fOutBuf, 0, fInBuf, 0, chunkLen )
                   val chunkLen2 = lim.process( fInBuf, 0, fOutBuf, 0, chunkLen )
                   afNew.write( outBuf, 0, chunkLen2 )
                   written += chunkLen2
-                  done += chunkLen
+                  pos += chunkLen
                }
-               pos += entry.fade
+               // fade
+               val fdLen   = entry.fade
+               if( fdLen > 0 ) {
+                  var done    = 0L
+                  val fo      = SignalFader( 0L, fdLen, 1f, 0f, 0.6666f )
+                  val fi      = SignalFader( 0L, fdLen, 0f, 1f, 0.6666f )
+                  while( done < fdLen ) {
+                     val chunkLen = min( fdLen - done, 8192 ).toInt
+                     afOld.seek( entry.span.start + done )
+                     afOld.read( inBuf, 0, chunkLen )
+                     afOld.seek( entry.span.stop - fdLen + done )
+                     afOld.read( outBuf, 0, chunkLen )
+                     fo.process( fInBuf, 0, fInBuf, 0, chunkLen )
+                     fi.process( fOutBuf, 0, fOutBuf, 0, chunkLen )
+                     add( fOutBuf, 0, fInBuf, 0, chunkLen )
+                     val chunkLen2 = lim.process( fInBuf, 0, fOutBuf, 0, chunkLen )
+                     afNew.write( outBuf, 0, chunkLen2 )
+                     written += chunkLen2
+                     done += chunkLen
+                  }
+                  pos += entry.fade
+               }
+               shrink += entry.span.length - entry.fade
             }
-            shrink += entry.span.length - entry.fade
-         }
-         clear( fInBuf, 0, 8192 )
-         while( written < pos ) {
-            val chunkLen   = math.min( pos - written, 8192 ).toInt
-            val chunkLen2  = lim.process( fInBuf, 0, fOutBuf, 0, chunkLen )
-            afNew.write( outBuf, 0, chunkLen2 )
-            written += chunkLen2
+            clear( fInBuf, 0, 8192 )
+            while( written < pos ) {
+               val chunkLen   = math.min( pos - written, 8192 ).toInt
+               val chunkLen2  = lim.process( fInBuf, 0, fOutBuf, 0, chunkLen )
+               afNew.write( outBuf, 0, chunkLen2 )
+               written += chunkLen2
+            }
+         } finally {
+            afOld.close()
          }
       }
    }
@@ -274,13 +279,12 @@ extends Database /* AbstractDatabase */ with ExtractionImpl {
       updateLoop { afNew =>
          val afApp = AudioFile.openRead( appFile )
 //println( "app file = " + appFile + "; numFrames = " + afApp.numFrames + "; off = " + offset + " ; len = " + len )
-
-         // this is important: DiskOut writes in blocks, and therefore the actual
-         // number of frames in afApp may be a bit smaller than the len0 argument!
-         val off  = min( off0, afApp.numFrames )
-         val len = min( len0, afApp.numFrames - off )
-
          try {
+            // this is important: DiskOut writes in blocks, and therefore the actual
+            // number of frames in afApp may be a bit smaller than the len0 argument!
+            val off  = min( off0, afApp.numFrames )
+            val len = min( len0, afApp.numFrames - off )
+
             if( off > 0 ) afApp.seek( off )
             val fdLen = oldFileO.map( fOld => {
                val afOld   = AudioFile.openRead( fOld )

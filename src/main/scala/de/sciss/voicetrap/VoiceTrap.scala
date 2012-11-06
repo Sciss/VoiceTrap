@@ -32,7 +32,12 @@ import de.sciss.synth.proc.RichGroup
 import de.sciss.osc
 
 object VoiceTrap {
-   val useMnemo               = true
+   val useMnemo               = false  // true
+   val bootServer             = true   // false
+   val minimal                = false  // true
+   val liveInput              = true
+   val stereoOutput           = true   // false
+   val gui                    = true
 
    lazy val baseDirectory     : File   = {
       if( useMnemo ) {
@@ -46,9 +51,6 @@ object VoiceTrap {
    lazy val televisionFile    : File   = new File( new File( baseDirectory, "tv" ), "tv.aif" )
    lazy val temporaryDirectory: File   = new File( baseDirectory, "tmp" )
 
-   val minimal                = false
-   val liveInput              = true
-   val stereoOutput           = false
    val limiterLevel           = 0.9
    val compander              = true
    val hpfFreq                = 50.0
@@ -58,21 +60,20 @@ object VoiceTrap {
    val shrinkAmount           = 0.15
 //   val keepOneProbability     = 0.2
 
-   lazy val numRows           = if( minimal ) /* 2 */ 1 else 4
+   lazy val numRows           = if( minimal ) 2 /* 1 */ else 4
    lazy val numColumns        = if( minimal ) 1 else 3
    lazy val matrixSize        = numRows * numColumns
 
    val sampleRate             = 44100.0
    val audioInterface         = "MOTU 828mk2"
    val protocol: osc.Transport.Net = osc.UDP
-   val bootServer             = false // true
    val highestInputChannel    = 2
    val highestOutputChannel   = 22
    val microphoneChannel      = 0
    var microphoneGain         = 1.0 // amp linear
    val outChannels            = (3 to 10) ++ (15 to 18)
 
-   val forkIterations         = if( minimal ) 1 else 6
+   val forkIterations         = /* if( minimal ) 1 else */ 6
 
    val drainProbability       = 0.05 // 0.1
 
