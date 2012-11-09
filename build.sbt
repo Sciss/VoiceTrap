@@ -2,7 +2,7 @@ import AssemblyKeys._
 
 name := "VoiceTrap"
 
-version := "0.0.1"
+version := "0.1.0"
 
 organization := "de.sciss"
 
@@ -15,8 +15,8 @@ scalaVersion := "2.9.2"
 resolvers += "Oracle Repository" at "http://download.oracle.com/maven"  // required for sleepycat
 
 libraryDependencies ++= Seq(
-   "de.sciss" %% "soundprocesses" % "1.1.0",
-   "de.sciss" %% "strugatzki" % "1.0.0"
+   "de.sciss" %% "soundprocesses" % "1.1.2",
+   "de.sciss" %% "strugatzki" % "1.1.0"
 )
 
 // libraryDependencies in ThisBuild <+= scalaVersion { sv =>
