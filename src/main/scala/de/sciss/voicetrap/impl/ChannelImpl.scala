@@ -32,10 +32,11 @@ import synth.{addAfter, SynthGraph, proc}
 import concurrent.stm.Ref
 import de.sciss.lucre.bitemp.{BiGroup, Span}
 import java.io.File
-import proc.{Proc, Scan, Artifact, Grapheme}
+import synth.proc.{SoundProcesses, Proc, Scan, Artifact, Grapheme}
 import GraphemeUtil.formatSpan
 
-import VoiceTrap.{numColumns, sampleRate, phraseLength, loopLength, forkIterations}
+import VoiceTrap.{numColumns, sampleRate, phraseLength, loopLength, forkIterations, playBackOnly}
+import java.util.concurrent.TimeUnit
 
 object ChannelImpl {
    private final val SER_VERSION = 1
@@ -91,7 +92,24 @@ object ChannelImpl {
          log( "spawning " + chan + " with " + cursor + " (pos = " + cursor.position + ")" )
          implicit val aStore  = document.artifactStore
          val loop = (loopLength.step()( tx.peer ) * sampleRate).toLong
-         nextSearch( loop, 0, tx.info.timeStamp, document, auralSystem, server, transportOption = None )
+         if( playBackOnly ) {
+            playBack( loop, auralSystem )
+         } else {
+            nextSearch( loop, 0, tx.info.timeStamp, document, auralSystem, server, transportOption = None )
+         }
+      }
+
+      private def playBack( loop: Long, auralSystem: proc.AuralSystem[ S ])
+                          ( implicit tx: Tx, cursor: Cursor, artifactStore: ArtifactStore ) {
+         val t       = makeTransport( auralSystem )
+         val millis  = (loop / sampleRate * 1000).toLong
+         submitTxn(
+            SoundProcesses.pool.scheduleAtFixedRate( new Runnable {
+               def run() {
+                  cursor.step( tx1 => t.seek( 0L )( tx1 ))
+               }
+            }, millis, millis, TimeUnit.MILLISECONDS )
+         )( _ => () )( tx.peer )
       }
 
       private def makeTransport( auralSystem: proc.AuralSystem[ S ])( implicit tx: Tx, cursor: Cursor,

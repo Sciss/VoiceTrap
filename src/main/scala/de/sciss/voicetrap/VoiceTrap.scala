@@ -32,12 +32,30 @@ import de.sciss.synth.proc
 import de.sciss.osc
 
 object VoiceTrap {
-   val useMnemo               = true   // false
+   /**
+    * If `true`, use `/Volumes/Mnemo2/VoiceTrap` as base directory,
+    * otherwise use `~/Desktop/VoiceTrap`.
+    */
+   val useMnemo               = false
    val bootServer             = true   // false
+   /**
+    * If `true`, use the minimum number of channels, this is for debugging purposes.
+    */
    val minimal                = false  // true
+   /**
+    * If `true`, use microphone input, otherwise rely on pre-recorded input file.
+    */
    val liveInput              = true
-   val stereoOutput           = false  // true
-//   val gui                    = true
+   /**
+    * If `true`. mix output channels to stereo signal, useful for debugging on
+    * laptop stereo out.
+    */
+   val stereoOutput           = true
+   /**
+    * If `true`, opens db and just plays back the timelines in loop, otherwise
+    * goes into normal generative mode.
+    */
+   val playBackOnly           = true
 
    lazy val baseDirectory     : File   = {
       if( useMnemo ) {
