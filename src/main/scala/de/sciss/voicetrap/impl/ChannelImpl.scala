@@ -28,7 +28,7 @@ package impl
 
 import de.sciss.lucre.{DataInput, DataOutput, stm, data}
 import de.sciss.synth
-import synth.{SynthDef, addAfter, SynthGraph, proc}
+import synth.{addAfter, SynthGraph, proc}
 import concurrent.stm.Ref
 import de.sciss.lucre.bitemp.{BiGroup, Span}
 import java.io.File
@@ -334,15 +334,18 @@ object ChannelImpl {
          val grw     = Grapheme.Modifiable[ S ]
          val grd     = Grapheme.Modifiable[ S ]
          grw.add( time -> segm.value )
-         grd.add( time -> Grapheme.Value.Curve( dur -> stepShape ))
+         val gv      = Grapheme.Value.Curve
+         val crv     = gv( dur -> stepShape )   // sucky IDEA highlights error here if we use Grapheme.Value.Curve() straight away XXX TODO
+         grd.add( time -> crv )
          scanw.source_=( Some( Scan.Link.Grapheme( grw )))
          scand.source_=( Some( Scan.Link.Grapheme( grd )))
-         p.graph_=( SynthGraph {
+         val sg = SynthGraph {
             val sig     = scan( "sig" ).ar( 0 )
             val duri    = A2K.kr( scan( "dur" ).ar( 1 ))
             val env     = EnvGen.ar( Env.linen( 0.2, (duri - 0.4).max( 0 ), 0.2 ))
             Out.ar( 0, sig * env )
-         })
+         }
+         p.graph_=( sg )
          val span    = Span( time, time + len )
          logThis( "adding process " + formatSpan( span ) + " " + p + " in " + tx.inputAccess )
 //de.sciss.lucre.event.showLog = true

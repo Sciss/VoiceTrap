@@ -28,7 +28,6 @@ package impl
 
 import java.io.File
 import de.sciss.strugatzki.FeatureExtraction
-import concurrent.stm.Txn
 
 trait ExtractionImpl {
    import GraphemeUtil._

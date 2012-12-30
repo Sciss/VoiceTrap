@@ -25,7 +25,6 @@
 
 package de.sciss.voicetrap
 
-import de.sciss.synth.proc.Proc
 import impl.PhraseImpl
 import java.io.File
 import concurrent.stm.InTxn

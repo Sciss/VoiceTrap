@@ -107,7 +107,8 @@ object FutureResult {
             peer.react {
                case Set( value ) =>
                   close( this )
-                  syncVar.set( value )
+//                  syncVar.set( value )
+                  syncVar.put( value )
             }
          }, c )
          peer.start()

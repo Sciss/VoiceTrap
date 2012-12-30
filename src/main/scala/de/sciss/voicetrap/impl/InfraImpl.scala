@@ -26,14 +26,12 @@
 package de.sciss.voicetrap
 package impl
 
-import de.sciss.lucre.{confluent, stm}
-import confluent.reactive.ConfluentReactive
+import de.sciss.lucre.stm
 import stm.store.BerkeleyDB
 import java.io.File
 import de.sciss.synth
 import synth.{addToTail, SynthGraph, Bus, proc, Server}
 import proc.{SoundProcesses, AuralSystem}
-import de.sciss.osc
 
 object InfraImpl {
    def apply() : Infra = {

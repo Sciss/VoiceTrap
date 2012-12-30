@@ -27,7 +27,6 @@ package de.sciss.voicetrap
 package impl
 
 import java.io.File
-import concurrent.stm.InTxn
 import de.sciss.synth.proc
 
 abstract class AbstractDifferanceDatabaseFiller extends DifferanceDatabaseFiller {

@@ -26,7 +26,6 @@
 package de.sciss.voicetrap
 
 import impl.{DifferanceDatabaseFillerImpl => Impl}
-import concurrent.stm.InTxn
 import de.sciss.synth.proc
 
 object DifferanceDatabaseFiller {

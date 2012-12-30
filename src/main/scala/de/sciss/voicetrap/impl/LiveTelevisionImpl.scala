@@ -30,7 +30,6 @@ import java.io.{IOException, File}
 import de.sciss.synth
 import synth.proc
 import synth.io.{AudioFile, SampleFormat, AudioFileType}
-import concurrent.stm.{InTxn, Ref}
 
 object LiveTelevisionImpl {
 //   private val identifier  = "live-television-impl"
@@ -39,7 +38,7 @@ object LiveTelevisionImpl {
 }
 final class LiveTelevisionImpl private () extends Television {
    import GraphemeUtil._
-   import LiveTelevisionImpl._
+//   import LiveTelevisionImpl._
 
    val lookAheadLim = 0.01
 //   val DEBUG = false
@@ -56,7 +55,7 @@ final class LiveTelevisionImpl private () extends Television {
    def capture( identifier: String, server: proc.Server, length: Long )( implicit tx: Tx ) : FutureResult[ File ] = {
       import synth._
       import ugen._
-      import proc.{log => _, _}
+//      import proc.{log => _, _}
 //      import DSL._
 
       val dur     = framesToSeconds( length ) + latency

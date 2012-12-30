@@ -27,11 +27,10 @@ package de.sciss.voicetrap
 package impl
 
 import java.io.File
-import de.sciss.synth
 import concurrent.stm.{Ref, InTxn}
 
 object PhraseImpl {
-   import GraphemeUtil._
+//   import GraphemeUtil._
 
    private val identifier  = "phrase-impl"
 

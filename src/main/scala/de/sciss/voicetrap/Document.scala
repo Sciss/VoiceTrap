@@ -29,8 +29,7 @@ package de.sciss.voicetrap
 import impl.{DocumentImpl => Impl}
 import de.sciss.lucre.Writable
 import de.sciss.synth.proc
-import proc.{RichAudioBus, AuralSystem}
-import de.sciss.synth.AudioBus
+import proc.AuralSystem
 
 object Document {
    implicit def serializer: Serializer[ Document ] = Impl.serializer

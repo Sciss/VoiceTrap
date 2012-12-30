@@ -28,7 +28,7 @@ package impl
 
 import java.io.File
 import de.sciss.synth.io.{AudioFileSpec, AudioFile}
-import concurrent.stm.{InTxn, Ref}
+import concurrent.stm.Ref
 import de.sciss.synth.proc
 
 object FileTelevisionImpl {
@@ -43,7 +43,7 @@ object FileTelevisionImpl {
 }
 class FileTelevisionImpl private ( f: File, spec: AudioFileSpec ) extends Television {
    import GraphemeUtil._
-   import FileTelevisionImpl._
+//   import FileTelevisionImpl._
 
 //   private val posRef = Ref( 0L )
    private val posRef = Ref( (math.random * (spec.numFrames - 1)).toLong )
