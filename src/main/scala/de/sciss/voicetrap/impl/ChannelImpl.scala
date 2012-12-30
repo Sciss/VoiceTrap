@@ -2,7 +2,7 @@
  *  ChannelImpl.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2013 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -32,7 +32,7 @@ import synth.{SynthDef, addAfter, SynthGraph, proc}
 import concurrent.stm.Ref
 import de.sciss.lucre.bitemp.{BiGroup, Span}
 import java.io.File
-import synth.proc.{Proc, RichServer, ProcTxn, RichSynthDef, Scan, Artifact, Grapheme}
+import proc.{Proc, Scan, Artifact, Grapheme}
 import GraphemeUtil.formatSpan
 
 import VoiceTrap.{numColumns, sampleRate, phraseLength, loopLength, forkIterations}
@@ -87,7 +87,7 @@ object ChannelImpl {
 
 //      def cursor( implicit tx: Tx ) : Cursor = cursorVar.get
 
-      def start( document: Document, server: RichServer, auralSystem: proc.AuralSystem[ S ])( implicit tx: Tx, cursor: Cursor ) {
+      def start( document: Document, server: proc.Server, auralSystem: proc.AuralSystem[ S ])( implicit tx: Tx, cursor: Cursor ) {
          log( "spawning " + chan + " with " + cursor + " (pos = " + cursor.position + ")" )
          implicit val aStore  = document.artifactStore
          val loop = (loopLength.step()( tx.peer ) * sampleRate).toLong
@@ -104,7 +104,7 @@ object ChannelImpl {
          val view = proc.AuralPresentation.run[ S, I ]( t, auralSystem )
          view.group match {
             case Some( rg ) =>
-               implicit val ptx = ProcTxn()
+//               implicit val ptx = ProcTxn()
                rg.moveBefore( audible = true, target = VoiceTrap.masterGroup )
                val routeGraph = SynthGraph {
                   import synth._
@@ -115,9 +115,11 @@ object ChannelImpl {
                   Out.ar( outBus, sig ) // * SinOsc.ar( 444 )
                   ReplaceOut.ar( inBus, sig * DC.ar( 0 ))
                }
-               val sd = RichSynthDef( rg.server, routeGraph, nameHint = Some( "channel-route" ))
+//               val sd = proc.SynthDef( rg.server, routeGraph, nameHint = Some( "channel-route" ))
+//               sd.play( target = rg, args = Seq( "out" -> (VoiceTrap.privateBus.index + matrixIndex) ), addAction = addAfter )
                val matrixIndex = row * numColumns + column
-               sd.play( target = rg, args = Seq( "out" -> (VoiceTrap.privateBus.index + matrixIndex) ), addAction = addAfter )
+               proc.Synth( routeGraph, nameHint = Some( "channel-route" ))( target = rg,
+                 args = Seq( "out" -> (VoiceTrap.privateBus.index + matrixIndex)), addAction = addAfter )
 
                // XXX TODO:
 //                  val pingGraph = SynthGraph {
@@ -132,7 +134,7 @@ object ChannelImpl {
       }
 
       def nextSearch( loop: Long, iter: Int, iterZeroTime: Long, document: Document, auralSystem: proc.AuralSystem[ S ],
-                      server: RichServer, transportOption: Option[ Transport ])( implicit tx: Tx, cursor: Cursor ) {
+                      server: proc.Server, transportOption: Option[ Transport ])( implicit tx: Tx, cursor: Cursor ) {
          implicit val itx = tx.peer
 
          implicit val aStore  = document.artifactStore
@@ -169,7 +171,7 @@ object ChannelImpl {
          }
       }
 
-      private def playJumpBackSound( server: RichServer )( implicit ptx: ProcTxn ) {
+      private def playJumpBackSound( server: proc.Server )( implicit ptx: proc.Txn ) {
          val gr = SynthGraph {
             import synth._
             import ugen._
@@ -195,12 +197,13 @@ object ChannelImpl {
             }
             Out.ar( bus, sig * amp )
          }
-         val rd = RichSynthDef( server, gr )
+//         val rd = proc.SynthDef( server, gr )
          val ch = row * numColumns + column + VoiceTrap.privateBus.index
-         rd.play( target = server.defaultGroup, args = Seq( "bus" -> ch, "amp" -> VoiceTrap.jumpBackSoundVolume ))
+//         rd.play( target = server.defaultGroup, args = Seq( "bus" -> ch, "amp" -> VoiceTrap.jumpBackSoundVolume ))
+        proc.Synth( gr )( target = server.defaultGroup, args = Seq( "bus" -> ch, "amp" -> VoiceTrap.jumpBackSoundVolume ))
       }
 
-      private def postStep( server: RichServer, auralSystem: proc.AuralSystem[ S ], insSpan: Span,
+      private def postStep( server: proc.Server, auralSystem: proc.AuralSystem[ S ], insSpan: Span,
                             artOpt: Option[ AudioArtifact ],
                             document: Document, transport: Transport, iter: Int, iterZeroTime: Long ) {
          document.cursor.step { implicit tx =>
@@ -213,7 +216,7 @@ object ChannelImpl {
 
             if( incIter ) logThis( "iteration " + nextIter + jumpBack.map( " @" + _ ).getOrElse( "" ))
 
-            if( jumpBack.isDefined && VoiceTrap.jumpBackSound ) playJumpBackSound( server )( ProcTxn() )
+            if( jumpBack.isDefined && VoiceTrap.jumpBackSound ) playJumpBackSound( server ) // ( ProcTxn() )
 
             document.withChannel( row = row, column = column, jumpBack = None )(
                exchangeArtifact( artOpt, insSpan, jumpBack, transport ))
@@ -241,7 +244,7 @@ object ChannelImpl {
       }
 
       private def invokeNextSearch( loop: Long, iter: Int, iterTimeZero: Long, document: Document,
-                                    auralSystem: proc.AuralSystem[ S ], server: RichServer, transportOption: Option[ Transport ])
+                                    auralSystem: proc.AuralSystem[ S ], server: proc.Server, transportOption: Option[ Transport ])
                                   ( _tx: Tx, _csr: Cursor, ch: Channel ) {
          implicit val tx   = _tx
          implicit val csr  = _csr

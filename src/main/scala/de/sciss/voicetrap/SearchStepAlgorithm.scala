@@ -2,7 +2,7 @@
  *  SearchStepAlgorithm.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2013 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -26,7 +26,9 @@
 package de.sciss.voicetrap
 
 import de.sciss.lucre.bitemp.Span
-import de.sciss.synth.proc.{RichServer, Artifact, Scan, Grapheme}
+import de.sciss.synth
+import synth.proc
+import proc.{Artifact, Scan, Grapheme}
 import collection.immutable.{IndexedSeq => IIdxSeq}
 import de.sciss.synth.io.{AudioFileType, SampleFormat, AudioFileSpec, AudioFile}
 
@@ -45,7 +47,7 @@ object SearchStepAlgorithm {
    }
    case class Open( af: AudioFile, stop: Long, fadeIn: SignalFader, fadeOut: SignalFader )
 
-   def apply( channel: Channel, server: RichServer, span: Span, group: ProcGroup, hidden: AudioArtifact )
+   def apply( channel: Channel, server: proc.Server, span: Span, group: ProcGroup, hidden: AudioArtifact )
             ( implicit tx: Tx, artifactStore: ArtifactStore ) : FutureResult[ AudioArtifact ] = {
       // first, calculate all the 'cutted' audio segments within the given target span
       val posSegms = group.intersect( span ).toIndexedSeq.flatMap { case (sp, seq) =>

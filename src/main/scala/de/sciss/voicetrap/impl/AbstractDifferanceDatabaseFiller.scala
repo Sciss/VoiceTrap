@@ -2,7 +2,7 @@
  *  AbstractDifferanceDatabaseFiller.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2013 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ package impl
 
 import java.io.File
 import concurrent.stm.InTxn
-import de.sciss.synth.proc.RichServer
+import de.sciss.synth.proc
 
 abstract class AbstractDifferanceDatabaseFiller extends DifferanceDatabaseFiller {
    import GraphemeUtil._
@@ -44,7 +44,7 @@ abstract class AbstractDifferanceDatabaseFiller extends DifferanceDatabaseFiller
    def television : Television
    def maxCaptureDur : Double
 
-   def perform( server: RichServer )( implicit tx: Tx ) : FutureResult[ Unit ] = {
+   def perform( server: proc.Server )( implicit tx: Tx ) : FutureResult[ Unit ] = {
       implicit val itx = tx.peer
       val tgtLen  = secondsToFrames( durationMotion.step() )
       val dbLen   = database.length

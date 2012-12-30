@@ -2,7 +2,7 @@
  *  VoiceTrap.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2013 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -28,7 +28,7 @@ package de.sciss.voicetrap
 import java.io.File
 import collection.immutable.{IndexedSeq => IIdxSeq}
 import de.sciss.synth.AudioBus
-import de.sciss.synth.proc.RichGroup
+import de.sciss.synth.proc
 import de.sciss.osc
 
 object VoiceTrap {
@@ -111,7 +111,7 @@ object VoiceTrap {
 
    var txnThread : Thread = null
 
-   var masterGroup : RichGroup = null
+   var masterGroup : proc.Group = null
 
    def main( args: Array[ String ]) {
       Infra().start()

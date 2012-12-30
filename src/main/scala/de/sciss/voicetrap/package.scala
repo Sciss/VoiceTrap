@@ -2,7 +2,7 @@
  *  package.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2013 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -25,7 +25,6 @@
 
 package de.sciss
 
-import lucre.confluent.reactive.ConfluentReactive
 import lucre.{DataOutput, DataInput, stm}
 import synth.expr.ExprImplicits
 import synth.io.AudioFileSpec
@@ -38,7 +37,7 @@ import annotation.elidable
 import annotation.elidable._
 
 package object voicetrap {
-   type S               = ConfluentReactive
+   type S               = proc.Confluent
 
    object implicits extends ExprImplicits[ S ]
 

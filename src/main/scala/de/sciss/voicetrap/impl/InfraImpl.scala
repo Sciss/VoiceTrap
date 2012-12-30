@@ -1,12 +1,38 @@
+/*
+ *  InfraImpl.scala
+ *  (VoiceTrap)
+ *
+ *  Copyright (c) 2012-2013 Hanns Holger Rutz. All rights reserved.
+ *
+ *  This software is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public License
+ *  as published by the Free Software Foundation; either
+ *  version 2, june 1991 of the License, or (at your option) any later version.
+ *
+ *  This software is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ *  General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public
+ *  License (gpl.txt) along with this software; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ *
+ *
+ *  For further information, please contact Hanns Holger Rutz at
+ *  contact@sciss.de
+ */
+
 package de.sciss.voicetrap
 package impl
 
-import de.sciss.lucre.confluent.reactive.ConfluentReactive
-import de.sciss.lucre.stm.impl.BerkeleyDB
+import de.sciss.lucre.{confluent, stm}
+import confluent.reactive.ConfluentReactive
+import stm.store.BerkeleyDB
 import java.io.File
 import de.sciss.synth
 import synth.{addToTail, SynthGraph, Bus, proc, Server}
-import synth.proc.{RichGroup, SoundProcesses, ProcTxn, RichSynthDef, AuralSystem}
+import proc.{SoundProcesses, AuralSystem}
 import de.sciss.osc
 
 object InfraImpl {
@@ -22,7 +48,7 @@ object InfraImpl {
 
       val dir     = new File( VoiceTrap.baseDirectory, "db" )
       val store   = BerkeleyDB.factory( dir )
-      val system  = ConfluentReactive( store )
+      val system  = proc.Confluent( store )
 //de.sciss.lucre.confluent.showCursorLog = true
 //de.sciss.lucre.confluent.showLog       = true
 //de.sciss.lucre.event.showLog           = true
@@ -88,11 +114,13 @@ object InfraImpl {
                         }
                      }
                   }
-                  implicit val ptx = ProcTxn()
-                  val rd = RichSynthDef( server, routeGraph, nameHint = Some( "internal-bus" ))
-                  val mg = RichGroup( server )
-                  mg.play( target = server.defaultGroup, addAction = addToTail )
-                  rd.play( target = mg )
+//                  implicit val ptx = ProcTxn()
+//                  val rd = proc.SynthDef( server, routeGraph, nameHint = Some( "internal-bus" ))
+                  val mg = proc.Group( server )( target = server.defaultGroup, addAction = addToTail )
+//                  mg.play( target = server.defaultGroup, addAction = addToTail )
+//                  rd.play( target = mg )
+                  proc.Synth( routeGraph, nameHint = Some( "internal-bus" ))( target = mg )
+
                   VoiceTrap.masterGroup = mg
 
 //                  server.peer.dumpOSC()

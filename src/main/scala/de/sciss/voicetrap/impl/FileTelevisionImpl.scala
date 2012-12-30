@@ -2,7 +2,7 @@
  *  FileTelevisionImpl.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2013 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -29,7 +29,7 @@ package impl
 import java.io.File
 import de.sciss.synth.io.{AudioFileSpec, AudioFile}
 import concurrent.stm.{InTxn, Ref}
-import de.sciss.synth.proc.RichServer
+import de.sciss.synth.proc
 
 object FileTelevisionImpl {
 //   private val identifier  = "file-television-impl"
@@ -50,7 +50,7 @@ class FileTelevisionImpl private ( f: File, spec: AudioFileSpec ) extends Televi
 
    def latency = 0.0
 
-   def capture( identifier: String, server: RichServer, length: Long )( implicit tx: Tx ) : FutureResult[ File ] = {
+   def capture( identifier: String, server: proc.Server, length: Long )( implicit tx: Tx ) : FutureResult[ File ] = {
       implicit val itx = tx.peer
       val oldPos = posRef()
       threadFuture( identifier + " : capture" ) {
