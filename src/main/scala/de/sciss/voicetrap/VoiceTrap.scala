@@ -57,6 +57,11 @@ object VoiceTrap {
     */
    val playBackOnly           = true
 
+   /**
+    * Set to `true` to enable scsynth OSC dump for debugging purposes.
+    */
+   val dumpOSC                = false
+
    lazy val baseDirectory     : File   = {
       if( useMnemo ) {
          new File( new File( "/Volumes", "Mnemo2" ), "VoiceTrap" )

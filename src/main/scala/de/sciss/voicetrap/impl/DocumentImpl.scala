@@ -63,6 +63,10 @@ object DocumentImpl {
          val chanHandles   = channels.map( tx.newHandle( _ ))
 
          val artifactStoreVar = tx.readVar[ ArtifactStore ]( id, in ) // .read[ S ]( in, access )
+if( artifactStoreVar.get.baseDirectory != VoiceTrap.artifactDirectory ) {
+   log( "Changing artifact storage directory to " + VoiceTrap.artifactDirectory )
+   artifactStoreVar.set( proc.ArtifactStore[ S ]( VoiceTrap.artifactDirectory ))
+}
          new Impl( id, cursor, chanCursorVars, channels, chanHandles, artifactStoreVar )
       }
    }
