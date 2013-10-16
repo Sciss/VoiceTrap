@@ -10,7 +10,7 @@ homepage := Some( url( "https://github.com/Sciss/VoiceTrap" ))
 
 licenses := Seq( "GPL v2+" -> url( "http://www.gnu.org/licenses/gpl-2.0.txt" ))
 
-scalaVersion := "2.9.2" // "2.10.0"
+scalaVersion := "2.10.3"
 
 resolvers += "Oracle Repository" at "http://download.oracle.com/maven"  // required for sleepycat
 
