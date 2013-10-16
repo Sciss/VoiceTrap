@@ -32,111 +32,113 @@ import de.sciss.synth.proc
 import de.sciss.osc
 
 object VoiceTrap {
-   /**
-    * If `true`, use `/Volumes/Mnemo2/VoiceTrap` as base directory,
-    * otherwise use `~/Desktop/VoiceTrap`.
-    */
-   val useMnemo               = false
-   val bootServer             = true   // false
-   /**
-    * If `true`, use the minimum number of channels, this is for debugging purposes.
-    */
-   val minimal                = false  // true
-   /**
-    * If `true`, use microphone input, otherwise rely on pre-recorded input file.
-    */
-   val liveInput              = true
-   /**
-    * If `true`. mix output channels to stereo signal, useful for debugging on
-    * laptop stereo out.
-    */
-   val stereoOutput           = true
-   /**
-    * If `true`, opens db and just plays back the timelines in loop, otherwise
-    * goes into normal generative mode.
-    */
-   val playBackOnly           = true
+  /**
+   * If `true`, use `/Volumes/Mnemo2/VoiceTrap` as base directory,
+   * otherwise use `~/Desktop/VoiceTrap`.
+   */
+  val useMnemo                = false
 
-   /**
-    * Set to `true` to enable scsynth OSC dump for debugging purposes.
-    */
-   val dumpOSC                = false
+  val bootServer              = true // false
+  /**
+   * If `true`, use the minimum number of channels, this is for debugging purposes.
+   */
+  val minimal                 = false // true
+  /**
+   * If `true`, use microphone input, otherwise rely on pre-recorded input file.
+   */
+  val liveInput               = true
+  /**
+   * If `true`. mix output channels to stereo signal, useful for debugging on
+   * laptop stereo out.
+   */
+  val stereoOutput            = true
+  /**
+   * If `true`, opens db and just plays back the timelines in loop, otherwise
+   * goes into normal generative mode.
+   */
+  val playBackOnly            = true
 
-   lazy val baseDirectory     : File   = {
-      if( useMnemo ) {
-         new File( new File( "/Volumes", "Mnemo2" ), "VoiceTrap" )
-      } else {
-         new File( new File( sys.props( "user.home" ), "Desktop" ), "VoiceTrap" )
-      }
-   }
-   lazy val artifactDirectory : File   = new File( baseDirectory, "artifacts" )
-//   lazy val databaseDirectory : File   = new File( baseDirectory, "audio_db" )
-   lazy val televisionFile    : File   = new File( new File( baseDirectory, "tv" ), "tv.aif" )
-   lazy val temporaryDirectory: File   = new File( baseDirectory, "tmp" )
+  /**
+   * Set to `true` to enable scsynth OSC dump for debugging purposes.
+   */
+  val dumpOSC                 = false
 
-   val limiterLevel           = 0.9
-   val compander              = true
-   val hpfFreq                = 50.0
+  lazy val baseDirectory     : File   =
+     if (useMnemo) {
+       new File(new File("/Volumes", "Mnemo2"), "VoiceTrap")
+     } else {
+       new File(new File(sys.props("user.home"), "Desktop"), "VoiceTrap")
+     }
 
-   val jumpBackSound          = true
-   val jumpBackSoundVolume    = 1.0
-   val shrinkAmount           = 0.15
-//   val keepOneProbability     = 0.2
+  lazy val artifactDirectory  : File = new File(baseDirectory, "artifacts")
+  //   lazy val databaseDirectory : File   = new File( baseDirectory, "audio_db" )
+  lazy val televisionFile     : File = new File(new File(baseDirectory, "tv"), "tv.aif")
+  lazy val temporaryDirectory : File = new File(baseDirectory, "tmp")
 
-   lazy val numRows           = if( minimal ) 2 /* 1 */ else 4
-   lazy val numColumns        = if( minimal ) 1 else 3
-   lazy val matrixSize        = numRows * numColumns
+  val limiterLevel           = 0.9
+  val compander              = true
+  val hpfFreq                = 50.0
 
-   val sampleRate             = 44100.0
-   val audioInterface         = "MOTU 828mk2"
-   val protocol: osc.Transport.Net = osc.UDP
-   val highestInputChannel    = 2
-   val highestOutputChannel   = 22
-   val microphoneChannel      = 0
-   var microphoneGain         = 1.0 // amp linear
-   val outChannels            = (3 to 10) ++ (15 to 18)
-   val masterGain             = 1.25
+  val jumpBackSound          = true
+  val jumpBackSoundVolume    = 1.0
+  val shrinkAmount           = 0.15
+  //   val keepOneProbability     = 0.2
 
-   val forkIterations         = /* if( minimal ) 1 else */ 6
+  lazy val numRows           = if (minimal) 2 /* 1 */ else 4
+  lazy val numColumns        = if (minimal) 1 else 3
+  lazy val matrixSize        = numRows * numColumns
 
-   val drainProbability       = 0.05 // 0.1
+  val sampleRate             = 44100.0
+  val audioInterface         = "MOTU 828mk2"
+  val protocol: osc.Transport.Net = osc.UDP
+  val highestInputChannel    = 2
+  val highestOutputChannel   = 22
+  val microphoneChannel      = 0
+  var microphoneGain         = 1.0 // amp linear
+  val outChannels            = (3 to 10) ++ (15 to 18)
+  val masterGain             = 1.25
 
-   val recordBufferSize       = 65536 // 32768
+  val forkIterations         = /* if( minimal ) 1 else */ 6
 
-//   lazy val internalBusOffset = highestOutputChannel + highestInputChannel
+  val drainProbability       = 0.05 // 0.1
 
-   var privateBus : AudioBus  = null      // XXX TODO: que se puede acer...
+  val recordBufferSize       = 65536 // 32768
 
-   lazy val phraseLength : Motion  = Motion.exprand( 8.0, 24.0 )
-   lazy val loopLength : Motion    = if( minimal ) Motion.constant( 45.0 ) else Motion.exprand( 90.0 / 1.1, 90.0 * 1.1 ) // Motion.constant( 90.0 )
+  //   lazy val internalBusOffset = highestOutputChannel + highestInputChannel
 
-   lazy val startTime         = System.currentTimeMillis()
+  var privateBus: AudioBus   = null      // XXX TODO: que se puede acer...
 
-   case class ChannelDB( database: Database, query: DifferanceDatabaseQuery,
-                         thinner: DifferanceDatabaseThinner, filler: DifferanceDatabaseFiller )
+  lazy val phraseLength: Motion  = Motion.exprand(8.0, 24.0)
+  lazy val loopLength: Motion    = if (minimal) Motion.constant(45.0) else Motion.exprand(90.0 / 1.1, 90.0 * 1.1) // Motion.constant( 90.0 )
 
-   lazy val databases = IIdxSeq.tabulate( numRows ) { row => IIdxSeq.tabulate( numColumns ) { col =>
-      val mStr       = "_" + (row+1) + "_" + (col+1)
-      val dir        = new File( baseDirectory, "audio_db" + mStr )
-//      if( !dir.isDirectory ) dir.mkdir()
-      val database   = Database( "db" + mStr, dir )
-      val query      = DifferanceDatabaseQuery(   database )
-      val thinner    = DifferanceDatabaseThinner( database )
-      val filler     = DifferanceDatabaseFiller( database, television )
-      ChannelDB( database, query, thinner, filler )
-   }}
+  lazy val startTime         = System.currentTimeMillis()
 
-//   lazy val database        : Database                   = Database( databaseDirectory )
-//   lazy val databaseQuery   : DifferanceDatabaseQuery    = DifferanceDatabaseQuery(   database )
-//   lazy val databaseThinner : DifferanceDatabaseThinner  = DifferanceDatabaseThinner( database )
-//   lazy val databaseFiller  : DifferanceDatabaseFiller   = DifferanceDatabaseFiller( database, television )
-   lazy val television      : Television                 = if( liveInput ) Television.live() else Television.fromFile( televisionFile )
+  case class ChannelDB(database: Database, query: DifferanceDatabaseQuery,
+                       thinner: DifferanceDatabaseThinner, filler: DifferanceDatabaseFiller)
 
-   var txnThread : Thread = null
+  lazy val databases = IIdxSeq.tabulate(numRows) { row =>
+    IIdxSeq.tabulate(numColumns) { col =>
+      val mStr      = "_" + (row + 1) + "_" + (col + 1)
+      val dir       = new File(baseDirectory, "audio_db" + mStr)
+      //      if( !dir.isDirectory ) dir.mkdir()
+      val database  = Database("db" + mStr, dir)
+      val query     = DifferanceDatabaseQuery   (database)
+      val thinner   = DifferanceDatabaseThinner (database)
+      val filler    = DifferanceDatabaseFiller  (database, television)
+      ChannelDB(database, query, thinner, filler)
+    }
+  }
 
-   var masterGroup : proc.Group = null
+  //   lazy val database        : Database                   = Database( databaseDirectory )
+  //   lazy val databaseQuery   : DifferanceDatabaseQuery    = DifferanceDatabaseQuery(   database )
+  //   lazy val databaseThinner : DifferanceDatabaseThinner  = DifferanceDatabaseThinner( database )
+  //   lazy val databaseFiller  : DifferanceDatabaseFiller   = DifferanceDatabaseFiller( database, television )
 
-   def main( args: Array[ String ]) {
-      Infra().start()
-   }
+  lazy val television: Television = if (liveInput) Television.live() else Television.fromFile(televisionFile)
+
+  var txnThread: Thread = null
+
+  var masterGroup: proc.Group = null
+
+  def main(args: Array[String]): Unit = Infra().start()
 }

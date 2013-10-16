@@ -103,14 +103,12 @@ package object voicetrap {
   def submit(fun: => Unit): Unit = {
     requireNotInTxn()
     proc.SoundProcesses.pool.submit(new Runnable {
-      def run() {
+      def run(): Unit =
         try {
           fun
         } catch {
-          case e: Throwable =>
-            e.printStackTrace()
+          case e: Throwable => e.printStackTrace()
         }
-      }
     })
   }
 
@@ -118,7 +116,6 @@ package object voicetrap {
     require(Thread.currentThread() == VoiceTrap.txnThread, "Txn not on the correct thread")
 
   def submitTxn(fun: => Unit)(failure: Throwable => Unit)(implicit tx: InTxn): Unit = {
-    //      requireTxnThread()
     Txn.afterCommit(_ => submit(fun))
     Txn.afterRollback {
       case Txn.RolledBack(Txn.UncaughtExceptionCause(e)) =>
