@@ -15,12 +15,15 @@ object Analysis extends App {
       implicit val dtx: s.D#Tx = s.durableTx(tx)
       val acc         = tx.inputAccess
       println(acc)
-      val term        = acc.term // 1L << 32
+      val term0       = 16206L // acc.term // 1L << 32
       // val tree  = p(s)('readIndexTree)(term, dtx).asInstanceOf[Sys.IndexTree[s.D]]
-      val tree        = s.readIndexTree(term)
+      val tree        = s.readIndexTree(term0)
+      val (vertx0, _) = s.readTreeVertex(tree.tree, acc.index, term0)
+      val term        = vertx0.version
       val (vertx, _)  = s.readTreeVertex(tree.tree, acc.index, term)
+      val info        = s.versionInfo(term)
       println(s"tree: $tree")
-      println(s"vertex: $vertx; version = ${vertx.versionInt}")
+      println(s"vertex: $vertx; version = ${vertx.versionInt}; info = $info")
     }
     s.close()
   }
