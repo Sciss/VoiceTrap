@@ -6,6 +6,7 @@ import de.sciss.file._
 import collection.immutable.{IndexedSeq => Vec}
 import language.implicitConversions
 import play.api.libs.json.Format
+import java.io.PrintStream
 
 object Analysis extends App {
   run()
@@ -15,18 +16,58 @@ object Analysis extends App {
   def lastDBVersion       = 16206   // as left behind after december 2012
   def lastInstallVersion  = 15703   // as run up to 06-Nov-12 19:01'31.943
 
+  def firstStamp  = 1352215283704L
+  def lastStamp   = 1352224891943L
+  // 1352217362394L
+
   case class Version(id: Int, rand: Int, stamp: Long, parent: Int) {
     def term: Long = (rand.toLong << 32) | (id.toLong & 0xFFFFFFFFL)
   }
 
-  def jsonFile = userHome / "Desktop" / "voicetrap_versions.json"
+  def trunc = false
+
+  def jsonFile  = userHome / "Desktop" / (if (trunc) "trunc.json" else "voicetrap_versions.json")
+  def dotFile   = jsonFile.replaceExt("dot")
 
   implicit lazy val versionFormat : Format[Version]       = AutoFormat[Version]
   implicit lazy val versionsFormat: Format[Vec[Version]]  = Formats.VecFormat[Version]
 
   def run(): Unit = {
     generateJSON()
+    generateDOT()
+  }
 
+  def generateDOT(overwrite: Boolean = true): Unit = {
+    if (!overwrite && dotFile.isFile) {
+      println(s"File '$dotFile' already exists.")
+      return
+    }
+    val versions = JsIO.read[Vec[Version]](jsonFile).get
+    val out = new PrintStream(dotFile)
+    try {
+      import out._
+      println("digraph Versions {")
+      // println("""  len=0.1;""")
+      println("""  ranksep=0.05;""")
+      println("""  node [style=filled, shape=point, fillcolor=black, fixedsize=true, width=0.3, height=0.1, fontname="Helvetica", fontsize=8, fontcolor=white];""")
+      println("""  edge [arrowhead=none, len=0.1];""")
+      var eliminate = 1     // don't include the main cursor
+      var xpos = 0
+      versions.foreach { v =>
+        if (v.id == eliminate || v.parent == eliminate) {
+          eliminate = v.id
+        } else if (v.parent == -1) {
+          println(s"""  ${v.id} [pos="${xpos * 10},0!", fillcolor=red];""")
+          xpos += 1
+        } else {
+          println(s"  ${v.parent} -> ${v.id};")
+        }
+      }
+      println("}")
+      Console.out.println(s"Wrote '$dotFile'.")
+    } finally {
+      out.close()
+    }
   }
 
   def generateJSON(): Unit = {
