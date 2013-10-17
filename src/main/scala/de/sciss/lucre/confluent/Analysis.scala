@@ -13,12 +13,14 @@ object Analysis extends App {
     infra.cursor.step { implicit tx =>
       // val doc = infra.document.get
       implicit val dtx: s.D#Tx = s.durableTx(tx)
-      val term  = 1L << 32
+      val acc         = tx.inputAccess
+      println(acc)
+      val term        = acc.term // 1L << 32
       // val tree  = p(s)('readIndexTree)(term, dtx).asInstanceOf[Sys.IndexTree[s.D]]
-      val tree  = s.readIndexTree(term)
-      val vertx = s.readTreeVertex(tree.tree, tx.inputAccess.index, term)
+      val tree        = s.readIndexTree(term)
+      val (vertx, _)  = s.readTreeVertex(tree.tree, acc.index, term)
       println(s"tree: $tree")
-      println(s"vertex: $vertx")
+      println(s"vertex: $vertx; version = ${vertx.versionInt}")
     }
     s.close()
   }
