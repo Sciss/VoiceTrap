@@ -1,8 +1,8 @@
-import AssemblyKeys._
+// import AssemblyKeys._
 
 name := "VoiceTrap"
 
-version := "0.2.0"
+version := "0.2.1-SNAPSHOT" // analysis only!
 
 organization := "de.sciss"
 
@@ -15,14 +15,16 @@ scalaVersion := "2.10.3"
 resolvers += "Oracle Repository" at "http://download.oracle.com/maven"  // required for sleepycat
 
 libraryDependencies ++= Seq(
-  "de.sciss" %% "soundprocesses" % "1.3.2+",
-  "de.sciss" %% "lucrestm-bdb" % "1.6.+",
-  "de.sciss" %% "strugatzki" % "1.3.+"
+  "de.sciss" %% "soundprocesses"    % "1.3.2+",
+  "de.sciss" %% "lucrestm-bdb"      % "1.6.+",
+  "de.sciss" %% "strugatzki"        % "1.3.+",
+  "de.sciss" %% "play-json-sealed"  % "0.1.+",
+  "de.sciss" %% "fileutil"          % "1.0.+"
 )
 
 retrieveManaged := true
 
-scalacOptions ++= Seq( "-deprecation", "-unchecked", "-no-specialization" )   // "-Xelide-below", "INFO"
+scalacOptions ++= Seq("-deprecation", "-unchecked", "-no-specialization", "-feature")   // "-Xelide-below", "INFO"
 
 testOptions in Test += Tests.Argument("-oF")
 
@@ -30,6 +32,6 @@ fork in run := true  // required for shutdown hook, and also the scheduled threa
 
 // ---- packaging ----
 
-seq( assemblySettings: _* )
-
-test in assembly := {}
+// seq( assemblySettings: _* )
+//
+// test in assembly := {}

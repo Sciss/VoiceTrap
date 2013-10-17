@@ -29,6 +29,7 @@ import actors.sciss.FutureActor
 import actors.{Futures, Future}
 import concurrent.stm.Txn
 import collection.immutable.{IndexedSeq => IIdxSeq}
+import language.implicitConversions
 
 trait FutureResult[ +A ] {
    import FutureResult._

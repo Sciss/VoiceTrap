@@ -140,5 +140,5 @@ object VoiceTrap {
 
   var masterGroup: proc.Group = null
 
-  def main(args: Array[String]): Unit = Infra().start()
+  // def main(args: Array[String]): Unit = Infra().start()
 }
