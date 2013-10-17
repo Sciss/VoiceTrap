@@ -37,4 +37,5 @@ trait Infra {
   def system: S
   def document: Source[Document]
   def start(): Unit
+  def cursor: Cursor
 }

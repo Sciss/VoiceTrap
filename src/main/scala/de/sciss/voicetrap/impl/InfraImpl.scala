@@ -60,7 +60,7 @@ object InfraImpl {
     new Impl(system, access)(cursor)
   }
 
-  private final class Impl(val system: S, val document: Source[Document])(implicit cursor: Cursor)
+  private final class Impl(val system: S, val document: Source[Document])(implicit val cursor: Cursor)
     extends Infra {
 
     def start(): Unit = {

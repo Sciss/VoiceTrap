@@ -15,9 +15,9 @@ scalaVersion := "2.10.3"
 resolvers += "Oracle Repository" at "http://download.oracle.com/maven"  // required for sleepycat
 
 libraryDependencies ++= Seq(
-   "de.sciss" %% "soundprocesses" % "1.3.+",
-   "de.sciss" %% "lucrestm-bdb" % "1.6.+",
-   "de.sciss" %% "strugatzki" % "1.3.+"
+  "de.sciss" %% "soundprocesses" % "1.3.2+",
+  "de.sciss" %% "lucrestm-bdb" % "1.6.+",
+  "de.sciss" %% "strugatzki" % "1.3.+"
 )
 
 retrieveManaged := true
