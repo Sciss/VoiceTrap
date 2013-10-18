@@ -13,6 +13,7 @@ import Swing._
 import de.sciss.pdflitz.Generate.QuickDraw
 import java.awt.{Shape, Color}
 import java.awt.geom.{Line2D, Point2D, Ellipse2D}
+import scala.annotation.tailrec
 
 object Analysis extends App {
   run()
@@ -65,9 +66,10 @@ object Analysis extends App {
     var nodeMap   = Map.empty[Int, Node]
     var edges     = Set.empty[(Node, Node)]
 
-    val yLen      = 10.0
-    val xSpc      = 30.0
-    val yLenSq    = yLen * yLen
+    val yLen        = 10.0
+    val bestDist    = yLen * 2
+    val xSpc        = 40.0
+    val bestDistSq  = bestDist * bestDist
 
     versions.foreach { v =>
       if (v.id == eliminate || v.parent == eliminate) {
@@ -88,10 +90,10 @@ object Analysis extends App {
       }
     }
 
-    val nodes   = nodeMap.values.toIndexedSeq
-    val numIter = 100
-    val dt      = 0.05  // delta time in integration
-    val minRank = 10    // ignore vertices whose vertical spacing is too large
+    val nodes     = nodeMap.values.toIndexedSeq
+    val numIter   = 200
+    val dt        = 0.05        // delta time in integration
+    val minYDist  = yLen * 20   // ignore vertices whose vertical spacing is too large
 
     // ---- layout ----
     // attraction and repulsion following Chernobelskiy et al. 2011
@@ -100,7 +102,7 @@ object Analysis extends App {
       // var forces = Map.empty[Node, Double] withDefaultValue 0.0
       val forces = nodes.map { n =>
         if (n.pinned) 0.0 else nodes.view.map { n1 =>
-          if (math.abs(n1.y - n.y) < minRank && n != n1) {
+          if (math.abs(n1.y - n.y) <= minYDist && n != n1) {
             val isCon = edges.contains(n -> n1) || edges.contains(n1 -> n)
             val dx    = n1.x - n.x
             val dy    = n1.y - n.y
@@ -111,9 +113,9 @@ object Analysis extends App {
             val cos   = math.cos(ang)
             if (isCon) {
               val f = (dist - yLen) / dist
-              cos * f
+              cos * f * 20 // x20 to increase force
             } else {
-              val f = yLenSq / math.max(1.0, dist * dist * dist)
+              val f = bestDistSq / math.max(1.0, dist * dist * dist)
               -cos * f
             }
 
@@ -133,16 +135,32 @@ object Analysis extends App {
     val h       = margin + (bottom - top) + margin
 
     val draw = QuickDraw(math.ceil(w).toInt -> math.ceil(h).toInt) { g =>
-      g.setColor(Color.black)
       g.translate(margin - left, margin - top)
       edges.foreach { case (p, c) =>
-        // g.setColor(Color.red)
+        val outDegree = edges.count(_._1 == p)
+        // later branch offs in blue
+        val isBranch = outDegree > 1 && (c.id - p.id > 1)
+        g.setColor(if (isBranch) Color.blue else Color.black)
         g.draw(new Line2D.Double(p.location, c.location))
       }
       nodes.foreach { n =>
-        val isBranching = edges.count(_._1 == n) > 1
-        g.setColor(if (isBranching) Color.red else Color.black)
-        g.fill(n.shape(if (isBranching) 3.0 else 2.0))
+        val outDegree   = edges.count(_._1 == n)
+        val isBranch    = outDegree == 2 || {
+          edges.find(_._2 == n).exists { case (p, _) =>
+            edges.filter(_._1 == p).exists { case (_, c) => c.id < n.id }
+          }
+          // val pOutDegree  = edges.find(_._2 == n).map { case (p, _) => edges.count(_._1 == p) } .getOrElse(1)
+        }
+        val isTerm      = !isBranch && outDegree == 0 && {
+          @tailrec def findBranch(c: Node): Boolean = edges.find(_._2 == c) match {
+            case Some((p, _)) => edges.count(_._1 == p) > 1 || findBranch(p)
+            case _            => false
+          }
+          findBranch(n)
+        }
+        // leaves in red, branching nodes in blue
+        g.setColor(if (isBranch) Color.blue else if (isTerm) Color.red else Color.black)
+        g.fill(n.shape(if (outDegree != 1) 3.0 else 2.0))
       }
     }
 
