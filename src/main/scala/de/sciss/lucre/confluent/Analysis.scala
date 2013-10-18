@@ -12,7 +12,7 @@ import scala.swing.Swing
 import Swing._
 import de.sciss.pdflitz.Generate.QuickDraw
 import java.awt.{Shape, Color}
-import java.awt.geom.{Point2D, Ellipse2D}
+import java.awt.geom.{Line2D, Point2D, Ellipse2D}
 
 object Analysis extends App {
   run()
@@ -45,11 +45,11 @@ object Analysis extends App {
     generatePDF()
   }
 
-  case class Node(id: Int)(x0: Double, val y: Double, pinned: Boolean) {
+  case class Node(id: Int)(x0: Double, val y: Double, val pinned: Boolean) {
     // var children  = Vec.empty[Node]
     var x         = x0
 
-    def shape: Shape      = new Ellipse2D.Double(x - 1, y - 1, 2, 2)
+    def shape(radius: Double): Shape = new Ellipse2D.Double(x - radius, y - radius, radius*2, radius*2)
     def location: Point2D = new Point2D.Double(x, y)
   }
 
@@ -60,10 +60,14 @@ object Analysis extends App {
     }
     val versions  = JsIO.read[Vec[Version]](jsonFile).get
     var eliminate = 1     // don't include the main cursor
-    var xpos      = 0
+    var xpos      = 0.0
 
     var nodeMap   = Map.empty[Int, Node]
     var edges     = Set.empty[(Node, Node)]
+
+    val yLen      = 10.0
+    val xSpc      = 30.0
+    val yLenSq    = yLen * yLen
 
     versions.foreach { v =>
       if (v.id == eliminate || v.parent == eliminate) {
@@ -71,12 +75,12 @@ object Analysis extends App {
       } else {
         val n = if (v.parent == -1) {
           val x = xpos
-          xpos += 20
+          xpos += xSpc
           Node(v.id)(x0 = x, y = 0.0, pinned = true)
         } else {
           // println(s"  ${v.parent} -> ${v.id};")
           val p = nodeMap(v.parent)
-          val c = Node(v.id)(x0 = p.x, y = p.y + 10, pinned = false)
+          val c = Node(v.id)(x0 = p.x, y = p.y + yLen, pinned = false)
           edges += p -> c
           c
         }
@@ -85,55 +89,60 @@ object Analysis extends App {
     }
 
     val nodes   = nodeMap.values.toIndexedSeq
-    val minDist = 30
     val numIter = 100
-    val force   = 0.05
+    val dt      = 0.05  // delta time in integration
+    val minRank = 10    // ignore vertices whose vertical spacing is too large
 
     // ---- layout ----
+    // attraction and repulsion following Chernobelskiy et al. 2011
     for (iter <- 1 to numIter) {
       println(s"Layout iteration $iter")
       // var forces = Map.empty[Node, Double] withDefaultValue 0.0
       val forces = nodes.map { n =>
-        nodes.view.map { n1 =>
-          if (n != n1) {
+        if (n.pinned) 0.0 else nodes.view.map { n1 =>
+          if (math.abs(n1.y - n.y) < minRank && n != n1) {
             val isCon = edges.contains(n -> n1) || edges.contains(n1 -> n)
-            val dx = n1.x - n.x
+            val dx    = n1.x - n.x
+            val dy    = n1.y - n.y
+            val dist  = math.sqrt(dx * dx + dy * dy)
+            val ang   = if (dx != 0) math.atan2(dy, dx) else {
+              if (n.id < n1.id) math.Pi else 0.0
+            }
+            val cos   = math.cos(ang)
             if (isCon) {
-              dx * force
+              val f = (dist - yLen) / dist
+              cos * f
             } else {
-              val dy    = n1.y - n.y
-              val dist  = math.sqrt(dx * dx + dy * dy)
-              if (dist < minDist) {
-                val ang = if (dx != 0) math.atan2(dy, dx) else {
-                  if (n.id < n1.id) math.Pi else 0.0
-                }
-                math.cos(ang) * minDist * force
-
-              } else {
-                0.0
-              }
+              val f = yLenSq / math.max(1.0, dist * dist * dist)
+              -cos * f
             }
 
           } else {
            0.0
           }
-        } .sum
+        } .sum * dt
       }
       (nodes zip forces).foreach { case (n, f) => n.x += f }
     }
 
-    val (ix, iy) = ((0.0, 0.0) /: nodes) {
-      case ((x, y), n) => (math.max(x, n.x), math.max(x, n.y))
+    val (left, top, right, bottom) = ((0.0, 0.0, 0.0, 0.0) /: nodes) {
+      case ((x0, y0, x1, y1), n) => (math.min(x0, n.x), math.min(y0, n.y), math.max(x1, n.x), math.max(y1, n.y))
     }
-    val hins    = 10
-    val vins    = 10
-    val (w, h)  = (math.ceil(ix).toInt + hins*2, math.ceil(iy).toInt + vins*2)
+    val margin  = 5.0
+    val w       = margin + (right - left) + margin
+    val h       = margin + (bottom - top) + margin
 
-    val draw = QuickDraw(w -> h) { g =>
+    val draw = QuickDraw(math.ceil(w).toInt -> math.ceil(h).toInt) { g =>
       g.setColor(Color.black)
-      g.translate(hins, vins)
+      g.translate(margin - left, margin - top)
+      edges.foreach { case (p, c) =>
+        // g.setColor(Color.red)
+        g.draw(new Line2D.Double(p.location, c.location))
+      }
       nodes.foreach { n =>
-        g.fill(n.shape)
+        val isBranching = edges.count(_._1 == n) > 1
+        g.setColor(if (isBranching) Color.red else Color.black)
+        g.fill(n.shape(if (isBranching) 3.0 else 2.0))
       }
     }
 
