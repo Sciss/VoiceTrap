@@ -46,12 +46,20 @@ object Analysis extends App {
     generatePDF()
   }
 
+  def rotated = true
+
   case class Node(id: Int)(x0: Double, val y: Double, val pinned: Boolean) {
     // var children  = Vec.empty[Node]
     var x         = x0
 
-    def shape(radius: Double): Shape = new Ellipse2D.Double(x - radius, y - radius, radius*2, radius*2)
-    def location: Point2D = new Point2D.Double(x, y)
+    def shape(radius: Double): Shape = {
+      val (h, v) = if (rotated) (y, x) else (x, y)
+      new Ellipse2D.Double(h - radius, v - radius, radius*2, radius*2)
+    }
+    def location: Point2D = {
+      val (h, v) = if (rotated) (y, x) else (x, y)
+      new Point2D.Double(h, v)
+    }
   }
 
   def generatePDF(overwrite: Boolean = true): Unit = {
@@ -67,8 +75,8 @@ object Analysis extends App {
     var edges     = Set.empty[(Node, Node)]
 
     val yLen        = 10.0
-    val bestDist    = yLen * 2
-    val xSpc        = 40.0
+    val bestDist    = yLen * math.sqrt(2) // * 2 produces funky thread crossings, visually appealing, but well...
+    val xSpc        = 60.0
     val bestDistSq  = bestDist * bestDist
 
     versions.foreach { v =>
@@ -128,7 +136,11 @@ object Analysis extends App {
     }
 
     val (left, top, right, bottom) = ((0.0, 0.0, 0.0, 0.0) /: nodes) {
-      case ((x0, y0, x1, y1), n) => (math.min(x0, n.x), math.min(y0, n.y), math.max(x1, n.x), math.max(y1, n.y))
+      case ((x0, y0, x1, y1), n) =>
+        val loc = n.location
+        val nx  = loc.getX
+        val ny  = loc.getY
+        (math.min(x0, nx), math.min(y0, ny), math.max(x1, nx), math.max(y1, ny))
     }
     val margin  = 5.0
     val w       = margin + (right - left) + margin
