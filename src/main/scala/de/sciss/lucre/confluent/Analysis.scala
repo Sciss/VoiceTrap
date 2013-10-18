@@ -2,11 +2,17 @@ package de.sciss.lucre.confluent
 
 import de.sciss.voicetrap._
 import de.sciss.play.json.{Formats, AutoFormat}
-import de.sciss.file._
 import collection.immutable.{IndexedSeq => Vec}
 import language.implicitConversions
 import play.api.libs.json.Format
 import java.io.PrintStream
+import de.sciss.file._
+import de.sciss.pdflitz
+import scala.swing.Swing
+import Swing._
+import de.sciss.pdflitz.Generate.QuickDraw
+import java.awt.{Shape, Color}
+import java.awt.geom.{Point2D, Ellipse2D}
 
 object Analysis extends App {
   run()
@@ -24,26 +30,123 @@ object Analysis extends App {
     def term: Long = (rand.toLong << 32) | (id.toLong & 0xFFFFFFFFL)
   }
 
-  def trunc = false
+  def trunc = true
 
   def jsonFile  = userHome / "Desktop" / (if (trunc) "trunc.json" else "voicetrap_versions.json")
   def dotFile   = jsonFile.replaceExt("dot")
+  def pdfFile   = jsonFile.replaceExt("pdf")
 
   implicit lazy val versionFormat : Format[Version]       = AutoFormat[Version]
   implicit lazy val versionsFormat: Format[Vec[Version]]  = Formats.VecFormat[Version]
 
   def run(): Unit = {
     generateJSON()
-    generateDOT()
+    // generateDOT()
+    generatePDF()
   }
 
-  def generateDOT(overwrite: Boolean = true): Unit = {
+  case class Node(id: Int)(x0: Double, val y: Double, pinned: Boolean) {
+    // var children  = Vec.empty[Node]
+    var x         = x0
+
+    def shape: Shape      = new Ellipse2D.Double(x - 1, y - 1, 2, 2)
+    def location: Point2D = new Point2D.Double(x, y)
+  }
+
+  def generatePDF(overwrite: Boolean = true): Unit = {
+    if (!overwrite && pdfFile.isFile) {
+      println(s"File '$pdfFile' already exists.")
+      return
+    }
+    val versions  = JsIO.read[Vec[Version]](jsonFile).get
+    var eliminate = 1     // don't include the main cursor
+    var xpos      = 0
+
+    var nodeMap   = Map.empty[Int, Node]
+    var edges     = Set.empty[(Node, Node)]
+
+    versions.foreach { v =>
+      if (v.id == eliminate || v.parent == eliminate) {
+        eliminate = v.id
+      } else {
+        val n = if (v.parent == -1) {
+          val x = xpos
+          xpos += 20
+          Node(v.id)(x0 = x, y = 0.0, pinned = true)
+        } else {
+          // println(s"  ${v.parent} -> ${v.id};")
+          val p = nodeMap(v.parent)
+          val c = Node(v.id)(x0 = p.x, y = p.y + 10, pinned = false)
+          edges += p -> c
+          c
+        }
+        nodeMap += v.id -> n
+      }
+    }
+
+    val nodes   = nodeMap.values.toIndexedSeq
+    val minDist = 30
+    val numIter = 100
+    val force   = 0.05
+
+    // ---- layout ----
+    for (iter <- 1 to numIter) {
+      println(s"Layout iteration $iter")
+      // var forces = Map.empty[Node, Double] withDefaultValue 0.0
+      val forces = nodes.map { n =>
+        nodes.view.map { n1 =>
+          if (n != n1) {
+            val isCon = edges.contains(n -> n1) || edges.contains(n1 -> n)
+            val dx = n1.x - n.x
+            if (isCon) {
+              dx * force
+            } else {
+              val dy    = n1.y - n.y
+              val dist  = math.sqrt(dx * dx + dy * dy)
+              if (dist < minDist) {
+                val ang = if (dx != 0) math.atan2(dy, dx) else {
+                  if (n.id < n1.id) math.Pi else 0.0
+                }
+                math.cos(ang) * minDist * force
+
+              } else {
+                0.0
+              }
+            }
+
+          } else {
+           0.0
+          }
+        } .sum
+      }
+      (nodes zip forces).foreach { case (n, f) => n.x += f }
+    }
+
+    val (ix, iy) = ((0.0, 0.0) /: nodes) {
+      case ((x, y), n) => (math.max(x, n.x), math.max(x, n.y))
+    }
+    val hins    = 10
+    val vins    = 10
+    val (w, h)  = (math.ceil(ix).toInt + hins*2, math.ceil(iy).toInt + vins*2)
+
+    val draw = QuickDraw(w -> h) { g =>
+      g.setColor(Color.black)
+      g.translate(hins, vins)
+      nodes.foreach { n =>
+        g.fill(n.shape)
+      }
+    }
+
+    pdflitz.Generate(pdfFile, draw, overwrite = true)
+  }
+
+  def generateDOT(overwrite: Boolean = false): Unit = {
     if (!overwrite && dotFile.isFile) {
       println(s"File '$dotFile' already exists.")
       return
     }
-    val versions = JsIO.read[Vec[Version]](jsonFile).get
-    val out = new PrintStream(dotFile)
+    val versions  = JsIO.read[Vec[Version]](jsonFile).get
+    val out       = new PrintStream(dotFile)
     try {
       import out._
       println("digraph Versions {")

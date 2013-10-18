@@ -19,7 +19,8 @@ libraryDependencies ++= Seq(
   "de.sciss" %% "lucrestm-bdb"      % "1.6.+",
   "de.sciss" %% "strugatzki"        % "1.3.+",
   "de.sciss" %% "play-json-sealed"  % "0.1.+",
-  "de.sciss" %% "fileutil"          % "1.0.+"
+  "de.sciss" %% "fileutil"          % "1.0.+",
+  "de.sciss" %% "pdflitz"           % "1.0.+"
 )
 
 retrieveManaged := true
