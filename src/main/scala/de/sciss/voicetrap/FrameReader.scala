@@ -2,7 +2,7 @@
  *  FrameReader.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -30,24 +30,26 @@ import impl.{FrameReaderFactoryImpl => Impl}
 import java.io.File
 
 object FrameReader {
-   object Factory {
-      def apply( file: File ) : Factory = Impl( file )
-   }
+  object Factory {
+    def apply(file: File): Factory = Impl(file)
+  }
 
-   trait Factory {
-      def open() : FrameReader
-   }
+  trait Factory {
+    def open(): FrameReader
+  }
 
 }
+
 trait FrameReader {
-   /**
-    * Reads a chunk of frames into a buffer, starting at the beginning of the buffer
-    * and at a given frame offset into the reader.
-    *
-    * @param buf  the buffer to write out. data will be written starting from offset 0
-    * @param off  the offset into the frame reader source. this must be advanced for successive chunks
-    * @param len  the number of frames to read
-    */
-   def read( buf: Frames, off: Long, len: Int ) : Unit
-   def close() : Unit
+  /**
+   * Reads a chunk of frames into a buffer, starting at the beginning of the buffer
+   * and at a given frame offset into the reader.
+   *
+   * @param buf the buffer to write out. data will be written starting from offset 0
+   * @param off the offset into the frame reader source. this must be advanced for successive chunks
+   * @param len the number of frames to read
+   */
+  def read(buf: Frames, off: Long, len: Int): Unit
+
+  def close(): Unit
 }

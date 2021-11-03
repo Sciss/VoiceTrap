@@ -26,25 +26,30 @@
 package de.sciss.voicetrap
 package impl
 
-import java.io.File
 import de.sciss.synth.io.{AudioFile, Frames}
 
+import java.io.File
+
 object FrameReaderFactoryImpl {
-   def apply( file: File ) : FrameReader.Factory = new FrameReader.Factory {
-      def open() : FrameReader = {
-         val af = AudioFile.openRead( file )
-         new ReaderImpl( af )
+  def apply(file: File): FrameReader.Factory = new FrameReader.Factory {
+    def open(): FrameReader = {
+      val af = AudioFile.openRead(file)
+      new ReaderImpl(af)
+    }
+  }
+
+  private final class ReaderImpl(af: AudioFile) extends FrameReader {
+    override def toString: String = "FrameReader(" + af.file.getOrElse("?") + ")"
+
+    def read(buf: Frames, off: Long, len: Int): Unit = {
+      if (off != af.position) {
+        af.position = off
       }
-   }
+      af.read(buf, 0, len)
+    }
 
-   private final class ReaderImpl( af: AudioFile ) extends FrameReader {
-      override def toString = "FrameReader(" + af.file.getOrElse( "?" ) + ")"
-
-      def read( buf: Frames, off: Long, len: Int ) {
-         if( off != af.position ) { af.position = off }
-         af.read( buf, 0, len )
-      }
-
-      def close() { af.close() }
-   }
+    def close(): Unit = {
+      af.close()
+    }
+  }
 }

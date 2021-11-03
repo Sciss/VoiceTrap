@@ -2,7 +2,7 @@
  *  AudioFileCache.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -25,30 +25,33 @@
 
 package de.sciss.voicetrap
 
-import collection.mutable.{ HashMap => MHashMap }
+import collection.mutable.{HashMap => MHashMap}
 import java.io.{File, IOException}
 import de.sciss.synth.io.{AudioFile, AudioFileSpec}
 
 object AudioFileCache {
-   private val sync  = new AnyRef
-   private val map   = MHashMap.empty[ File, Entry ]
+  private val sync   = new AnyRef
+  private val map    = MHashMap.empty[File, Entry]
 
-   @throws( classOf[ IOException ])
-   def spec( path: String ) : AudioFileSpec = sync.synchronized {
-      val f       = new File( path )
-      val mod     = f.lastModified()
-      map.get( f ) match {
-         case Some( entry ) if( entry.modified == mod ) => entry.spec
-         case _ => {
-            val spec    = AudioFile.readSpec( f )
-            val entry   = Entry( mod, spec )
-            map += f -> entry
-            spec
-         }
-      }
-   }
+  @throws(classOf[IOException])
+  def spec(path: String): AudioFileSpec = sync.synchronized {
+    val f = new File(path)
+    val mod = f.lastModified()
+    map.get(f) match {
+      case Some(entry) if entry.modified == mod => entry.spec
+      case _ =>
+         val spec = AudioFile.readSpec(f)
+         val entry = Entry(mod, spec)
+         map += f -> entry
+         spec
+    }
+  }
 
-   def clear() { sync.synchronized { map.clear() }}
+  def clear(): Unit = {
+    sync.synchronized {
+      map.clear()
+    }
+  }
 
-   private case class Entry( modified: Long, spec: AudioFileSpec )
+  private case class Entry(modified: Long, spec: AudioFileSpec)
 }

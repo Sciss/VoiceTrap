@@ -2,7 +2,7 @@
  *  AbstractDifferanceDatabaseFiller.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -26,47 +26,51 @@
 package de.sciss.voicetrap
 package impl
 
+import de.sciss.synth.proc.Server
+
 import java.io.File
-import concurrent.stm.InTxn
-import de.sciss.synth.proc.RichServer
+import scala.concurrent.stm.InTxn
 
 abstract class AbstractDifferanceDatabaseFiller extends DifferanceDatabaseFiller {
-   import GraphemeUtil._
 
-//   private val identifier = "a-database-filler"
+  import GraphemeUtil._
 
-   /**
-    * Target database length in seconds.
-    */
-   def durationMotion : Motion
+  //   private val identifier = "a-database-filler"
 
-   def database : Database
-   def television : Television
-   def maxCaptureDur : Double
+  /**
+   * Target database length in seconds.
+   */
+  def durationMotion: Motion
 
-   def perform( server: RichServer )( implicit tx: Tx ) : FutureResult[ Unit ] = {
-      implicit val itx = tx.peer
-      val tgtLen  = secondsToFrames( durationMotion.step() )
-      val dbLen   = database.length
-      val inc0    = tgtLen - dbLen
-      val maxF    = secondsToFrames( maxCaptureDur )
-      val inc     = min( inc0, maxF )
+  def database: Database
 
-      if( inc > 44100L /* 0 */ ) {
-         val fillMsg = identifier + " fill"
-         log( identifier + " : gathering " + formatSeconds( framesToSeconds( inc )))
-         television.capture( identifier, server, inc ).flatMapSuccess( fillMsg ) { f =>
-//            log( identifier + " : mapping capture success" )
-            performWithFile( f, secondsToFrames( television.latency ), inc )
-         }
-      } else {
-         futureOf( identifier + " no fill needed", () )
+  def television: Television
+
+  def maxCaptureDur: Double
+
+  def perform(server: Server)(implicit tx: Tx): FutureResult[Unit] = {
+    implicit val itx: InTxn = tx.peer
+    val tgtLen = secondsToFrames(durationMotion.step())
+    val dbLen = database.length
+    val inc0 = tgtLen - dbLen
+    val maxF = secondsToFrames(maxCaptureDur)
+    val inc = min(inc0, maxF)
+
+    if (inc > 44100L /* 0 */ ) {
+      val fillMsg = identifier + " fill"
+      log(identifier + " : gathering " + formatSeconds(framesToSeconds(inc)))
+      television.capture(identifier, server, inc).flatMapSuccess(fillMsg) { f =>
+        //            log( identifier + " : mapping capture success" )
+        performWithFile(f, secondsToFrames(television.latency), inc)
       }
-   }
+    } else {
+      futureOf(identifier + " no fill needed", ())
+    }
+  }
 
-   private def performWithFile( file: File, off: Long, inc: Long ) : FutureResult[ Unit ] = {
-      atom( identifier + " : appending " + formatSeconds( framesToSeconds( inc ))) { tx1 =>
-         database.append( file, off, inc )( tx1 )
-      }
-   }
+  private def performWithFile(file: File, off: Long, inc: Long): FutureResult[Unit] = {
+    atom(identifier + " : appending " + formatSeconds(framesToSeconds(inc))) { tx1 =>
+      database.append(file, off, inc)(tx1)
+    }
+  }
 }

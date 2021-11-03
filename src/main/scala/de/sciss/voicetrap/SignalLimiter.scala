@@ -2,7 +2,7 @@
  *  SignalLimiter.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -26,16 +26,19 @@
 package de.sciss.voicetrap
 
 //import impl.{SignalLimiterImpl => Impl}
-import impl.{DummyLimiterImpl => Impl} // XXX
+
+import de.sciss.voicetrap.impl.{DummyLimiterImpl => Impl} // XXX
 
 object SignalLimiter {
-   /**
-    * Default ceiling is -0.2 dB.
-    */
-   def apply( lookAhead: Int, ceil: Float = 0.977f ) : SignalLimiter = Impl( lookAhead, ceil )
+  /**
+   * Default ceiling is -0.2 dB.
+   */
+  def apply(lookAhead: Int, ceil: Float = 0.977f): SignalLimiter = Impl(lookAhead, ceil)
 }
+
 trait SignalLimiter {
-   def process( in: Array[ Float ], inOff: Int, out: Array[ Float ], outOff: Int, len: Int ) : Int
-   def latency : Int
-//   def flush( out: Array[ Float ], outOff: Int, len: Int ) : Int
+  def process(in: Array[Float], inOff: Int, out: Array[Float], outOff: Int, len: Int): Int
+
+  def latency: Int
+  //   def flush( out: Array[ Float ], outOff: Int, len: Int ) : Int
 }

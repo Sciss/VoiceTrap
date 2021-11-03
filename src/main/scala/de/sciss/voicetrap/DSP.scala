@@ -2,7 +2,7 @@
  *  DSP.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -26,19 +26,19 @@
 package de.sciss.voicetrap
 
 object DSP {
-   def add( in: Array[ Float ], inOff: Int, out: Array[ Float ], outOff: Int, len: Int ) {
-      var i = 0
-      while( i < len ) {
-         out( outOff + i ) += in( inOff + i )
-         i += 1
-      }
-   }
+  def add(in: Array[Float], inOff: Int, out: Array[Float], outOff: Int, len: Int): Unit = {
+    var i = 0
+    while (i < len) {
+      out(outOff + i) += in(inOff + i)
+      i += 1
+    }
+  }
 
-   def clear( in: Array[ Float ], inOff: Int, len: Int ) {
-      var i = 0
-      while( i < len ) {
-         in( inOff + i ) = 0f
-         i += 1
-      }
-   }
+  def clear(in: Array[Float], inOff: Int, len: Int): Unit = {
+    var i = 0
+    while (i < len) {
+      in(inOff + i) = 0f
+      i += 1
+    }
+  }
 }

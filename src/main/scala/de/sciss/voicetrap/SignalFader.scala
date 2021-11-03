@@ -2,7 +2,7 @@
  *  SignalFader.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -25,15 +25,16 @@
 
 package de.sciss.voicetrap
 
-import impl.{SignalFaderImpl => Impl}
+import de.sciss.voicetrap.impl.{SignalFaderImpl => Impl}
 
-object SignalFader{
-   def apply( off: Long, len: Long, start: Float, stop: Float, pow: Float = 1f ) : SignalFader =
-      Impl( off, len, start, stop, pow )
+object SignalFader {
+  def apply(off: Long, len: Long, start: Float, stop: Float, pow: Float = 1f): SignalFader =
+    Impl(off, len, start, stop, pow)
 }
+
 trait SignalFader {
-   /**
-    * It is safe to use the same array for input and output, as long as `outOff <= inOff`.
-    */
-   def process( in: Array[ Float ], inOff: Int, out: Array[ Float ], outOff: Int, len: Int ) : Unit
+  /**
+   * It is safe to use the same array for input and output, as long as `outOff <= inOff`.
+   */
+  def process(in: Array[Float], inOff: Int, out: Array[Float], outOff: Int, len: Int): Unit
 }

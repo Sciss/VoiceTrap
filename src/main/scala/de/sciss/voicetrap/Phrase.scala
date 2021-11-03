@@ -25,28 +25,30 @@
 
 package de.sciss.voicetrap
 
-import de.sciss.synth.proc.Proc
-import impl.PhraseImpl
+import de.sciss.voicetrap.impl.PhraseImpl
+
 import java.io.File
-import concurrent.stm.InTxn
+import scala.concurrent.stm.InTxn
 
 object Phrase {
-   def fromFile( file: File ) : Phrase = PhraseImpl.fromFile( file )
+  def fromFile(file: File): Phrase = PhraseImpl.fromFile(file)
 }
+
 trait Phrase {
-   def printFormat : String
+  def printFormat: String
 
-   def length: Long
-//   def player( implicit tx: Tx ) : Proc
-   def asStrugatzkiInput( implicit tx: InTxn ) : FutureResult[ File ]
+  def length: Long
 
-   def reader : FrameReader.Factory
+  //   def player( implicit tx: Tx ) : Proc
+  def asStrugatzkiInput(implicit tx: InTxn): FutureResult[File]
 
-//   /**
-//    * Plays this phrase into a given diffusion proc
-//    * (by creating a gen proc and connecting its output
-//    * to the diffusion). The result represents the
-//    * phrase
-//    */
-//   def playInto( diffusion: Proc )( implicit tx: Tx ) : FutureResult[ Unit ]
+  def reader: FrameReader.Factory
+
+  //   /**
+  //    * Plays this phrase into a given diffusion proc
+  //    * (by creating a gen proc and connecting its output
+  //    * to the diffusion). The result represents the
+  //    * phrase
+  //    */
+  //   def playInto( diffusion: Proc )( implicit tx: Tx ) : FutureResult[ Unit ]
 }

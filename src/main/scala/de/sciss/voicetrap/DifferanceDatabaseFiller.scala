@@ -2,7 +2,7 @@
  *  DifferanceDatabaseFiller.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -25,16 +25,17 @@
 
 package de.sciss.voicetrap
 
-import impl.{DifferanceDatabaseFillerImpl => Impl}
-import concurrent.stm.InTxn
-import de.sciss.synth.proc.RichServer
+import de.sciss.synth.proc.Server
+import de.sciss.voicetrap.impl.{DifferanceDatabaseFillerImpl => Impl}
 
 object DifferanceDatabaseFiller {
-   def apply( db: Database, tv: Television ) : DifferanceDatabaseFiller = Impl( db, tv )
+  def apply(db: Database, tv: Television): DifferanceDatabaseFiller = Impl(db, tv)
 }
-trait DifferanceDatabaseFiller {
-   def database : Database
-   def perform( server: RichServer )( implicit tx: Tx ) : FutureResult[ Unit ]
 
-   def identifier: String
+trait DifferanceDatabaseFiller {
+  def database: Database
+
+  def perform(server: Server)(implicit tx: Tx): FutureResult[Unit]
+
+  def identifier: String
 }

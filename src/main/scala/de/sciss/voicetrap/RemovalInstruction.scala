@@ -2,7 +2,7 @@
  *  RemovalInstruction.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -27,11 +27,11 @@ package de.sciss.voicetrap
 
 import de.sciss.lucre.bitemp.Span
 
-final case class RemovalInstruction( span: Span, fade: Long ) {
-   def merge( b: RemovalInstruction ) : Option[ RemovalInstruction ] = {
-      if( span.overlaps( b.span )) {
-         val spanNew = span.union( b.span )
-         Some( RemovalInstruction( spanNew, if( spanNew.start == span.start ) fade else b.fade ))
-      } else None
-   }
+final case class RemovalInstruction(span: Span, fade: Long) {
+  def merge(b: RemovalInstruction): Option[RemovalInstruction] = {
+    if (span.overlaps(b.span)) {
+      val spanNew = span.union(b.span)
+      Some(RemovalInstruction(spanNew, if (spanNew.start == span.start) fade else b.fade))
+    } else None
+  }
 }

@@ -2,7 +2,7 @@
  *  FileTelevisionImpl.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -26,66 +26,68 @@
 package de.sciss.voicetrap
 package impl
 
+import de.sciss.synth.io.{AudioFile, AudioFileSpec}
+import de.sciss.synth.proc.Server
+
 import java.io.File
-import de.sciss.synth.io.{AudioFileSpec, AudioFile}
-import concurrent.stm.{InTxn, Ref}
-import de.sciss.synth.proc.RichServer
+import scala.concurrent.stm.{InTxn, Ref}
 
 object FileTelevisionImpl {
-//   private val identifier  = "file-television-impl"
+  //   private val identifier  = "file-television-impl"
 
-   def apply( f: File ) : Television = {
-      val spec = AudioFile.readSpec( f )
-      require( spec.numChannels == 1, /* identifier + */ " : must be mono" )
-      require( spec.numFrames > 0, /* identifier + */ " : file is empty" )
-      new FileTelevisionImpl( f, spec )
-   }
+  def apply(f: File): Television = {
+    val spec = AudioFile.readSpec(f)
+    require(spec.numChannels == 1, /* identifier + */ " : must be mono")
+    require(spec.numFrames > 0, /* identifier + */ " : file is empty")
+    new FileTelevisionImpl(f, spec)
+  }
 }
-class FileTelevisionImpl private ( f: File, spec: AudioFileSpec ) extends Television {
-   import GraphemeUtil._
-   import FileTelevisionImpl._
 
-//   private val posRef = Ref( 0L )
-   private val posRef = Ref( (math.random * (spec.numFrames - 1)).toLong )
+class FileTelevisionImpl private(f: File, spec: AudioFileSpec) extends Television {
 
-   def latency = 0.0
+  import GraphemeUtil._
 
-   def capture( identifier: String, server: RichServer, length: Long )( implicit tx: Tx ) : FutureResult[ File ] = {
-      implicit val itx = tx.peer
-      val oldPos = posRef()
-      threadFuture( identifier + " : capture" ) {
-         try {
-            val fNew    = createTempFile( ".aif", None, keep = false )
-            val afNew   = openMonoWrite( fNew )
-            try {
-               val afTV = AudioFile.openRead( f )
-               try {
-                  var pos     = oldPos
-                  var left    = length
-                  afTV.seek( oldPos )
-                  while( left > 0L ) {
-                     val chunkLen = min( spec.numFrames - pos, left )
-                     afTV.copyTo( afNew, chunkLen )
-                     pos += chunkLen
-                     if( pos == spec.numFrames ) {
-                        afTV.seek( 0L )
-                        pos = 0L
-                     }
-                     left -= chunkLen
-                  }
-                  fNew
-               } finally {
-                  afTV.close()
-               }
-//            } catch {
-//               case e =>
-//                  println( "FileTelevisionImpl capture - Oops. exception. Should handle" )
-//                  e.printStackTrace()
-//                  fNew // que puede... XXX
-            } finally {
-               afNew.close()
+  //   private val posRef = Ref( 0L )
+  private val posRef = Ref((math.random * (spec.numFrames - 1)).toLong)
+
+  def latency = 0.0
+
+  def capture(identifier: String, server: Server, length: Long)(implicit tx: Tx): FutureResult[File] = {
+    implicit val itx: InTxn = tx.peer
+    val oldPos = posRef()
+    threadFuture(identifier + " : capture") {
+      try {
+        val fNew = createTempFile(".aif", None, keep = false)
+        val afNew = openMonoWrite(fNew)
+        try {
+          val afTV = AudioFile.openRead(f)
+          try {
+            var pos = oldPos
+            var left = length
+            afTV.seek(oldPos)
+            while (left > 0L) {
+              val chunkLen = min(spec.numFrames - pos, left)
+              afTV.copyTo(afNew, chunkLen)
+              pos += chunkLen
+              if (pos == spec.numFrames) {
+                afTV.seek(0L)
+                pos = 0L
+              }
+              left -= chunkLen
             }
-         }
+            fNew
+          } finally {
+            afTV.close()
+          }
+          //            } catch {
+          //               case e =>
+          //                  println( "FileTelevisionImpl capture - Oops. exception. Should handle" )
+          //                  e.printStackTrace()
+          //                  fNew // que puede... XXX
+        } finally {
+          afNew.close()
+        }
       }
-   }
+    }
+  }
 }

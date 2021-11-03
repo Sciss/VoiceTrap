@@ -2,7 +2,7 @@
  *  OverwriteInstruction.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -27,12 +27,13 @@ package de.sciss.voicetrap
 
 import de.sciss.lucre.bitemp.Span
 
-final case class OverwriteInstruction( span: Span, newLength: Long ) {
-   import GraphemeUtil._
+final case class OverwriteInstruction(span: Span, newLength: Long) {
 
-   def printFormat : String = {
-      val s = formatSpan( span )
-      val p = formatPercent( newLength.toDouble / span.length )
-      "over( " + s + " -> " + p + " )"
-   }
+  import GraphemeUtil._
+
+  def printFormat: String = {
+    val s = formatSpan(span)
+    val p = formatPercent(newLength.toDouble / span.length)
+    "over( " + s + " -> " + p + " )"
+  }
 }

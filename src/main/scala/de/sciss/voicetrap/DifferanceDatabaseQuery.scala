@@ -2,7 +2,7 @@
  *  DifferanceDatabaseQuery.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -30,19 +30,22 @@ import de.sciss.lucre.bitemp.Span
 import concurrent.stm.InTxn
 
 object DifferanceDatabaseQuery {
-   final case class Match( database: Database, span: Span, boostIn: Float, boostOut: Float ) {
-      import GraphemeUtil._
+  final case class Match(database: Database, span: Span, boostIn: Float, boostOut: Float) {
 
-      def printFormat : String = {
-         val s = formatSpan( span )
-         "match( " + s + " )"
-      }
-   }
+    import GraphemeUtil._
 
-   def apply( db: Database ) : DifferanceDatabaseQuery = Impl( db )
+    def printFormat: String = {
+      val s = formatSpan(span)
+      "match( " + s + " )"
+    }
+  }
+
+  def apply(db: Database): DifferanceDatabaseQuery = Impl(db)
 }
-trait DifferanceDatabaseQuery {
-   import DifferanceDatabaseQuery._
 
-   def find( phrase: Phrase /*, overwrite: OverwriteInstruction */ )( implicit tx: InTxn ) : FutureResult[ Match ]
+trait DifferanceDatabaseQuery {
+
+  import DifferanceDatabaseQuery._
+
+  def find(phrase: Phrase /*, overwrite: OverwriteInstruction */)(implicit tx: InTxn): FutureResult[Match]
 }

@@ -2,7 +2,7 @@
  *  LiveTelevisionImpl.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -26,117 +26,121 @@
 package de.sciss.voicetrap
 package impl
 
-import java.io.{IOException, File}
 import de.sciss.synth
-import synth.io.{AudioFile, SampleFormat, AudioFileType}
-import concurrent.stm.{InTxn, Ref}
-import synth.proc.RichServer
+import de.sciss.synth.io.{AudioFile, AudioFileType, SampleFormat}
+import de.sciss.synth.proc.Server
+
+import java.io.{File, IOException}
+import scala.concurrent.stm.InTxn
 
 object LiveTelevisionImpl {
-//   private val identifier  = "live-television-impl"
+  //   private val identifier  = "live-television-impl"
 
-   def apply() : Television = new LiveTelevisionImpl()
+  def apply(): Television = new LiveTelevisionImpl()
 }
-final class LiveTelevisionImpl private () extends Television {
-   import GraphemeUtil._
-   import LiveTelevisionImpl._
 
-   val lookAheadLim = 0.01
-//   val DEBUG = false
+final class LiveTelevisionImpl private() extends Television {
 
-   def latency = lookAheadLim * 2
+  import GraphemeUtil._
 
-//   private val procRef  = Ref( Option.empty[ synth.proc.Proc ])
-//   private val futRef   = Ref({
-//      val ev = FutureResult.event[ File ]()
-//      ev.fail( new RuntimeException( identifier + " : capture file not yet initialized" ))
-//      ev
-//   })
+  val lookAheadLim = 0.01
+  //   val DEBUG = false
 
-   def capture( identifier: String, server: RichServer, length: Long )( implicit tx: Tx ) : FutureResult[ File ] = {
-      import synth._
-      import ugen._
-      import proc.{log => _, _}
-//      import DSL._
+  def latency: Double = lookAheadLim * 2
 
-      val dur     = framesToSeconds( length ) + latency
-      val res     = FutureResult.event[ File ]( identifier + " capture" )
-//      val oldFut  = futRef.swap( res )( tx.peer )
-//      require( oldFut.isSet, identifier + " : still in previous capture" )
+  //   private val procRef  = Ref( Option.empty[ synth.proc.Proc ])
+  //   private val futRef   = Ref({
+  //      val ev = FutureResult.event[ File ]()
+  //      ev.fail( new RuntimeException( identifier + " : capture file not yet initialized" ))
+  //      ev
+  //   })
 
-//      if( DEBUG ) log( identifier + " : capture begin [1]" )
+  def capture(identifier: String, server: Server, length: Long)(implicit tx: Tx): FutureResult[File] = {
+    import synth.{Buffer => _, Synth => _, _}
+    import proc.{log => _, _}
+    import ugen._
+    //      import DSL._
 
-      val graph   = SynthGraph {
-         val boost   = "boost".kr
-         val buf     = "buf".kr // ir
-         val dura    = "dur".ir
-         val in0     = In.ar( NumOutputBuses.ir + VoiceTrap.microphoneChannel, 1 )
-         val in1     = if( VoiceTrap.hpfFreq >= 16 ) HPF.ar( in0, VoiceTrap.hpfFreq ) else in0
-         val in      = if( VoiceTrap.compander ) {
-            Compander.ar( in1, in1, thresh = (-24).dbamp, ratioBelow = 1, ratioAbove = 0.33, attack = 0.2, release = 1 )
-         } else in1
+    val dur = framesToSeconds(length) + latency
+    val res = FutureResult.event[File](identifier + " capture")
+    //      val oldFut  = futRef.swap( res )( tx.peer )
+    //      require( oldFut.isSet, identifier + " : still in previous capture" )
 
-         val mix     = Limiter.ar( in * boost, 0.97, 0.01 )
-//         val done    = Done.kr( Line.kr( dur = dura ))
-         Line.kr( dur = dura, doneAction = freeSelf )
-         DiskOut.ar( buf, mix ) // WhiteNoise.ar( 0.2 )) // mix * DC.ar(0) )
+    //      if( DEBUG ) log( identifier + " : capture begin [1]" )
+
+    val graph = SynthGraph {
+      val boost = "boost".kr
+      val buf = "buf".kr // ir
+      val dura = "dur".ir
+      val in0 = In.ar(NumOutputBuses.ir + VoiceTrap.microphoneChannel, 1)
+      val in1 = if (VoiceTrap.hpfFreq >= 16) HPF.ar(in0, VoiceTrap.hpfFreq) else in0
+      val in = if (VoiceTrap.compander) {
+        Compander.ar(in1, in1, thresh = (-24).dbamp, ratioBelow = 1, ratioAbove = 0.33, attack = 0.2, release = 1)
+      } else in1
+
+      val mix = Limiter.ar(in * boost, 0.97, 0.01)
+      //         val done    = Done.kr( Line.kr( dur = dura ))
+      Line.kr(dur = dura, doneAction = freeSelf)
+      DiskOut.ar(buf, mix) // WhiteNoise.ar( 0.2 )) // mix * DC.ar(0) )
+    }
+
+    //      if( DEBUG ) log( identifier + " : capture begin [2]" )
+
+//    implicit val ptx = ProcTxn()
+//    val rd = RichSynthDef(server, graph)
+    val path = createTempFile(".aif", None, keep = false)
+    //      val buf = bufRecord( path.getAbsolutePath, 1, AudioFileType.AIFF, SampleFormat.Int24 )
+    val buf = Buffer.diskOut(server)(path.getAbsolutePath, AudioFileType.AIFF, SampleFormat.Int24,
+      numFrames = VoiceTrap.recordBufferSize, numChannels = 1)
+
+    log(identifier + " : capture begin " + path)
+
+    //      if( DEBUG ) log( identifier + " : capture begin [3]" )
+
+    val rs = Synth(graph)(
+      target = server.defaultGroup,
+      args = Seq("boost" -> VoiceTrap.microphoneGain, "dur" -> dur, "buf" -> buf.id),
+      dependencies /*buffers*/ = List(buf)
+    )
+
+    //      if( DEBUG ) log( identifier + " : capture begin [4]" )
+
+    //val thr = Thread.currentThread()
+
+    rs.onEndTxn { implicit ptx =>
+      log(identifier + " : capture closing ") // + (Thread.currentThread() == thr) )
+      buf.dispose() // closeAndFree()
+      // trick to make the transaction commit wait for the buffer closing confirmation
+
+// DISABLED 2021
+//      ptx.addMessage(message = osc.StatusMessage, /*change = None,*/ audible = true, dependencies = List(buf))
+
+      implicit val itx: InTxn = ptx.peer
+      submitTxn { // threadTxn( identifier + " : capture completed" )
+        finishCapture(identifier, path, res)
+      } { e =>
+        res.fail(e)
       }
+    }
 
-//      if( DEBUG ) log( identifier + " : capture begin [2]" )
+    //      if( DEBUG ) log( identifier + " : capture begin [5]" )
 
-      implicit val ptx = ProcTxn()
-      val rd   = RichSynthDef( server, graph )
-      val path = createTempFile( ".aif", None, keep = false )
-//      val buf = bufRecord( path.getAbsolutePath, 1, AudioFileType.AIFF, SampleFormat.Int24 )
-      val buf  = RichBuffer( server )
-      buf.alloc( numFrames = VoiceTrap.recordBufferSize, numChannels = 1 )
-      buf.record( path.getAbsolutePath, AudioFileType.AIFF, SampleFormat.Int24 )
+    // XXX TODO : this should be somewhat handled (ProcTxn needs addition)
+    //      tx.afterFailure { e => res.fail( e )}
 
-      log( identifier + " : capture begin " + path )
+    res
+  }
 
-//      if( DEBUG ) log( identifier + " : capture begin [3]" )
-
-      val rs = rd.play(
-         target   = server.defaultGroup,
-         args     = Seq( "boost" -> VoiceTrap.microphoneGain, "dur" -> dur, "buf" -> buf.id ),
-         buffers  = Seq( buf )
-      )
-
-//      if( DEBUG ) log( identifier + " : capture begin [4]" )
-
-//val thr = Thread.currentThread()
-
-      rs.onEndTxn { implicit ptx =>
-         log( identifier + " : capture closing " ) // + (Thread.currentThread() == thr) )
-         buf.closeAndFree()
-         // trick to make the transaction commit wait for the buffer closing confirmation
-         ptx.add( msg = osc.StatusMessage, change = None, audible = true, dependencies = Map( buf.isAlive -> false ))
-         implicit val itx = ptx.peer
-         submitTxn { // threadTxn( identifier + " : capture completed" )
-            finishCapture( identifier, path, res )
-         } { e =>
-            res.fail( e )
-         }
-      }
-
-//      if( DEBUG ) log( identifier + " : capture begin [5]" )
-
-// XXX TODO : this should be somewhat handled (ProcTxn needs addition)
-//      tx.afterFailure { e => res.fail( e )}
-
-      res
-   }
-
-   private def finishCapture( identifier: String, path: File, fut: FutureResult.Event[ File ]) {
-//      requireTxnThread()
-      try {
-         AudioFile.readSpec( path )
-         log( identifier + " : capture completed" )
-         fut.succeed( path )
-      } catch {
-         case e: IOException =>
-            log( identifier + " : capture failed" )
-            fut.fail( e )
-      }
-   }
+  private def finishCapture(identifier: String, path: File, fut: FutureResult.Event[File]): Unit = {
+    //      requireTxnThread()
+    try {
+      AudioFile.readSpec(path)
+      log(identifier + " : capture completed")
+      fut.succeed(path)
+    } catch {
+      case e: IOException =>
+        log(identifier + " : capture failed")
+        fut.fail(e)
+    }
+  }
 }

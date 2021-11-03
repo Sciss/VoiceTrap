@@ -2,7 +2,7 @@
  *  AbstractDifferanceDatabaseThinner.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -26,9 +26,10 @@
 package de.sciss.voicetrap
 package impl
 
-import collection.immutable.{IndexedSeq => IIdxSeq}
-import concurrent.stm.InTxn
 import de.sciss.lucre.bitemp.Span
+
+import scala.collection.immutable.{IndexedSeq => IIdxSeq}
+import scala.concurrent.stm.InTxn
 
 //object AbstractDifferanceDatabaseThinner {
 //   private final case class Entry( span: Span, fadeIn: Long, fadeOut: Long ) {
@@ -42,66 +43,72 @@ import de.sciss.lucre.bitemp.Span
 //   }
 //}
 abstract class AbstractDifferanceDatabaseThinner extends DifferanceDatabaseThinner {
-   import GraphemeUtil._
-//   import AbstractDifferanceDatabaseThinner._
 
-   /**
-    * Cross-fade punch-in duration in seconds
-    */
-   def fadeInMotion : Motion
-   /**
-    * Cross-fade punch-out duration in seconds
-    */
-   def fadeOutMotion : Motion
-   /**
-    * Factor at which the removed spans shrink (0 = no shrinking, 1 = removal not carried out)
-    */
-   def shrinkMotion : Motion
-   /**
-    * Position jitter in seconds
-    */
-   def jitterMotion : Motion
+  import GraphemeUtil._
+  //   import AbstractDifferanceDatabaseThinner._
 
-   def database : Database
+  /**
+   * Cross-fade punch-in duration in seconds
+   */
+  def fadeInMotion: Motion
 
-   def limiter() : SignalLimiter
-   def inFader( off: Long, len: Long ) : SignalFader
-   def outFader( off: Long, len: Long ) : SignalFader
+  /**
+   * Cross-fade punch-out duration in seconds
+   */
+  def fadeOutMotion: Motion
 
-   def remove( spans: IIdxSeq[ Span ])( implicit tx: InTxn ) : FutureResult[ Unit ] = {
-      val dbLen   = database.length
-      val instrs  = spans.map { span =>
-         val shrink     = shrinkMotion.step()
-         val jitter     = secondsToFrames( jitterMotion.step() )
-         val start0     = (span.start + jitter + shrink * (span.length/2)).toLong
-         val stop0      = (span.stop + jitter - shrink * ((span.length+1)/2)).toLong
-         val start      = max( 0L, min( dbLen, start0 ))
-         val stop       = max( start, min( dbLen, stop0 ))
-         val spanT      = Span( start, stop )
+  /**
+   * Factor at which the removed spans shrink (0 = no shrinking, 1 = removal not carried out)
+   */
+  def shrinkMotion: Motion
 
-         val fade0      = secondsToFrames( fadeInMotion.step() )
-         val fiPre      = min( spanT.start, fade0/2 )
-         val foPost     = min( dbLen - spanT.stop, fade0/2 )
+  /**
+   * Position jitter in seconds
+   */
+  def jitterMotion: Motion
 
-         val fiPost0    = fade0 - fiPre
-         val foPre0     = fade0 - foPost
-         val innerSum   = fiPost0 + foPre0
+  def database: Database
 
-         val (fiPost, foPre) = if( innerSum <= spanT.length ) {
-            (fiPost0, foPre0)
-         } else {
-            val scl     = spanT.length.toDouble / innerSum
-            ((fiPost0 * scl).toLong, (foPre0 * scl).toLong)
-         }
+  def limiter(): SignalLimiter
 
-         val spanTFd    = Span( spanT.start - fiPre, spanT.stop + foPost )
-//         val fadeIn     = fiPre + fiPost
-//         val fadeOut    = foPre + foPost
-         val fade       = min( fiPre + fiPost, foPre + foPost )
+  def inFader(off: Long, len: Long): SignalFader
 
-         RemovalInstruction( spanTFd, fade )
+  def outFader(off: Long, len: Long): SignalFader
+
+  def remove(spans: IIdxSeq[Span])(implicit tx: InTxn): FutureResult[Unit] = {
+    val dbLen = database.length
+    val instrs = spans.map { span =>
+      val shrink = shrinkMotion.step()
+      val jitter = secondsToFrames(jitterMotion.step())
+      val start0 = (span.start + jitter + shrink * (span.length / 2)).toLong
+      val stop0 = (span.stop + jitter - shrink * ((span.length + 1) / 2)).toLong
+      val start = max(0L, min(dbLen, start0))
+      val stop = max(start, min(dbLen, stop0))
+      val spanT = Span(start, stop)
+
+      val fade0 = secondsToFrames(fadeInMotion.step())
+      val fiPre = min(spanT.start, fade0 / 2)
+      val foPost = min(dbLen - spanT.stop, fade0 / 2)
+
+      val fiPost0 = fade0 - fiPre
+      val foPre0 = fade0 - foPost
+      val innerSum = fiPost0 + foPre0
+
+      val (fiPost, foPre) = if (innerSum <= spanT.length) {
+        (fiPost0, foPre0)
+      } else {
+        val scl = spanT.length.toDouble / innerSum
+        ((fiPost0 * scl).toLong, (foPre0 * scl).toLong)
       }
 
-      database.remove( instrs )
-   }
+      val spanTFd = Span(spanT.start - fiPre, spanT.stop + foPost)
+      //         val fadeIn     = fiPre + fiPost
+      //         val fadeOut    = foPre + foPost
+      val fade = min(fiPre + fiPost, foPre + foPost)
+
+      RemovalInstruction(spanTFd, fade)
+    }
+
+    database.remove(instrs)
+  }
 }

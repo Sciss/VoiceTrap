@@ -2,7 +2,7 @@
  *  DifferanceDatabaseQueryImpl.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -26,120 +26,123 @@
 package de.sciss.voicetrap
 package impl
 
-import de.sciss.strugatzki.{FeatureCorrelation, Span => SSpan}
-import java.io.File
-import de.sciss.synth
-import concurrent.stm.InTxn
 import de.sciss.lucre.bitemp.Span
+import de.sciss.strugatzki.{FeatureCorrelation, Span => SSpan}
+import de.sciss.synth
+
+import java.io.File
+import scala.concurrent.stm.InTxn
 
 object DifferanceDatabaseQueryImpl {
-   var verbose = false
+  var verbose = false
 
-   def apply( db: Database ) : DifferanceDatabaseQuery = new DifferanceDatabaseQueryImpl( db )
+  def apply(db: Database): DifferanceDatabaseQuery = new DifferanceDatabaseQueryImpl(db)
 }
-class DifferanceDatabaseQueryImpl private ( db: Database ) extends AbstractDifferanceDatabaseQuery {
-   import GraphemeUtil._
-   import DifferanceDatabaseQuery._
 
-   private val identifier  = "query_" + db.identifier
+class DifferanceDatabaseQueryImpl private(db: Database) extends AbstractDifferanceDatabaseQuery {
 
-//   val matchDurationMotion    = Motion.coin(
-//      1.0/33,
-//      Motion.linexp( Motion.walk( 0, 1, 0.1 ), 0, 1, 0.4, 4.0 ), // Motion.exprand( 0.4, 4.0 )
-//      Motion.exprand( 4.0, 16.0 )
-//   )
-//   val matchDeviationMotion   = Motion.linrand( 0.2, 0.5 )
-   val spectralMotion         = Motion.linrand( 0.25, 0.75 )
-//   val stretchDeviationMotion = Motion.walk( 0.111, 0.333, 0.05 ) // Motion.linrand( 0.2, 0.5 )
-//   val rankMotion             = Motion.linrand( 0, 11 )
+  import DifferanceDatabaseQuery._
+  import GraphemeUtil._
 
-   val maxBoostMotion         = Motion.constant( 30 ) // 18
-   val minSpacingMotion       = Motion.constant( 0.0 ) // 0.5
+  private val identifier = "query_" + db.identifier
 
-//   val minPhraseDur           = 10.0
+  //   val matchDurationMotion    = Motion.coin(
+  //      1.0/33,
+  //      Motion.linexp( Motion.walk( 0, 1, 0.1 ), 0, 1, 0.4, 4.0 ), // Motion.exprand( 0.4, 4.0 )
+  //      Motion.exprand( 4.0, 16.0 )
+  //   )
+  //   val matchDeviationMotion   = Motion.linrand( 0.2, 0.5 )
+  val spectralMotion: Motion = Motion.linrand(0.25, 0.75)
+  //   val stretchDeviationMotion = Motion.walk( 0.111, 0.333, 0.05 ) // Motion.linrand( 0.2, 0.5 )
+  //   val rankMotion             = Motion.linrand( 0, 11 )
 
-   def findMatch( rank: Int, phrase: Phrase, weight: Double )( implicit tx: InTxn ) : FutureResult[ Match ] = {
+  val maxBoostMotion: Motion = Motion.constant(30) // 18
+  val minSpacingMotion: Motion = Motion.constant(0.0) // 0.5
 
-      import synth._
+  //   val minPhraseDur           = 10.0
 
-//log( "----find match 0" )
-      val maxBoost   = maxBoostMotion.step().dbamp.toFloat
-//log( "----find match 1" )
-      val minSpc     = secondsToFrames( minSpacingMotion.step() )
-//log( "----find match 2" )
-      val dirFut     = db.asStrugatziDatabase
-//log( "----find match 3" )
-      val metaFut    = phrase.asStrugatzkiInput
-//log( "----find match 4" )
+  def findMatch(rank: Int, phrase: Phrase, weight: Double)(implicit tx: InTxn): FutureResult[Match] = {
 
-      val res = dirFut.flatMapSuccess( identifier + " map dir" ) { dir =>
-         log( "dir ready for " + db.identifier )
-         metaFut.flatMapSuccess( identifier + " find match" ) { metaInput =>
-            log( "meta ready for " + db.identifier )
-            val res = findMatchIn( dir, metaInput, maxBoost, minSpc, rank, phrase, weight )
-            log( "future match ready for " + db.identifier )
-            res
-         }
+    import synth._
+
+    //log( "----find match 0" )
+    val maxBoost = maxBoostMotion.step().dbamp.toFloat
+    //log( "----find match 1" )
+    val minSpc = secondsToFrames(minSpacingMotion.step())
+    //log( "----find match 2" )
+    val dirFut = db.asStrugatziDatabase
+    //log( "----find match 3" )
+    val metaFut = phrase.asStrugatzkiInput
+    //log( "----find match 4" )
+
+    val res = dirFut.flatMapSuccess(identifier + " map dir") { dir =>
+      log("dir ready for " + db.identifier)
+      metaFut.flatMapSuccess(identifier + " find match") { metaInput =>
+        log("meta ready for " + db.identifier)
+        val res = findMatchIn(dir, metaInput, maxBoost, minSpc, rank, phrase, weight)
+        log("future match ready for " + db.identifier)
+        res
       }
-//log( "----find match 5" )
-      res
-   }
+    }
+    //log( "----find match 5" )
+    res
+  }
 
-   private def findMatchIn( dir: File, metaInput: File, maxBoost: Float, minSpacing: Long, rank: Int, phrase: Phrase,
-                            weight: Double ) : FutureResult[ Match ] = {
+  private def findMatchIn(dir: File, metaInput: File, maxBoost: Float, minSpacing: Long, rank: Int, phrase: Phrase,
+                          weight: Double): FutureResult[Match] = {
 
-      import FeatureCorrelation.{Match => _, _} // otherwise Match shadows DifferanceDatabaseQuery.Match
+    import FeatureCorrelation.{Match => _, _} // otherwise Match shadows DifferanceDatabaseQuery.Match
 
-      val res              = FutureResult.event[ Match ]( identifier + " match" )
-      val set              = SettingsBuilder()
-      set.databaseFolder   = dir
-      set.normalize        = true
-      set.maxBoost         = maxBoost
-      set.metaInput        = metaInput
-      set.minSpacing       = minSpacing
-      set.numMatches       = max( 2, rank + 1 )
-      set.numPerFile       = max( 2, rank + 1 )
+    val res = FutureResult.event[Match](identifier + " match")
+    val set = SettingsBuilder()
+    set.databaseFolder = dir
+    set.normalize = true
+    set.maxBoost = maxBoost
+    set.metaInput = metaInput
+    set.minSpacing = minSpacing
+    set.numMatches = max(2, rank + 1)
+    set.numPerFile = max(2, rank + 1)
 
-      val punchIn          = Span( 0L, phrase.length )
+    val punchIn = Span(0L, phrase.length)
 
-      set.punchIn          = Punch( SSpan( punchIn.start, punchIn.stop ), weight.toFloat )
-      set.punchOut         = None // Some( Punch( SSpan( punchOut.start, punchOut.stop ), weight.toFloat ))
-//      set.minPunch         = minPunch
-//      set.maxPunch         = maxPunch
+    set.punchIn = Punch(SSpan(punchIn.start, punchIn.stop), weight.toFloat)
+    set.punchOut = None // Some( Punch( SSpan( punchOut.start, punchOut.stop ), weight.toFloat ))
+    //      set.minPunch         = minPunch
+    //      set.maxPunch         = maxPunch
 
-      val setb             = set.build
+    val setb = set.build
 
-      if( verbose ) println( "----CORRELATION----" )
-      if( verbose ) println( setb )
+    if (verbose) println("----CORRELATION----")
+    if (verbose) println(setb)
 
-      val process          = apply( setb ) {
-         case Aborted =>
-            val e = new RuntimeException( identifier + " process aborted" )
-            res.fail( e )
+    val process = apply(setb) {
+      case Aborted =>
+        val e = new RuntimeException(identifier + " process aborted")
+        res.fail(e)
 
-         case Failure( e ) =>
-            res.fail( e )
+      case Failure(e) =>
+        res.fail(e)
 
-         case Success( coll ) =>
-            val idx0 = min( coll.size - 1, rank )
-            val idx  = if( idx0 == 0 && coll( idx0 ).sim.isNaN ) idx0 + 1 else idx0
-            if( idx < 0 || idx >= coll.size ) {
-               val e = new RuntimeException( identifier + " process yielded no matches" )
-               res.fail( e )
-            } else {
-               val m = coll( idx )
-               res.succeed( Match( db, Span( m.punch.start, m.punch.stop ), m.boostIn, m.boostOut ))
-            }
+      case Success(coll) =>
+        val idx0 = min(coll.size - 1, rank)
+        val idx = if (idx0 == 0 && coll(idx0).sim.isNaN) idx0 + 1 else idx0
+        if (idx < 0 || idx >= coll.size) {
+          val e = new RuntimeException(identifier + " process yielded no matches")
+          res.fail(e)
+        } else {
+          val m = coll(idx)
+          res.succeed(Match(db, Span(m.punch.start, m.punch.stop), m.boostIn, m.boostOut))
+        }
 
-         case Progress( p ) =>
-      }
-      process.start()
-      res
-   }
+      case Progress(_) =>
+    }
+    process.start()
+    res
+  }
 
-//   private def failureMatch = {
-//      atomic( identifier + " : failure match" ) { tx1 =>
-//         Match( db, Span( 0L, min( db.length( tx1 ), secondsToFrames( 1.0 ))), 1f, 1f )
-//      }
-//   }
+  //   private def failureMatch = {
+  //      atomic( identifier + " : failure match" ) { tx1 =>
+  //         Match( db, Span( 0L, min( db.length( tx1 ), secondsToFrames( 1.0 ))), 1f, 1f )
+  //      }
+  //   }
 }

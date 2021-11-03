@@ -2,7 +2,7 @@
  *  DifferanceDatabaseThinner.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -31,8 +31,9 @@ import de.sciss.lucre.bitemp.Span
 import concurrent.stm.InTxn
 
 object DifferanceDatabaseThinner {
-   def apply( database: Database ) : DifferanceDatabaseThinner = Impl( database )
+  def apply(database: Database): DifferanceDatabaseThinner = Impl(database)
 }
+
 trait DifferanceDatabaseThinner {
-   def remove( spans: IIdxSeq[ Span ])( implicit tx: InTxn ) : FutureResult[ Unit ]
+  def remove(spans: IIdxSeq[Span])(implicit tx: InTxn): FutureResult[Unit]
 }

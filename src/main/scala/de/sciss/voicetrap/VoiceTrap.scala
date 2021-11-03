@@ -2,7 +2,7 @@
  *  VoiceTrap.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -25,95 +25,98 @@
 
 package de.sciss.voicetrap
 
-import java.io.File
-import collection.immutable.{IndexedSeq => IIdxSeq}
-import de.sciss.synth.AudioBus
-import de.sciss.synth.proc.RichGroup
 import de.sciss.osc
+import de.sciss.synth.AudioBus
+import de.sciss.synth.proc.Group
+
+import java.io.File
+import scala.collection.immutable.{IndexedSeq => IIdxSeq}
 
 object VoiceTrap {
-   val useMnemo               = true   // false
-   val bootServer             = true   // false
-   val minimal                = false  // true
-   val liveInput              = true
-   val stereoOutput           = false  // true
-//   val gui                    = true
+  val useMnemo      = true // false
+  val bootServer    = true // false
+  val minimal       = false // true
+  val liveInput     = true
+  val stereoOutput  = false // true
+  //   val gui                    = true
 
-   lazy val baseDirectory     : File   = {
-      if( useMnemo ) {
-         new File( new File( "/Volumes", "Mnemo2" ), "VoiceTrap" )
-      } else {
-         new File( new File( sys.props( "user.home" ), "Desktop" ), "VoiceTrap" )
-      }
-   }
-   lazy val artifactDirectory : File   = new File( baseDirectory, "artifacts" )
-//   lazy val databaseDirectory : File   = new File( baseDirectory, "audio_db" )
-   lazy val televisionFile    : File   = new File( new File( baseDirectory, "tv" ), "tv.aif" )
-   lazy val temporaryDirectory: File   = new File( baseDirectory, "tmp" )
+  lazy val baseDirectory: File = {
+    if (useMnemo) {
+      new File(new File("/Volumes", "Mnemo2"), "VoiceTrap")
+    } else {
+      new File(new File(sys.props("user.home"), "Desktop"), "VoiceTrap")
+    }
+  }
+  lazy val artifactDirectory: File = new File(baseDirectory, "artifacts")
+  //   lazy val databaseDirectory : File   = new File( baseDirectory, "audio_db" )
+  lazy val televisionFile: File = new File(new File(baseDirectory, "tv"), "tv.aif")
+  lazy val temporaryDirectory: File = new File(baseDirectory, "tmp")
 
-   val limiterLevel           = 0.9
-   val compander              = true
-   val hpfFreq                = 50.0
+  val limiterLevel        = 0.9
+  val compander           = true
+  val hpfFreq             = 50.0
 
-   val jumpBackSound          = true
-   val jumpBackSoundVolume    = 1.0
-   val shrinkAmount           = 0.15
-//   val keepOneProbability     = 0.2
+  val jumpBackSound       = true
+  val jumpBackSoundVolume = 1.0
+  val shrinkAmount        = 0.15
+  //   val keepOneProbability     = 0.2
 
-   lazy val numRows           = if( minimal ) 2 /* 1 */ else 4
-   lazy val numColumns        = if( minimal ) 1 else 3
-   lazy val matrixSize        = numRows * numColumns
+  lazy val numRows    : Int = if (minimal) 2 /* 1 */ else 4
+  lazy val numColumns : Int = if (minimal) 1 else 3
+  lazy val matrixSize : Int = numRows * numColumns
 
-   val sampleRate             = 44100.0
-   val audioInterface         = "MOTU 828mk2"
-   val protocol: osc.Transport.Net = osc.UDP
-   val highestInputChannel    = 2
-   val highestOutputChannel   = 22
-   val microphoneChannel      = 0
-   var microphoneGain         = 1.0 // amp linear
-   val outChannels            = (3 to 10) ++ (15 to 18)
-   val masterGain             = 1.25
+  val sampleRate          = 44100.0
+  val audioInterface      = "MOTU 828mk2"
+  val protocol: osc.Transport.Net = osc.UDP
+  val highestInputChannel   = 2
+  val highestOutputChannel  = 22
+  val microphoneChannel     = 0
+  var microphoneGain        = 1.0 // amp linear
+  val outChannels: Seq[Int] = (3 to 10) ++ (15 to 18)
+  val masterGain            = 1.25
 
-   val forkIterations         = /* if( minimal ) 1 else */ 6
+  val forkIterations = /* if( minimal ) 1 else */ 6
 
-   val drainProbability       = 0.05 // 0.1
+  val drainProbability = 0.05 // 0.1
 
-   val recordBufferSize       = 65536 // 32768
+  val recordBufferSize = 65536 // 32768
 
-//   lazy val internalBusOffset = highestOutputChannel + highestInputChannel
+  //   lazy val internalBusOffset = highestOutputChannel + highestInputChannel
 
-   var privateBus : AudioBus  = null      // XXX TODO: que se puede acer...
+  var privateBus: AudioBus = null // XXX TODO: que se puede acer...
 
-   lazy val phraseLength : Motion  = Motion.exprand( 8.0, 24.0 )
-   lazy val loopLength : Motion    = if( minimal ) Motion.constant( 45.0 ) else Motion.exprand( 90.0 / 1.1, 90.0 * 1.1 ) // Motion.constant( 90.0 )
+  lazy val phraseLength : Motion = Motion.exprand(8.0, 24.0)
+  lazy val loopLength   : Motion = if (minimal) Motion.constant(45.0) else Motion.exprand(90.0 / 1.1, 90.0 * 1.1) // Motion.constant( 90.0 )
 
-   lazy val startTime         = System.currentTimeMillis()
+  lazy val startTime: Long = System.currentTimeMillis()
 
-   case class ChannelDB( database: Database, query: DifferanceDatabaseQuery,
-                         thinner: DifferanceDatabaseThinner, filler: DifferanceDatabaseFiller )
+  case class ChannelDB(database: Database, query: DifferanceDatabaseQuery,
+                       thinner: DifferanceDatabaseThinner, filler: DifferanceDatabaseFiller)
 
-   lazy val databases = IIdxSeq.tabulate( numRows ) { row => IIdxSeq.tabulate( numColumns ) { col =>
-      val mStr       = "_" + (row+1) + "_" + (col+1)
-      val dir        = new File( baseDirectory, "audio_db" + mStr )
-//      if( !dir.isDirectory ) dir.mkdir()
-      val database   = Database( "db" + mStr, dir )
-      val query      = DifferanceDatabaseQuery(   database )
-      val thinner    = DifferanceDatabaseThinner( database )
-      val filler     = DifferanceDatabaseFiller( database, television )
-      ChannelDB( database, query, thinner, filler )
-   }}
+  lazy val databases: IIdxSeq[IIdxSeq[ChannelDB]] = IIdxSeq.tabulate(numRows) { row =>
+    IIdxSeq.tabulate(numColumns) { col =>
+      val mStr = "_" + (row + 1) + "_" + (col + 1)
+      val dir = new File(baseDirectory, "audio_db" + mStr)
+      //      if( !dir.isDirectory ) dir.mkdir()
+      val database = Database("db" + mStr, dir)
+      val query = DifferanceDatabaseQuery(database)
+      val thinner = DifferanceDatabaseThinner(database)
+      val filler = DifferanceDatabaseFiller(database, television)
+      ChannelDB(database, query, thinner, filler)
+    }
+  }
 
-//   lazy val database        : Database                   = Database( databaseDirectory )
-//   lazy val databaseQuery   : DifferanceDatabaseQuery    = DifferanceDatabaseQuery(   database )
-//   lazy val databaseThinner : DifferanceDatabaseThinner  = DifferanceDatabaseThinner( database )
-//   lazy val databaseFiller  : DifferanceDatabaseFiller   = DifferanceDatabaseFiller( database, television )
-   lazy val television      : Television                 = if( liveInput ) Television.live() else Television.fromFile( televisionFile )
+  //   lazy val database        : Database                   = Database( databaseDirectory )
+  //   lazy val databaseQuery   : DifferanceDatabaseQuery    = DifferanceDatabaseQuery(   database )
+  //   lazy val databaseThinner : DifferanceDatabaseThinner  = DifferanceDatabaseThinner( database )
+  //   lazy val databaseFiller  : DifferanceDatabaseFiller   = DifferanceDatabaseFiller( database, television )
+  lazy val television: Television = if (liveInput) Television.live() else Television.fromFile(televisionFile)
 
-   var txnThread : Thread = null
+  var txnThread: Thread = null
 
-   var masterGroup : RichGroup = null
+  var masterGroup: Group = null
 
-   def main( args: Array[ String ]) {
-      Infra().start()
-   }
+  def main(args: Array[String]): Unit = {
+    Infra().start()
+  }
 }

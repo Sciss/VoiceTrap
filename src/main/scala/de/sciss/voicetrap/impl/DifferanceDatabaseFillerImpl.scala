@@ -2,7 +2,7 @@
  *  DifferanceDatabaseFillerImpl.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -27,17 +27,17 @@ package de.sciss.voicetrap
 package impl
 
 object DifferanceDatabaseFillerImpl {
-   def apply( db: Database, tv: Television ) : DifferanceDatabaseFiller = {
-      new Impl( db, tv )
-   }
+  def apply(db: Database, tv: Television): DifferanceDatabaseFiller = {
+    new Impl(db, tv)
+  }
 
-   private final class Impl( val database: Database, val television: Television )
-   extends AbstractDifferanceDatabaseFiller {
-      val durationMotion   = Motion.constant( 180.0 )
-      val maxCaptureDur    = 45.0
+  private final class Impl(val database: Database, val television: Television)
+    extends AbstractDifferanceDatabaseFiller {
+    val durationMotion: Motion = Motion.constant(180.0)
+    val maxCaptureDur = 45.0
 
-      def identifier = "fill(" + database.identifier + ")"
+    def identifier: String = "fill(" + database.identifier + ")"
 
-      override def toString = "DifferanceDatabaseFiller@" + hashCode.toHexString
-   }
+    override def toString: String = "DifferanceDatabaseFiller@" + hashCode.toHexString
+  }
 }

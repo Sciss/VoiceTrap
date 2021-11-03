@@ -2,7 +2,7 @@
  *  DifferanceDatabaseThinner.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -27,25 +27,27 @@ package de.sciss.voicetrap
 package impl
 
 object DifferanceDatabaseThinnerImpl {
-   def apply( database: Database ) : DifferanceDatabaseThinner = new DifferanceDatabaseThinnerImpl( database )
+  def apply(database: Database): DifferanceDatabaseThinner = new DifferanceDatabaseThinnerImpl(database)
 }
-final class DifferanceDatabaseThinnerImpl private ( val database: Database ) extends AbstractDifferanceDatabaseThinner {
-   import GraphemeUtil._
 
-   val fadeInMotion : Motion  = Motion.exprand( 0.02, 2.0 )
-   val fadeOutMotion : Motion = Motion.exprand( 0.03, 3.0 )
-   val shrinkMotion : Motion  = Motion.linrand( 0.0, 1.0 )
-   val jitterMotion : Motion  = Motion.linexp( Motion.walk( 0.0, 1.0, 0.1 ), 0.0, 1.0, 0.02222222, 5.0 )
+final class DifferanceDatabaseThinnerImpl private(val database: Database) extends AbstractDifferanceDatabaseThinner {
 
-   /**
-    * Uses 1/3 pow which gives some -4 dB cross fade point, a bit weaker than equal power fade
-    */
-   def inFader( off: Long, len: Long ) : SignalFader = SignalFader( off, len, 0f, 1f, 0.66666f )
+  import GraphemeUtil._
 
-   /**
-    * Uses 1/3 pow which gives some -4 dB cross fade point, a bit weaker than equal power fade
-    */
-   def outFader( off: Long, len: Long ) : SignalFader = SignalFader( off, len, 1f, 0f, 0.66666f )
+  val fadeInMotion: Motion = Motion.exprand(0.02, 2.0)
+  val fadeOutMotion: Motion = Motion.exprand(0.03, 3.0)
+  val shrinkMotion: Motion = Motion.linrand(0.0, 1.0)
+  val jitterMotion: Motion = Motion.linexp(Motion.walk(0.0, 1.0, 0.1), 0.0, 1.0, 0.02222222, 5.0)
 
-   def limiter() : SignalLimiter = SignalLimiter( secondsToFrames( 0.100 ).toInt )
+  /**
+   * Uses 1/3 pow which gives some -4 dB cross fade point, a bit weaker than equal power fade
+   */
+  def inFader(off: Long, len: Long): SignalFader = SignalFader(off, len, 0f, 1f, 0.66666f)
+
+  /**
+   * Uses 1/3 pow which gives some -4 dB cross fade point, a bit weaker than equal power fade
+   */
+  def outFader(off: Long, len: Long): SignalFader = SignalFader(off, len, 1f, 0f, 0.66666f)
+
+  def limiter(): SignalLimiter = SignalLimiter(secondsToFrames(0.100).toInt)
 }

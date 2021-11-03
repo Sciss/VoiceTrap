@@ -1,22 +1,23 @@
 package scala.actors
 package sciss
 
-import concurrent.SyncVar
-import scheduler.DaemonScheduler
+import scala.actors.scheduler.DaemonScheduler
+import scala.concurrent.SyncVar
 
 /**
-* `scala.actors` unfortunately is largely misdesigned. One problem with `Futures` is that
-* `FutureActor` is private, not extensible, and on top of that, `Future` has package private
-* fields that cannot be accessed, unless we hijack package `scala.actors`.
-*/
+ * `scala.actors` unfortunately is largely misdesigned. One problem with `Futures` is that
+ * `FutureActor` is private, not extensible, and on top of that, `Future` has package private
+ * fields that cannot be accessed, unless we hijack package `scala.actors`.
+ */
 object FutureActor {
-   def newChannel[ A ]() : Channel[ A ] = new Channel[ A ]( Actor.self( DaemonScheduler ))
+  def newChannel[A](): Channel[A] = new Channel[A](Actor.self(DaemonScheduler))
 }
+
 class FutureActor[T](fun: SyncVar[T] => Unit, channel: Channel[T]) extends Future[T] with DaemonActor {
 
   var enableChannel = false // guarded by this
 
-  def isSet = !fvalue.isEmpty
+  def isSet: Boolean = fvalue.isDefined
 
   def apply(): T = {
     if (fvalue.isEmpty) {
@@ -25,7 +26,7 @@ class FutureActor[T](fun: SyncVar[T] => Unit, channel: Channel[T]) extends Futur
     fvalueTyped
   }
 
-  def respond(k: T => Unit) {
+  def respond(k: T => Unit): Unit = {
     if (isSet) k(fvalueTyped)
     else {
       val ft = this !! Eval
@@ -46,7 +47,7 @@ class FutureActor[T](fun: SyncVar[T] => Unit, channel: Channel[T]) extends Futur
     channel
   }
 
-  def act() {
+  def act(): Unit = {
     val res = new SyncVar[T]
 
     {
@@ -55,7 +56,7 @@ class FutureActor[T](fun: SyncVar[T] => Unit, channel: Channel[T]) extends Futur
 
       synchronized {
         val v = res.get
-        fvalue =  Some(v)
+        fvalue = Some(v)
         if (enableChannel)
           channel ! v
       }

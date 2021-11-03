@@ -2,7 +2,7 @@
  *  Television.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -25,20 +25,22 @@
 
 package de.sciss.voicetrap
 
-import impl.{FileTelevisionImpl => FileImpl, LiveTelevisionImpl => LiveImpl}
+import de.sciss.synth.proc.Server
+import de.sciss.voicetrap.impl.{FileTelevisionImpl => FileImpl, LiveTelevisionImpl => LiveImpl}
+
 import java.io.File
-import concurrent.stm.InTxn
-import de.sciss.synth.proc.RichServer
 
 object Television {
-   def fromFile( f: File ) : Television = FileImpl( f )
-   def live() : Television = LiveImpl()
-}
-trait Television {
-   def capture( identifier: String, server: RichServer, length: Long )( implicit tx: Tx ) : FutureResult[ File ]
+  def fromFile(f: File): Television = FileImpl(f)
 
-   /**
-    * Latency in capture result in seconds
-    */
-   def latency : Double
+  def live(): Television = LiveImpl()
+}
+
+trait Television {
+  def capture(identifier: String, server: Server, length: Long)(implicit tx: Tx): FutureResult[File]
+
+  /**
+   * Latency in capture result in seconds
+   */
+  def latency: Double
 }

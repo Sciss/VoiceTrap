@@ -2,7 +2,7 @@
  *  Motion.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -29,20 +29,25 @@ import impl.{MotionImpl => Impl}
 import concurrent.stm.InTxn
 
 object Motion {
-   def constant( value: Double ) : Motion = Impl.constant( value )
-   def linrand( lo: Double, hi: Double ) : Motion = Impl.linrand( lo, hi )
-   def exprand( lo: Double, hi: Double ) : Motion = Impl.exprand( lo, hi )
-   def sine( lo: Double, hi: Double, period: Int ) : Motion = Impl.sine( lo, hi, period )
-   def walk( lo: Double, hi: Double, maxStep: Double ) : Motion = Impl.walk( lo, hi, maxStep )
+  def constant(value: Double): Motion = Impl.constant(value)
 
-   def linlin( in: Motion, inLo: Double, inHi: Double, outLo: Double, outHi: Double ) : Motion =
-      Impl.linlin( in, inLo, inHi, outLo, outHi )
+  def linrand(lo: Double, hi: Double): Motion = Impl.linrand(lo, hi)
 
-   def linexp( in: Motion, inLo: Double, inHi: Double, outLo: Double, outHi: Double ) : Motion =
-      Impl.linexp( in, inLo, inHi, outLo, outHi )
+  def exprand(lo: Double, hi: Double): Motion = Impl.exprand(lo, hi)
 
-   def coin( prob: Double, a: Motion, b: Motion ) : Motion = Impl.coin( prob, a, b )
+  def sine(lo: Double, hi: Double, period: Int): Motion = Impl.sine(lo, hi, period)
+
+  def walk(lo: Double, hi: Double, maxStep: Double): Motion = Impl.walk(lo, hi, maxStep)
+
+  def linlin(in: Motion, inLo: Double, inHi: Double, outLo: Double, outHi: Double): Motion =
+    Impl.linlin(in, inLo, inHi, outLo, outHi)
+
+  def linexp(in: Motion, inLo: Double, inHi: Double, outLo: Double, outHi: Double): Motion =
+    Impl.linexp(in, inLo, inHi, outLo, outHi)
+
+  def coin(prob: Double, a: Motion, b: Motion): Motion = Impl.coin(prob, a, b)
 }
+
 trait Motion {
-   def step()( implicit tx: InTxn ) : Double
+  def step()(implicit tx: InTxn): Double
 }

@@ -2,7 +2,7 @@
  *  Database.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -31,24 +31,27 @@ import java.io.File
 import concurrent.stm.InTxn
 
 object Database {
-   def apply( name: String, dir: File ) : Database = Impl( name, dir )
+  def apply(name: String, dir: File): Database = Impl(name, dir)
 }
+
 trait Database {
-   def length( implicit tx: InTxn ): Long
-   def lengthSingle : Long
+  def length(implicit tx: InTxn): Long
 
-   def identifier: String
+  def lengthSingle: Long
 
-//   def remove( spans: IIdxSeq[ Span ])( implicit tx: Tx ) : FutureResult[ Unit ]
+  def identifier: String
 
-   def append( source: File, offset: Long, length: Long )( implicit tx: InTxn ) : FutureResult[ Unit ]
-   def remove( instrs: IIdxSeq[ RemovalInstruction ])( implicit tx: InTxn ) : FutureResult[ Unit ]
+  //   def remove( spans: IIdxSeq[ Span ])( implicit tx: Tx ) : FutureResult[ Unit ]
 
-   /**
-    * Returns a directory carrying the strugatzki meta files of
-    * the database.
-    */
-   def asStrugatziDatabase( implicit tx: InTxn ) : FutureResult[ File ]
+  def append(source: File, offset: Long, length: Long)(implicit tx: InTxn): FutureResult[Unit]
 
-   def reader : FrameReader.Factory
+  def remove(instrs: IIdxSeq[RemovalInstruction])(implicit tx: InTxn): FutureResult[Unit]
+
+  /**
+   * Returns a directory carrying the strugatzki meta files of
+   * the database.
+   */
+  def asStrugatziDatabase(implicit tx: InTxn): FutureResult[File]
+
+  def reader: FrameReader.Factory
 }

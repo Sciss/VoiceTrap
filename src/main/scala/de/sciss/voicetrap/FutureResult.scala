@@ -2,7 +2,7 @@
  *  FutureResult.scala
  *  (VoiceTrap)
  *
- *  Copyright (c) 2012 Hanns Holger Rutz. All rights reserved.
+ *  Copyright (c) 2012-2021 Hanns Holger Rutz. All rights reserved.
  *
  *  This software is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU General Public License
@@ -26,159 +26,176 @@
 package de.sciss.voicetrap
 
 import actors.sciss.FutureActor
-import actors.{Futures, Future}
+import actors.{Future, Futures}
 import concurrent.stm.Txn
 import collection.immutable.{IndexedSeq => IIdxSeq}
+import scala.language.implicitConversions
 
-trait FutureResult[ +A ] {
-   import FutureResult._
+trait FutureResult[+A] {
 
-   def name: String
+  import FutureResult._
 
-   def isSet : Boolean
-   def apply() : Result[ A ]
-   def map[ B ]( name: String )( fun: Result[ A ] => Result[ B ]) : FutureResult[ B ]
-   def flatMap[ B ]( name: String )( fun: Result[ A ] => FutureResult[ B ]) : FutureResult[ B ]
+  def name: String
 
-   final def mapSuccess[ B ]( name: String )( fun: A => Result[ B ]) : FutureResult[ B ] =
-      map( name ) {
-         case Success( value ) => fun( value )
-         case f @ Failure( _ ) => f
-      }
+  def isSet: Boolean
 
-   final def flatMapSuccess[ B ]( name: String )( fun: A => FutureResult[ B ]) : FutureResult[ B ] =
-      flatMap( name ) {
-         case Success( value ) => fun( value )
-         case f @ Failure( _ ) => now( name, f )
-      }
+  def apply(): Result[A]
 
-   /* private[grapheme] */ def peer : Future[ Result[ A ]]
+  def map[B](name: String)(fun: Result[A] => Result[B]): FutureResult[B]
 
-   override def toString = "FutureResult(name=" + name + ")@" + hashCode.toHexString
+  def flatMap[B](name: String)(fun: Result[A] => FutureResult[B]): FutureResult[B]
+
+  final def mapSuccess[B](name: String)(fun: A => Result[B]): FutureResult[B] =
+    map(name) {
+      case Success(value) => fun(value)
+      case f@Failure(_) => f
+    }
+
+  final def flatMapSuccess[B](name: String)(fun: A => FutureResult[B]): FutureResult[B] =
+    flatMap(name) {
+      case Success(value) => fun(value)
+      case f@Failure(_) => now(name, f)
+    }
+
+  /* private[grapheme] */ def peer: Future[Result[A]]
+
+  override def toString: String = "FutureResult(name=" + name + ")@" + hashCode.toHexString
 }
 
 object FutureResult {
-   object Result {
-      implicit def succeed[ A ]( value: A ) : Result[ A ] = Success( value )
-   }
+  object Result {
+    implicit def succeed[A](value: A): Result[A] = Success(value)
+  }
 
-   sealed trait Result[ +A ] {
-      def toOption: Option[ A ]
+  sealed trait Result[+A] {
+    def toOption: Option[A]
 
-//      /**
-//       * Returns the result value in case of success,
-//       * or rethrows the exception in case of failure
-//       */
-//      def get : A
-   }
-   final case class Failure( e: Throwable ) extends Result[ Nothing ] {
-      def toOption = None
-//      def get = throw e
-   }
-   final case class Success[ A ]( value: A ) extends Result[ A ] {
-      def toOption = Some( value )
-//      def get = value
-   }
+    //      /**
+    //       * Returns the result value in case of success,
+    //       * or rethrows the exception in case of failure
+    //       */
+    //      def get : A
+  }
 
-   def now[ A ]( name: String, value: Result[ A ]) : FutureResult[ A ] = {
-      val ev = event[ A ]( name )  // hmmmm... too much effort?
-      ev.set( value )
-      ev
-   }
+  final case class Failure(e: Throwable) extends Result[Nothing] {
+    def toOption: Option[Nothing] = None
+    //      def get = throw e
+  }
 
-   def nowSucceed[ A ]( name: String, value: A )     : FutureResult[ A ] = now( name, Success( value ))
-   def nowFail[ A ](    name: String, e: Throwable ) : FutureResult[ A ] = now( name, Failure( e ))
+  final case class Success[A](value: A) extends Result[A] {
+    def toOption: Option[A] = Some(value)
+    //      def get = value
+  }
 
-   trait Event[ A ] extends FutureResult[ A ] {
-      def set( result: Result[ A ]) : Unit
-      final def succeed( value :A ) { set( Success( value ))}
-      final def fail( e: Throwable ) { set( Failure( e ))}
-   }
+  def now[A](name: String, value: Result[A]): FutureResult[A] = {
+    val ev = event[A](name) // hmmmm... too much effort?
+    ev.set(value)
+    ev
+  }
 
-   def event[ A ]( name: String ) : FutureResult.Event[ A ] = {
-      val name0 = name
-      new FutureResult.Event[ A ] with Basic[ A ] {
-         case class Set( value: Result[ A ]) // warning: don't make this final -- scalac bug
+  def nowSucceed[A](name: String, value: A): FutureResult[A] = now(name, Success(value))
 
-         val name = name0
-         val c = FutureActor.newChannel[ Result[ A ]]()
-         val peer: FutureActor[ Result[ A ]] = new FutureActor[ Result[ A ]]({ syncVar =>
-            open( this )
-            peer.react {
-               case Set( value ) =>
-                  close( this )
-                  syncVar.set( value )
-            }
-         }, c )
-         peer.start()
+  def nowFail[A](name: String, e: Throwable): FutureResult[A] = now(name, Failure(e))
 
-         def set( value: Result[ A ]) { peer ! Set( value )}
+  trait Event[A] extends FutureResult[A] {
+    def set(result: Result[A]): Unit
+
+    final def succeed(value: A): Unit = {
+      set(Success(value))
+    }
+
+    final def fail(e: Throwable): Unit = {
+      set(Failure(e))
+    }
+  }
+
+  def event[A](name: String): FutureResult.Event[A] = {
+    val name0 = name
+    new FutureResult.Event[A] with Basic[A] {
+      case class Set(value: Result[A]) // warning: don't make this final -- scalac bug
+
+      val name: String = name0
+      val c: actors.Channel[Result[A]] = FutureActor.newChannel[Result[A]]()
+      val peer: FutureActor[Result[A]] = new FutureActor[Result[A]]({ syncVar =>
+        open(this)
+        peer.react {
+          case Set(value) =>
+            close(this)
+            syncVar.set(value)
+        }
+      }, c)
+      peer.start()
+
+      def set(value: Result[A]): Unit = {
+        peer ! Set(value)
       }
-   }
+    }
+  }
 
-   private def wrap[ A ]( name: String, fut: Future[ Result[ A ]]) : FutureResult[ A ] = {
-      val name0 = name
-      new FutureResult[ A ] with Basic[ A ] {
-         def name = name0
-         def peer = fut
+  private def wrap[A](name: String, fut: Future[Result[A]]): FutureResult[A] = {
+    val name0 = name
+    new FutureResult[A] with Basic[A] {
+      def name: String = name0
+
+      def peer: Future[Result[A]] = fut
+    }
+  }
+
+  private val sync = new AnyRef
+  private var openFuts = IIdxSeq.empty[FutureResult[_]]
+
+  private def open(fut: FutureResult[_]): Unit = {
+    sync.synchronized(openFuts :+= fut)
+  }
+
+  private def close(fut: FutureResult[_]): Unit = {
+    sync.synchronized(openFuts = openFuts.filterNot(_ == fut))
+  }
+
+  def dumpOpenFutures(): Unit = {
+    val futs = sync.synchronized(openFuts)
+    futs.foreach(println)
+  }
+
+  private sealed trait Basic[A] {
+    me: FutureResult[A] =>
+
+    def map[B](name: String)(fun: Result[A] => Result[B]): FutureResult[B] = wrap(name, Futures.future {
+      try {
+        open(this)
+        val res = try {
+          apply()
+        } finally {
+          close(this)
+        }
+        fun(res)
+      } catch {
+        case e: Throwable => Failure(e)
       }
-   }
+    })
 
-   private val sync = new AnyRef
-   private var openFuts = IIdxSeq.empty[ FutureResult[ _ ]]
+    def flatMap[B](name: String)(fun: Result[A] => FutureResult[B]): FutureResult[B] = wrap(name, Futures.future {
+      try {
+        open(this)
+        val res = try {
+          apply()
+        } finally {
+          close(this)
+        }
+        fun(res).apply()
 
-   private def open( fut: FutureResult[ _ ]) {
-      sync.synchronized( openFuts :+= fut )
-   }
-
-   private def close( fut: FutureResult[ _ ]) {
-      sync.synchronized( openFuts = openFuts.filterNot( _ == fut ))
-   }
-
-   def dumpOpenFutures() {
-      val futs = sync.synchronized( openFuts )
-      futs.foreach( println )
-   }
-
-   private sealed trait Basic[ A ] {
-      me: FutureResult[ A ] =>
-
-      def map[ B ]( name: String )( fun: Result[ A ] => Result[ B ]) : FutureResult[ B ] = wrap( name, Futures.future {
-         try {
-            open( this )
-            val res = try {
-               apply()
-            } finally {
-               close( this )
-            }
-            fun( res )
-         } catch {
-            case e: Throwable => Failure( e )
-         }
-      })
-
-      def flatMap[ B ]( name: String )( fun: Result[ A ] => FutureResult[ B ]) : FutureResult[ B ] = wrap( name, Futures.future {
-         try {
-            open( this )
-            val res = try {
-               apply()
-            } finally {
-               close( this )
-            }
-            fun( res ).apply()
-
-         } catch {
-            case e: Throwable => Failure( e )
-         } finally {
-            close( this )
-         }
-      })
-
-      def isSet : Boolean = peer.isSet
-
-      def apply() : Result[ A ] = {
-         require( Txn.findCurrent.isEmpty, "Must not call future-apply within an active transaction" )
-         peer.apply()
+      } catch {
+        case e: Throwable => Failure(e)
+      } finally {
+        close(this)
       }
-   }
+    })
+
+    def isSet: Boolean = peer.isSet
+
+    def apply(): Result[A] = {
+      require(Txn.findCurrent.isEmpty, "Must not call future-apply within an active transaction")
+      peer.apply()
+    }
+  }
 }
